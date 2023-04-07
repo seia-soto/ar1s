@@ -2,7 +2,15 @@ class ValidationError extends Error {
 	name = 'VALIDATION_ERROR';
 }
 
-export const useValidationError = (message: string) => new ValidationError(message);
+export enum ValidationErrorCodes {
+	// Generic
+	INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+
+	// Spec.platform
+	PLATFORM_DEFAULT_SHOULD_BE_UNIQUE = 'PLATFORM_DEFAULT_SHOULD_BE_UNIQUE',
+}
+
+export const useValidationError = (message: ValidationErrorCodes) => new ValidationError(message);
 
 export const isValidationError = (error: unknown) => error instanceof ValidationError;
 

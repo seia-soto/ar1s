@@ -15,7 +15,7 @@ export const models = tables<DatabaseSchema>({
 });
 
 // Generic optimized queries
-export const useIsExists = async <
+export const isExist = async <
 	Table extends keyof DatabaseSchema,
 	Col extends keyof DatabaseSchema[Table]['record'] & string,
 	Value extends DatabaseSchema[Table]['record'][Col],
