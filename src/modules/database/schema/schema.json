@@ -79,6 +79,20 @@
         "name": "createdAt",
         "isNullable": false,
         "hasDefault": false,
+        "typeId": 1114,
+        "typeName": "TIMESTAMP"
+      },
+      {
+        "name": "displayImageUrl",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "displayName",
+        "isNullable": false,
+        "hasDefault": false,
         "typeId": 25,
         "typeName": "TEXT"
       },
@@ -114,14 +128,35 @@
         "name": "updatedAt",
         "isNullable": false,
         "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
+        "typeId": 1114,
+        "typeName": "TIMESTAMP"
+      },
+      {
+        "name": "usedMessages",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "usedTokens",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
       }
     ]
   },
   {
     "name": "conversationMember",
     "columns": [
+      {
+        "name": "conversation",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
       {
         "name": "createdAt",
         "isNullable": false,
@@ -182,6 +217,13 @@
         "name": "usedTokens",
         "isNullable": false,
         "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "user",
+        "isNullable": false,
+        "hasDefault": true,
         "typeId": 23,
         "typeName": "INTEGER"
       }
@@ -280,11 +322,58 @@
         "typeName": "INTEGER"
       },
       {
+        "name": "inviteIdentifier",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
         "name": "token",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 25,
         "typeName": "TEXT"
+      },
+      {
+        "name": "updatedAt",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1114,
+        "typeName": "TIMESTAMP"
+      }
+    ]
+  },
+  {
+    "name": "platformUsage",
+    "columns": [
+      {
+        "name": "flag",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "model",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "platform",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
       },
       {
         "name": "updatedAt",
@@ -376,6 +465,46 @@
         "typeName": "TIMESTAMP"
       },
       {
+        "name": "username",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "userUsage",
+    "columns": [
+      {
+        "name": "flag",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "model",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "updatedAt",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1114,
+        "typeName": "TIMESTAMP"
+      },
+      {
         "name": "usedMessages",
         "isNullable": false,
         "hasDefault": false,
@@ -390,11 +519,11 @@
         "typeName": "INTEGER"
       },
       {
-        "name": "username",
+        "name": "user",
         "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
       }
     ]
   }

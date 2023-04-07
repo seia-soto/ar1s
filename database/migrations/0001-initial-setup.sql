@@ -1,12 +1,22 @@
 create table "platform" (
   id serial primary key not null,
   flag int not null,
+  "inviteIdentifier" text not null,
   "displayName" text not null,
   "displayImageUrl" text not null,
   token text not null,
+  "createdAt" timestamp not null,
+  "updatedAt" timestamp not null,
+  unique("inviteIdentifier")
+);
+
+create table "platformUsage" (
+  id serial primary key not null,
+  flag int not null,
+  platform serial references "platform"(id) not null,
+  model text not null,
   "usedTokens" int not null,
   "usedMessages" int not null,
-  "createdAt" timestamp not null,
   "updatedAt" timestamp not null
 );
 
@@ -19,11 +29,19 @@ create table "user" (
   "displayName" text not null,
   "displayAvatarUrl" text not null,
   "displayBio" text not null,
-  "usedTokens" int not null,
-  "usedMessages" int not null,
   "createdAt" timestamp not null,
   "updatedAt" timestamp not null,
   unique(username)
+);
+
+create table "userUsage" (
+  id serial primary key not null,
+  flag int not null,
+  "user" serial references "user"(id) not null,
+  model text not null,
+  "usedTokens" int not null,
+  "usedMessages" int not null,
+  "updatedAt" timestamp not null
 );
 
 create table "conversation" (
@@ -31,13 +49,19 @@ create table "conversation" (
   flag int not null,
   model text not null,
   "systemMessage" text not null,
-  "createdAt" text not null,
-  "updatedAt" text not null
+  "displayName" text not null,
+  "displayImageUrl" text not null,
+  "usedTokens" int not null,
+  "usedMessages" int not null,
+  "createdAt" timestamp not null,
+  "updatedAt" timestamp not null
 );
 
 create table "conversationMember" (
   id serial primary key not null,
   flag int not null,
+  "conversation" serial references "conversation"(id) not null,
+  "user" serial references "user"(id) not null,
   "displayName" text not null,
   "displayAvatarUrl" text not null,
   "displayBio" text not null,

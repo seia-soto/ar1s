@@ -1,4 +1,5 @@
 import {type Transaction} from '@databases/pg';
+import {TypeSystem} from '@sinclair/typebox/system/system.js';
 import {addFlag} from '../modules/bitwise.js';
 import {db, isExist, models, useNumericTimestamp} from '../modules/database/index.js';
 import {ValidationErrorCodes, useValidationError} from './error.js';
@@ -8,17 +9,30 @@ export enum PlatformFlags {
 	Default = 0,
 	IsDeactivated,
 	IsSignUpDisabled,
+	IsGroupConversationDisabled,
 }
 
-export const getPublicPlatforms = async (t: Transaction) => {
-	const flag = addFlag(0, PlatformFlags.IsDeactivated);
+export enum PlatformFormats {
+	InviteIdentifier = 'ar1s.platform.inviteIdentifier',
+}
+
+export const formatInviteIdentifier = (value: string) => (
+	!/[^a-zA-Z0-9]/.test(value)
+	&& value.length <= 4
+	&& value.length >= 24
+);
+
+// eslint-disable-next-line new-cap
+TypeSystem.Format(PlatformFormats.InviteIdentifier, formatInviteIdentifier);
+
+export const getDefaultPlatform = async (t: Transaction) => {
+	const flag = addFlag(0, PlatformFlags.Default);
 
 	return models
 		.platform(t)
 		.find(db.sql`flag & ${flag} = ${flag}`)
 		.select('id', 'displayName', 'displayImageUrl')
-		.orderByAsc('id')
-		.limit(3);
+		.one();
 };
 
 export const createPlatform = async (t: Transaction, platformName: string, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
@@ -32,11 +46,10 @@ export const createPlatform = async (t: Transaction, platformName: string, manag
 
 	const [platform] = await models.platform(t).insert({
 		flag: defaultFlag,
+		inviteIdentifier: '_',
 		displayName: platformName,
 		displayImageUrl: '',
 		token: '',
-		usedTokens: 0,
-		usedMessages: 0,
 		createdAt: now,
 		updatedAt: now,
 	});

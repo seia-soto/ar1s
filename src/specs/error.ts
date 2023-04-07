@@ -8,6 +8,7 @@ export enum ValidationErrorCodes {
 
 	// Spec.platform
 	PLATFORM_DEFAULT_SHOULD_BE_UNIQUE = 'PLATFORM_DEFAULT_SHOULD_BE_UNIQUE',
+	PLATFORM_NOT_OPEN_FOR_SIGNUP = 'PLATFORM_NOT_OPEN_FOR_SIGNUP',
 }
 
 export const useValidationError = (message: ValidationErrorCodes) => new ValidationError(message);

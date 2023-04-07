@@ -1,11 +1,12 @@
 import {type Transaction} from '@databases/pg';
-import {Type, type Static} from '@sinclair/typebox';
 import {TypeSystem} from '@sinclair/typebox/system';
 import {addFlag, removeFlag} from '../modules/bitwise.js';
-import {models, useNumericTimestamp} from '../modules/database/index.js';
+import {db, models, useNumericTimestamp} from '../modules/database/index.js';
 import {type User, type User_InsertParameters} from '../modules/database/schema/index.js';
 import {createHash, validateHash} from '../modules/hash.js';
 import {ValidationErrorCodes, useValidationError} from './error.js';
+import {ConversationMemberFlags} from './conversationMember.js';
+import {deleteConversation} from './conversation.js';
 
 export enum UserFlags {
 	Bootstrap = 0,
@@ -37,7 +38,7 @@ export const formatPassword = (value: string) => (
 // eslint-disable-next-line new-cap
 TypeSystem.Format(UserFormats.Password, formatPassword);
 
-export type UserInsertParams = Omit<User_InsertParameters, 'usedTokens' | 'usedMessages' | 'createdAt' | 'updatedAt'>;
+export type UserInsertParams = Omit<User_InsertParameters, 'createdAt' | 'updatedAt'>;
 
 export const createUser = async (t: Transaction, params: UserInsertParams) => {
 	const now = new Date();
@@ -46,8 +47,6 @@ export const createUser = async (t: Transaction, params: UserInsertParams) => {
 
 	const [user] = await models.user(t).insert({
 		...params,
-		usedTokens: 0,
-		usedMessages: 0,
 		createdAt: now,
 		updatedAt: now,
 	});
@@ -80,16 +79,6 @@ export const updateUserDisplayParams = async (t: Transaction, userId: User['id']
 	});
 };
 
-export const updateUserUsage = async (t: Transaction, userId: User['id'], usedTokens: number, usedMessages: number) => {
-	const now = new Date();
-
-	await models.user(t).update({id: userId}, {
-		usedTokens,
-		usedMessages,
-		updatedAt: now,
-	});
-};
-
 export const deactivateUser = async (t: Transaction, userId: User['id']) => {
 	const now = new Date();
 	const user = await models.user(t).find({id: userId}).select('flag').oneRequired();
@@ -117,5 +106,13 @@ export const deleteUser = async (t: Transaction, userId: User['id'], password: s
 		throw useValidationError(ValidationErrorCodes.INVALID_CREDENTIALS);
 	}
 
+	const isUserConversationOwner = addFlag(0, ConversationMemberFlags.IsOwner);
+	const ownedConversations = await models.conversationMember(t)
+		.find(db.sql`flag & ${isUserConversationOwner} = ${isUserConversationOwner}`)
+		.select('conversation')
+		.all();
+	await Promise.all(ownedConversations.map(async conversation => deleteConversation(t, conversation.conversation)));
+
+	await models.userUsage(t).delete({user: userId});
 	await models.user(t).delete({id: userId});
 };

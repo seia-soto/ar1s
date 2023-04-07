@@ -19,7 +19,7 @@ export const isExist = async <
 	Table extends keyof DatabaseSchema,
 	Col extends keyof DatabaseSchema[Table]['record'] & string,
 	Value extends DatabaseSchema[Table]['record'][Col],
->(t: Transaction, table: Table, col: Col, value: Value) => t.query(t.sql`SELECT EXISTS (SELECT 1 FROM ${t.sql.ident(table)} WHERE ${col}=${value})`) as Promise<[boolean]>;
+>(t: Transaction, table: Table, col: Col, value: Value) => t.query(t.sql`select exists (select 1 from ${t.sql.ident(table)} where ${col}=${value})`) as Promise<[boolean]>;
 
 export const useSingleRangedQuery = async <
 	Table extends keyof DatabaseSchema,
@@ -30,7 +30,7 @@ export const useSingleRangedQuery = async <
 export const useRangedQuery = async <
 	Table extends keyof DatabaseSchema,
 	RetType extends DatabaseSchema[Table]['record'],
->(t: Transaction, table: Table, from: number, until: number) => t.query(t.sql`SELECT * FROM ${t.sql.ident(table)} WHERE id BETWEEN ${from} AND ${until}`) as Promise<RetType[]>;
+>(t: Transaction, table: Table, from: number, until: number) => t.query(t.sql`select * from ${t.sql.ident(table)} where id between ${from} and ${until}`) as Promise<RetType[]>;
 
 export const useNumericTimestamp = async <
 	Table extends keyof DatabaseSchema,
