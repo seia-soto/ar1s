@@ -76,68 +76,7 @@
     "name": "conversation",
     "columns": [
       {
-        "name": "createdat",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "id",
-        "isNullable": false,
-        "hasDefault": true,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "model",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "systemmessage",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "updatedat",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      }
-    ]
-  },
-  {
-    "name": "conversationMember",
-    "columns": [
-      {
-        "name": "createdat",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1114,
-        "typeName": "TIMESTAMP"
-      },
-      {
-        "name": "displayavatarurl",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "displaybio",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "displayname",
+        "name": "createdAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 25,
@@ -158,21 +97,89 @@
         "typeName": "INTEGER"
       },
       {
-        "name": "updatedat",
+        "name": "model",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "systemMessage",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "updatedAt",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      }
+    ]
+  },
+  {
+    "name": "conversationMember",
+    "columns": [
+      {
+        "name": "createdAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
       },
       {
-        "name": "usedmessages",
+        "name": "displayAvatarUrl",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "displayBio",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "displayName",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "flag",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 23,
         "typeName": "INTEGER"
       },
       {
-        "name": "usedtokens",
+        "name": "id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "updatedAt",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 1114,
+        "typeName": "TIMESTAMP"
+      },
+      {
+        "name": "usedMessages",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "usedTokens",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 23,
@@ -205,11 +212,18 @@
         "typeName": "INTEGER"
       },
       {
-        "name": "createdat",
+        "name": "createdAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
+      },
+      {
+        "name": "flag",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
       },
       {
         "name": "id",
@@ -219,7 +233,7 @@
         "typeName": "INTEGER"
       },
       {
-        "name": "updatedat",
+        "name": "updatedAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
@@ -231,11 +245,18 @@
     "name": "platform",
     "columns": [
       {
-        "name": "createdat",
+        "name": "createdAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
+      },
+      {
+        "name": "flag",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 23,
+        "typeName": "INTEGER"
       },
       {
         "name": "id",
@@ -245,6 +266,13 @@
         "typeName": "INTEGER"
       },
       {
+        "name": "name",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
         "name": "token",
         "isNullable": false,
         "hasDefault": false,
@@ -252,21 +280,21 @@
         "typeName": "TEXT"
       },
       {
-        "name": "updatedat",
+        "name": "updatedAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
       },
       {
-        "name": "usedmessages",
+        "name": "usedMessages",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 23,
         "typeName": "INTEGER"
       },
       {
-        "name": "usedtokens",
+        "name": "usedTokens",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 23,
@@ -278,28 +306,28 @@
     "name": "user",
     "columns": [
       {
-        "name": "createdat",
+        "name": "createdAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
       },
       {
-        "name": "displayavatarurl",
+        "name": "displayAvatarUrl",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 25,
         "typeName": "TEXT"
       },
       {
-        "name": "displaybio",
+        "name": "displayBio",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 25,
         "typeName": "TEXT"
       },
       {
-        "name": "displayname",
+        "name": "displayName",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 25,
@@ -327,21 +355,28 @@
         "typeName": "TEXT"
       },
       {
-        "name": "updatedat",
+        "name": "platform",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "updatedAt",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
       },
       {
-        "name": "usedmessages",
+        "name": "usedMessages",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 23,
         "typeName": "INTEGER"
       },
       {
-        "name": "usedtokens",
+        "name": "usedTokens",
         "isNullable": false,
         "hasDefault": false,
         "typeId": 23,
