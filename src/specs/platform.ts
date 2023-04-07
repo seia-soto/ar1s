@@ -21,7 +21,8 @@ export const createPlatform = async (t: Transaction, platformName: string, manag
 
 	const [platform] = await models.platform(t).insert({
 		flag: defaultFlag,
-		name: platformName,
+		displayName: platformName,
+		displayImageUrl: '',
 		token: '',
 		usedTokens: 0,
 		usedMessages: 0,

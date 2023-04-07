@@ -1,7 +1,8 @@
 create table "platform" (
   id serial primary key not null,
   flag int not null,
-  "name" text not null,
+  "displayName" text not null,
+  "displayImageUrl" text not null,
   token text not null,
   "usedTokens" int not null,
   "usedMessages" int not null,

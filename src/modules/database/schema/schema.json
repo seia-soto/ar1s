@@ -252,6 +252,20 @@
         "typeName": "TIMESTAMP"
       },
       {
+        "name": "displayImageUrl",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
+        "name": "displayName",
+        "isNullable": false,
+        "hasDefault": false,
+        "typeId": 25,
+        "typeName": "TEXT"
+      },
+      {
         "name": "flag",
         "isNullable": false,
         "hasDefault": false,
@@ -264,13 +278,6 @@
         "hasDefault": true,
         "typeId": 23,
         "typeName": "INTEGER"
-      },
-      {
-        "name": "name",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
       },
       {
         "name": "token",
