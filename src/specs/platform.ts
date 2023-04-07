@@ -1,6 +1,6 @@
 import {type Transaction} from '@databases/pg';
 import {addFlag} from '../modules/bitwise.js';
-import {isExist, models} from '../modules/database/index.js';
+import {db, isExist, models, useNumericTimestamp} from '../modules/database/index.js';
 import {ValidationErrorCodes, useValidationError} from './error.js';
 import {UserFlags, createUser, type UserInsertParams} from './user.js';
 
@@ -9,6 +9,17 @@ export enum PlatformFlags {
 	IsDeactivated,
 	IsSignUpDisabled,
 }
+
+export const getPublicPlatforms = async (t: Transaction) => {
+	const flag = addFlag(0, PlatformFlags.IsDeactivated);
+
+	return models
+		.platform(t)
+		.find(db.sql`flag & ${flag} = ${flag}`)
+		.select('id', 'displayName', 'displayImageUrl')
+		.orderByAsc('id')
+		.limit(3);
+};
 
 export const createPlatform = async (t: Transaction, platformName: string, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
 	const defaultFlag = addFlag(0, PlatformFlags.Default);
@@ -34,5 +45,5 @@ export const createPlatform = async (t: Transaction, platformName: string, manag
 
 	await createUser(t, managerUserParams);
 
-	return platform;
+	return useNumericTimestamp(platform);
 };

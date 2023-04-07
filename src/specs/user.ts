@@ -2,7 +2,7 @@ import {type Transaction} from '@databases/pg';
 import {Type, type Static} from '@sinclair/typebox';
 import {TypeSystem} from '@sinclair/typebox/system';
 import {addFlag, removeFlag} from '../modules/bitwise.js';
-import {models} from '../modules/database/index.js';
+import {models, useNumericTimestamp} from '../modules/database/index.js';
 import {type User, type User_InsertParameters} from '../modules/database/schema/index.js';
 import {createHash, validateHash} from '../modules/hash.js';
 import {ValidationErrorCodes, useValidationError} from './error.js';
@@ -37,30 +37,6 @@ export const formatPassword = (value: string) => (
 // eslint-disable-next-line new-cap
 TypeSystem.Format(UserFormats.Password, formatPassword);
 
-export const exportableUserType = Type.Object({
-	username: Type.String({
-		format: UserFormats.Username,
-	}),
-	displayName: Type.String(),
-	displayAvatarUrl: Type.String(),
-	displayBio: Type.String(),
-	usedTokens: Type.Number(),
-	usedMessages: Type.Number(),
-	createdAt: Type.Number(),
-	updatedAt: Type.Number(),
-});
-
-export const useExportableUser = (user: User): Static<typeof exportableUserType> => ({
-	username: user.username,
-	displayName: user.displayName,
-	displayAvatarUrl: user.displayAvatarUrl,
-	displayBio: user.displayBio,
-	usedTokens: user.usedTokens,
-	usedMessages: user.usedMessages,
-	createdAt: user.createdAt.getTime(),
-	updatedAt: user.updatedAt.getTime(),
-});
-
 export type UserInsertParams = Omit<User_InsertParameters, 'usedTokens' | 'usedMessages' | 'createdAt' | 'updatedAt'>;
 
 export const createUser = async (t: Transaction, params: UserInsertParams) => {
@@ -76,7 +52,7 @@ export const createUser = async (t: Transaction, params: UserInsertParams) => {
 		updatedAt: now,
 	});
 
-	return user;
+	return useNumericTimestamp(user);
 };
 
 export const updateUserPassword = async (t: Transaction, userId: User['id'], currentPassword: string, newPassword: string) => {

@@ -14,7 +14,7 @@ export const models = tables<DatabaseSchema>({
 	databaseSchema,
 });
 
-// Generic optimized queries
+// Generic optimized queries and utils
 export const isExist = async <
 	Table extends keyof DatabaseSchema,
 	Col extends keyof DatabaseSchema[Table]['record'] & string,
@@ -31,3 +31,12 @@ export const useRangedQuery = async <
 	Table extends keyof DatabaseSchema,
 	RetType extends DatabaseSchema[Table]['record'],
 >(t: Transaction, table: Table, from: number, until: number) => t.query(t.sql`SELECT * FROM ${t.sql.ident(table)} WHERE id BETWEEN ${from} AND ${until}`) as Promise<RetType[]>;
+
+export const useNumericTimestamp = async <
+	Table extends keyof DatabaseSchema,
+	Record extends DatabaseSchema[Table]['record'] & {createdAt: Date; updatedAt: Date},
+>(record: Record) => ({
+	...record,
+	createdAt: record.createdAt.getTime(),
+	updatedAt: record.updatedAt.getTime(),
+});
