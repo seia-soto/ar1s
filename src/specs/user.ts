@@ -1,11 +1,10 @@
 import {type Transaction} from '@databases/pg';
 import {TypeSystem} from '@sinclair/typebox/system';
 import {addFlag, removeFlag} from '../modules/bitwise.js';
-import {db, models, useNumericTimestamp} from '../modules/database/index.js';
+import {models, useNumericTimestamp} from '../modules/database/index.js';
 import {type User, type User_InsertParameters} from '../modules/database/schema/index.js';
+import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
 import {createHash, validateHash} from '../modules/hash.js';
-import {ValidationErrorCodes, useValidationError} from './error.js';
-import {ConversationMemberFlags} from './conversationMember.js';
 import {deleteConversation, getOwnedConversation} from './conversation.js';
 
 export enum UserFlags {
@@ -58,7 +57,7 @@ export const updateUserPassword = async (t: Transaction, userId: User['id'], cur
 	const user = await models.user(t).find({id: userId}).select('password').oneRequired();
 
 	if (!await validateHash(user.password, currentPassword)) {
-		throw useValidationError(ValidationErrorCodes.INVALID_CREDENTIALS);
+		throw useValidationError(ValidationErrorCodes.InvalidCredentials);
 	}
 
 	const now = new Date();
@@ -103,7 +102,7 @@ export const deleteUser = async (t: Transaction, userId: User['id'], password: s
 	const user = await models.user(t).find({id: userId}).select('password').oneRequired();
 
 	if (!await validateHash(user.password, password)) {
-		throw useValidationError(ValidationErrorCodes.INVALID_CREDENTIALS);
+		throw useValidationError(ValidationErrorCodes.InvalidCredentials);
 	}
 
 	await Promise.all((await getOwnedConversation(t, userId)).map(async conversation => deleteConversation(t, conversation.conversation)));

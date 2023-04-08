@@ -1,5 +1,7 @@
 import useFastify, {type FastifyServerOptions} from 'fastify';
-import {isInexistingResourceError, isPermissionError, isValidationError} from '../specs/error.js';
+import useFastifyCookie from '@fastify/cookie';
+import {isInexistingResourceError, isPermissionError, isValidationError} from '../modules/error.js';
+import {route} from './routes/index.js';
 
 export const createServer = async (opts?: FastifyServerOptions) => {
 	const fastify = useFastify(opts);
@@ -53,6 +55,9 @@ export const createServer = async (opts?: FastifyServerOptions) => {
 
 		return reply;
 	});
+
+	await fastify.register(useFastifyCookie);
+	await fastify.register(route, {prefix: '/'});
 
 	return fastify;
 };

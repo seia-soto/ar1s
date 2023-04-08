@@ -4,11 +4,16 @@ class ValidationError extends Error {
 
 export enum ValidationErrorCodes {
 	// Generic
-	INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+	InvalidCredentials = 'INVALID_CREDENTIALS',
+
+	// Generic Ranged Queries
+	InvalidRangeOfFromId = 'INVALID_RANGE_OF_FROM_ID; Query `from` should be greater than 0 and less than 20',
+	InvalidRangeOfSizeId = 'INVALID_RANGE_OF_SIZE_ID; Query `size` should be greater than 0',
+	InvalidRangeOfId = 'INVALID_RANGE_OF_ID; `id` should be greater than 0',
 
 	// Spec.platform
-	PLATFORM_DEFAULT_SHOULD_BE_UNIQUE = 'PLATFORM_DEFAULT_SHOULD_BE_UNIQUE',
-	PLATFORM_NOT_OPEN_FOR_SIGNUP = 'PLATFORM_NOT_OPEN_FOR_SIGNUP',
+	PlatformDefaultShouldBeUnique = 'PLATFORM_DEFAULT_SHOULD_BE_UNIQUE',
+	PlatformNotOpenForSignUp = 'PLATFORM_NOT_OPEN_FOR_SIGNUP',
 }
 
 export const useValidationError = (message: ValidationErrorCodes) => new ValidationError(message);
