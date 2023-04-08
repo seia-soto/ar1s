@@ -108,6 +108,5 @@ export const deleteUser = async (t: Transaction, userId: User['id'], password: s
 
 	await Promise.all((await getOwnedConversation(t, userId)).map(async conversation => deleteConversation(t, conversation.conversation)));
 
-	await models.userUsage(t).delete({user: userId});
 	await models.user(t).delete({id: userId});
 };
