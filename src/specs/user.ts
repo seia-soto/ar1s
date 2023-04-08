@@ -6,7 +6,7 @@ import {type User, type User_InsertParameters} from '../modules/database/schema/
 import {createHash, validateHash} from '../modules/hash.js';
 import {ValidationErrorCodes, useValidationError} from './error.js';
 import {ConversationMemberFlags} from './conversationMember.js';
-import {deleteConversation} from './conversation.js';
+import {deleteConversation, getOwnedConversation} from './conversation.js';
 
 export enum UserFlags {
 	Bootstrap = 0,
@@ -106,12 +106,7 @@ export const deleteUser = async (t: Transaction, userId: User['id'], password: s
 		throw useValidationError(ValidationErrorCodes.INVALID_CREDENTIALS);
 	}
 
-	const isUserConversationOwner = addFlag(0, ConversationMemberFlags.IsOwner);
-	const ownedConversations = await models.conversationMember(t)
-		.find(db.sql`flag & ${isUserConversationOwner} = ${isUserConversationOwner}`)
-		.select('conversation')
-		.all();
-	await Promise.all(ownedConversations.map(async conversation => deleteConversation(t, conversation.conversation)));
+	await Promise.all((await getOwnedConversation(t, userId)).map(async conversation => deleteConversation(t, conversation.conversation)));
 
 	await models.userUsage(t).delete({user: userId});
 	await models.user(t).delete({id: userId});

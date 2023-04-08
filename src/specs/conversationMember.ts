@@ -7,6 +7,9 @@ export enum ConversationMemberFlags {
 	IsOwner = 0,
 }
 
+export const getConversationMembers = async (t: Transaction, conversationId: Conversation['id']) => models.conversationMember(t)
+	.find({conversation: conversationId});
+
 export const createConversationMember = async (t: Transaction, conversationId: Conversation['id'], user: User, isOwner = false) => {
 	const now = new Date();
 
@@ -23,8 +26,6 @@ export const createConversationMember = async (t: Transaction, conversationId: C
 		displayName: user.displayName,
 		displayAvatarUrl: user.displayAvatarUrl,
 		displayBio: user.displayBio,
-		usedTokens: 0,
-		usedMessages: 0,
 		createdAt: now,
 		updatedAt: now,
 	});

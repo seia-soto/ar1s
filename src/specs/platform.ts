@@ -4,6 +4,7 @@ import {addFlag} from '../modules/bitwise.js';
 import {db, isExist, models, useNumericTimestamp} from '../modules/database/index.js';
 import {ValidationErrorCodes, useValidationError} from './error.js';
 import {UserFlags, createUser, type UserInsertParams} from './user.js';
+import {type Platform_InsertParameters} from '../modules/database/schema/platform.js';
 
 export enum PlatformFlags {
 	Default = 0,
@@ -35,7 +36,7 @@ export const getDefaultPlatform = async (t: Transaction) => {
 		.one();
 };
 
-export const createPlatform = async (t: Transaction, platformName: string, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
+export const createPlatform = async (t: Transaction, platformParams: Pick<Platform_InsertParameters, 'inviteIdentifier' | 'displayName' | 'displayImageUrl' | 'token'>, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
 	const defaultFlag = addFlag(0, PlatformFlags.Default);
 
 	if (makePlatformDefault && await isExist(t, 'platform', 'flag', defaultFlag)) {
@@ -46,10 +47,7 @@ export const createPlatform = async (t: Transaction, platformName: string, manag
 
 	const [platform] = await models.platform(t).insert({
 		flag: defaultFlag,
-		inviteIdentifier: '_',
-		displayName: platformName,
-		displayImageUrl: '',
-		token: '',
+		...platformParams,
 		createdAt: now,
 		updatedAt: now,
 	});

@@ -10,16 +10,6 @@ create table "platform" (
   unique("inviteIdentifier")
 );
 
-create table "platformUsage" (
-  id serial primary key not null,
-  flag int not null,
-  platform serial references "platform"(id) not null,
-  model text not null,
-  "usedTokens" int not null,
-  "usedMessages" int not null,
-  "updatedAt" timestamp not null
-);
-
 create table "user" (
   id serial primary key not null,
   flag int not null,
@@ -34,16 +24,6 @@ create table "user" (
   unique(username)
 );
 
-create table "userUsage" (
-  id serial primary key not null,
-  flag int not null,
-  "user" serial references "user"(id) not null,
-  model text not null,
-  "usedTokens" int not null,
-  "usedMessages" int not null,
-  "updatedAt" timestamp not null
-);
-
 create table "conversation" (
   id serial primary key not null,
   flag int not null,
@@ -51,8 +31,6 @@ create table "conversation" (
   "systemMessage" text not null,
   "displayName" text not null,
   "displayImageUrl" text not null,
-  "usedTokens" int not null,
-  "usedMessages" int not null,
   "createdAt" timestamp not null,
   "updatedAt" timestamp not null
 );
@@ -65,8 +43,6 @@ create table "conversationMember" (
   "displayName" text not null,
   "displayAvatarUrl" text not null,
   "displayBio" text not null,
-  "usedTokens" int not null,
-  "usedMessages" int not null,
   "createdAt" timestamp not null,
   "updatedAt" timestamp not null
 );

@@ -130,20 +130,6 @@
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
-      },
-      {
-        "name": "usedMessages",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "usedTokens",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
       }
     ]
   },
@@ -205,20 +191,6 @@
         "hasDefault": false,
         "typeId": 1114,
         "typeName": "TIMESTAMP"
-      },
-      {
-        "name": "usedMessages",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "usedTokens",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
       },
       {
         "name": "user",
@@ -345,60 +317,6 @@
     ]
   },
   {
-    "name": "platformUsage",
-    "columns": [
-      {
-        "name": "flag",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "id",
-        "isNullable": false,
-        "hasDefault": true,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "model",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "platform",
-        "isNullable": false,
-        "hasDefault": true,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "updatedAt",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1114,
-        "typeName": "TIMESTAMP"
-      },
-      {
-        "name": "usedMessages",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "usedTokens",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      }
-    ]
-  },
-  {
     "name": "user",
     "columns": [
       {
@@ -470,60 +388,6 @@
         "hasDefault": false,
         "typeId": 25,
         "typeName": "TEXT"
-      }
-    ]
-  },
-  {
-    "name": "userUsage",
-    "columns": [
-      {
-        "name": "flag",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "id",
-        "isNullable": false,
-        "hasDefault": true,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "model",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 25,
-        "typeName": "TEXT"
-      },
-      {
-        "name": "updatedAt",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 1114,
-        "typeName": "TIMESTAMP"
-      },
-      {
-        "name": "usedMessages",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "usedTokens",
-        "isNullable": false,
-        "hasDefault": false,
-        "typeId": 23,
-        "typeName": "INTEGER"
-      },
-      {
-        "name": "user",
-        "isNullable": false,
-        "hasDefault": true,
-        "typeId": 23,
-        "typeName": "INTEGER"
       }
     ]
   }
