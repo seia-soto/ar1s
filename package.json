@@ -43,6 +43,7 @@
     "@fastify/type-provider-typebox": "^3.0.0",
     "@sinclair/typebox": "^0.26.8",
     "argon2": "^0.30.3",
-    "fastify": "^4.15.0"
+    "fastify": "^4.15.0",
+    "paseto": "^3.1.2"
   }
 }

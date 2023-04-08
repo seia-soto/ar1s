@@ -5,7 +5,7 @@ declare module 'fastify' {
 	interface FastifyRequest {
 		user: {
 			id: number;
-			flags: number;
+			flag: number;
 		};
 	}
 }

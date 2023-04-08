@@ -16,6 +16,9 @@ dependencies:
   fastify:
     specifier: ^4.15.0
     version: 4.15.0
+  paseto:
+    specifier: ^3.1.2
+    version: 3.1.2
 
 devDependencies:
   '@databases/pg':
@@ -2637,6 +2640,11 @@ packages:
     resolution: {integrity: sha512-Tpb8Z7r7XbbtBTrM9UhpkzzaMrqA2VXMT3YChzYltwV3P3pM6t8wl7TvpMnSTosz1aQAdVib7kdoys7vYOPerw==}
     engines: {node: '>=12'}
     dev: true
+
+  /paseto@3.1.2:
+    resolution: {integrity: sha512-TNmRcQFF7xRnkLnJ07gCD5lRB273V4fU1pCy8G2P9CQjffIzKMYa3e8yo6LlrCCjIdv4jjS85Cfz86hl5SHzng==}
+    engines: {node: '>=16.0.0'}
+    dev: false
 
   /path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
