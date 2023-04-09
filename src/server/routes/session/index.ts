@@ -1,10 +1,11 @@
-import {Type, type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
+import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
+import {Type} from '@sinclair/typebox';
 import {addFlag, compileBit, hasFlag} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {validateHash} from '../../../modules/hash.js';
-import {UserFlags, UserFormats} from '../../../specs/user.js';
 import {TokenFlags, encodeToken} from '../../../modules/token.js';
+import {UserFlags, UserFormats} from '../../../specs/user.js';
 
 export enum SessionCookieNames {
 	Session = '__Host-ab_session',
@@ -29,7 +30,7 @@ export const sessionRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 		},
 		async handler(request, reply) {
 			return db.tx(async t => {
-				const user = await models.user(t).find({username: request.body.username}).select('id', 'flag', 'password').oneRequired()
+				const user = await models.user(t).find({username: request.body.username}).select('id', 'flag', 'platform', 'password').oneRequired()
 					.catch(error => {
 						request.log.error(error);
 
@@ -45,6 +46,7 @@ export const sessionRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 				}
 
 				const token = await encodeToken({
+					platform: user.platform,
 					user: user.id,
 					flag: request.body.isTrustedEnvironment ? 0 : addFlag(0, compileBit(TokenFlags.IsTemporaryToken)),
 				});

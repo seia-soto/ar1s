@@ -118,6 +118,13 @@
         "typeName": "TEXT"
       },
       {
+        "name": "platform",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
         "name": "systemMessage",
         "isNullable": false,
         "hasDefault": false,
@@ -186,6 +193,13 @@
         "typeName": "INTEGER"
       },
       {
+        "name": "platform",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
         "name": "updatedAt",
         "isNullable": false,
         "hasDefault": false,
@@ -241,6 +255,13 @@
       },
       {
         "name": "id",
+        "isNullable": false,
+        "hasDefault": true,
+        "typeId": 23,
+        "typeName": "INTEGER"
+      },
+      {
+        "name": "platform",
         "isNullable": false,
         "hasDefault": true,
         "typeId": 23,

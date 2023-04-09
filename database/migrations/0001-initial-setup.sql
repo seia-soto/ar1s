@@ -27,6 +27,7 @@ create table "user" (
 create table "conversation" (
   id serial primary key not null,
   flag int not null,
+  platform serial references "platform"(id) not null,
   model text not null,
   "systemMessage" text not null,
   "displayName" text not null,
@@ -38,6 +39,7 @@ create table "conversation" (
 create table "conversationMember" (
   id serial primary key not null,
   flag int not null,
+  platform serial references "platform"(id) not null,
   "conversation" serial references "conversation"(id) not null,
   "user" serial references "user"(id) not null,
   "displayName" text not null,
@@ -50,6 +52,7 @@ create table "conversationMember" (
 create table "message" (
   id serial primary key not null,
   flag int not null,
+  platform serial references "platform"(id) not null,
   author serial references "conversationMember"(id) not null,
   "conversation" serial references "conversation"(id) not null,
   content text not null,

@@ -10,7 +10,9 @@ export enum ConversationMemberFlags {
 export const getConversationMembers = async (t: Transaction, conversationId: Conversation['id']) => models.conversationMember(t)
 	.find({conversation: conversationId});
 
-export const createConversationMember = async (t: Transaction, conversationId: Conversation['id'], user: User, isOwner = false) => {
+export type ConversationMemberInsertParams = Pick<User, 'id' | 'platform' | 'displayName' | 'displayAvatarUrl' | 'displayBio'>;
+
+export const createConversationMember = async (t: Transaction, conversationId: Conversation['id'], user: ConversationMemberInsertParams, isOwner = false) => {
 	const now = new Date();
 
 	let flag = 0;
@@ -21,6 +23,7 @@ export const createConversationMember = async (t: Transaction, conversationId: C
 
 	const [member] = await models.conversationMember(t).insert({
 		flag,
+		platform: user.platform,
 		conversation: conversationId,
 		user: user.id,
 		displayName: user.displayName,

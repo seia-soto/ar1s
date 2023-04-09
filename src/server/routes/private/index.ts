@@ -3,6 +3,7 @@ import {db, isExist} from '../../../modules/database/index.js';
 import {usePermissionError} from '../../../modules/error.js';
 import {decodeToken, encodeToken, isTokenRequiresRenewal} from '../../../modules/token.js';
 import {SessionCookieNames} from '../session/index.js';
+import {conversationRouter} from './conversation.js';
 
 export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// We should decorate user 'object' into 'null' for performance reason
@@ -21,6 +22,7 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 
 		if (!payload) {
 			void reply.clearCookie(SessionCookieNames.Session);
+
 			throw usePermissionError();
 		}
 
@@ -28,11 +30,13 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 
 		if (!isUserExists) {
 			void reply.clearCookie(SessionCookieNames.Session);
+
 			throw usePermissionError();
 		}
 
 		if (isTokenRequiresRenewal(payload.iat, payload.exp)) {
 			const newToken = await encodeToken({
+				platform: payload.platform,
 				user: payload.user,
 				flag: payload.flag,
 			});
@@ -43,9 +47,12 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 			});
 		}
 
-		request.user = {
-			id: payload.user,
+		request.session = {
+			platform: payload.platform,
+			user: payload.user,
 			flag: payload.flag,
 		};
 	});
+
+	await fastify.register(conversationRouter, {prefix: '/conversation'});
 };

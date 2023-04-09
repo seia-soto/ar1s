@@ -28,11 +28,11 @@ export const rangedQueryType = Type.Object({
 	}),
 });
 
-export const useRangedQueryParams = (from: string, size: string) => {
-	const fromN = parseInt(from, 10);
-	const sizeN = parseInt(size, 10);
+export const useRangedQueryParams = (query: {from: string; size: string}, max: number) => {
+	const fromN = parseInt(query.from, 10);
+	const sizeN = parseInt(query.size, 10);
 
-	if (fromN < 1 || fromN > 20) {
+	if (fromN < 1 || fromN > max) {
 		throw useValidationError(ValidationErrorCodes.InvalidRangeOfFromId);
 	}
 

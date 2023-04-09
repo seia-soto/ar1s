@@ -30,13 +30,6 @@ export const useSingleRangedQuery = async <
 export const useRangedQuery = async <
 	Table extends keyof DatabaseSchema,
 	RetType extends DatabaseSchema[Table]['record'],
->(t: Transaction, table: Table, from: number, until: number) => t.query(t.sql`select * from ${t.sql.ident(table)} where id between ${from} and ${until}`) as Promise<RetType[]>;
-
-export const useNumericTimestamp = async <
-	Table extends keyof DatabaseSchema,
-	Record extends DatabaseSchema[Table]['record'] & {createdAt: Date; updatedAt: Date},
->(record: Record) => ({
-	...record,
-	createdAt: record.createdAt.getTime(),
-	updatedAt: record.updatedAt.getTime(),
-});
+	Col extends keyof DatabaseSchema[Table]['record'] & string | '*',
+// eslint-disable-next-line max-params
+>(t: Transaction, table: Table, col: Col[], from: number, size: number) => t.query(t.sql`select ${t.sql.ident(col.join(', '))} from ${t.sql.ident(table)} where id between ${from} and ${from + size}`) as Promise<RetType[]>;

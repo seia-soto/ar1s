@@ -1,14 +1,21 @@
 import {type Transaction} from '@databases/pg';
 import {models} from '../modules/database/index.js';
-import {type Message, type Conversation, type ConversationMember} from '../modules/database/schema/index.js';
+import {type Conversation, type ConversationMember, type Message, type Platform} from '../modules/database/schema/index.js';
 
-export const createMessage = async (t: Transaction, conversationId: Conversation['id'], author: ConversationMember['id'], content: string) => {
+export type MessageRelationParams = {
+	platform: Platform['id'];
+	conversation: Conversation['id'];
+	user: ConversationMember['id'];
+};
+
+export const createMessage = async (t: Transaction, relations: MessageRelationParams, content: string) => {
 	const now = new Date();
 
 	const [message] = await models.message(t).insert({
 		flag: 0,
-		author,
-		conversation: conversationId,
+		platform: relations.platform,
+		author: relations.user,
+		conversation: relations.conversation,
 		content,
 		createdAt: now,
 		updatedAt: now,

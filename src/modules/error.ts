@@ -7,9 +7,9 @@ export enum ValidationErrorCodes {
 	InvalidCredentials = 'INVALID_CREDENTIALS',
 
 	// Generic Ranged Queries
-	InvalidRangeOfFromId = 'INVALID_RANGE_OF_FROM_ID; Query `from` should be greater than 0 and less than 20',
-	InvalidRangeOfSizeId = 'INVALID_RANGE_OF_SIZE_ID; Query `size` should be greater than 0',
-	InvalidRangeOfId = 'INVALID_RANGE_OF_ID; `id` should be greater than 0',
+	InvalidRangeOfFromId = 'INVALID_RANGE_OF_FROM_ID; Query `from` should be in valid range',
+	InvalidRangeOfSizeId = 'INVALID_RANGE_OF_SIZE_ID; Query `size` should be in valid range',
+	InvalidRangeOfId = 'INVALID_RANGE_OF_ID; `id` should be in valid range',
 
 	// Spec.platform
 	PlatformDefaultShouldBeUnique = 'PLATFORM_DEFAULT_SHOULD_BE_UNIQUE',

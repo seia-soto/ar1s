@@ -1,10 +1,10 @@
 import {type Transaction} from '@databases/pg';
-import {TypeSystem} from '@sinclair/typebox/system/system.js';
+import {TypeSystem} from '@sinclair/typebox/system';
 import {addFlag} from '../modules/bitwise.js';
-import {db, isExist, models, useNumericTimestamp} from '../modules/database/index.js';
+import {db, isExist, models} from '../modules/database/index.js';
+import {type Platform_InsertParameters} from '../modules/database/schema/platform.js';
 import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
 import {UserFlags, createUser, type UserInsertParams} from './user.js';
-import {type Platform_InsertParameters} from '../modules/database/schema/platform.js';
 
 export enum PlatformFlags {
 	Default = 0,
@@ -58,7 +58,10 @@ export const createPlatform = async (t: Transaction, platformParams: Pick<Platfo
 
 	managerUserParams.flag = addFlag(managerUserParams.flag, UserFlags.PlatformManager);
 
-	await createUser(t, managerUserParams);
+	await createUser(t, {
+		...managerUserParams,
+		platform: platform.id,
+	});
 
-	return useNumericTimestamp(platform);
+	return platform;
 };

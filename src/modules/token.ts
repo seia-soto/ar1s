@@ -11,6 +11,7 @@ export enum TokenFlags {
 }
 
 export type TokenPayload = {
+	platform: number;
 	user: number;
 	flag: number;
 };
