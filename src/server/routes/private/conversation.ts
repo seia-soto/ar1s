@@ -1,13 +1,13 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
 import {compileBit, hasFlag} from '../../../modules/bitwise.js';
-import {db, models, useRangedQuery} from '../../../modules/database/index.js';
+import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
-import {useInexistingResourceError, usePermissionError} from '../../../modules/error.js';
+import type Message from '../../../modules/database/schema/message.js';
+import {useInexistingResourceError} from '../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation, updateConversationDisplayParams} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
-import type Message from '../../../modules/database/schema/message.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
