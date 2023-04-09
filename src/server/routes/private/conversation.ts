@@ -1,12 +1,13 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
 import {compileBit, hasFlag} from '../../../modules/bitwise.js';
-import {db, models} from '../../../modules/database/index.js';
+import {db, models, useRangedQuery} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import {useInexistingResourceError, usePermissionError} from '../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserOwnedConversation, updateConversationDisplayParams} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
+import type Message from '../../../modules/database/schema/message.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -158,6 +159,34 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 				await deleteConversation(t, id);
 
 				return '';
+			});
+		},
+	});
+
+	// Get messages on the conversation
+	fastify.route({
+		url: '/:id/messages',
+		method: 'GET',
+		schema: {
+			params: singleRangedQueryType,
+			querystring: rangedQueryType,
+		},
+		async handler(request, _reply) {
+			const id = useSingleRangedQueryParam(request.params.id);
+			const {from, size} = useRangedQueryParams(request.query, 400);
+
+			return db.tx(async t => {
+				const messages = await t.query(t.sql`select * from ${t.sql.ident(models.message(t).tableName)}
+where id >= ${from}
+and conversation = ${id}
+order by id desc
+limit ${size}`) as Message[];
+
+				return messages.map(message => ({
+					...message,
+					createdAt: message.createdAt.getTime(),
+					updatedAt: message.updatedAt.getTime(),
+				}));
 			});
 		},
 	});
