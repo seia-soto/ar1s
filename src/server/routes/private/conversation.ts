@@ -9,6 +9,7 @@ import {ConversationFormats, createConversation, deleteConversation, isUserOwned
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
+	// Get all available conversation in range for user
 	fastify.route({
 		url: '/',
 		method: 'GET',
@@ -34,6 +35,8 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 	});
 
+	// Get a conversation for user and conversation owner
+	// For conversation owner, get all metadata
 	fastify.route({
 		url: '/:id',
 		method: 'GET',
@@ -56,6 +59,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 						throw useInexistingResourceError();
 					});
 
+				// If the user is the owner of the conversation
 				if (hasFlag(conversationMember.flag, compileBit(ConversationMemberFlags.IsOwner))) {
 					const conversation = await models.conversation(t).findOneRequired({id});
 
@@ -76,6 +80,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 	});
 
+	// Create a conversation owned by the user
 	fastify.route({
 		url: '/',
 		method: 'POST',
@@ -94,6 +99,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 		async handler(request, _reply) {
 			return db.tx(async t => {
+				// Get the details of the user to supply as the owner
 				const owner = await models.user(t).find({id: request.session.user}).select('id', 'flag', 'platform', 'displayName', 'displayAvatarUrl', 'displayBio').oneRequired();
 				const conversation = await createConversation(t, owner, request.body);
 
@@ -106,6 +112,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 	});
 
+	// Performs the update of display params for the conversation
 	fastify.route({
 		url: '/:id',
 		method: 'PATCH',
@@ -133,6 +140,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 	});
 
+	// Delete the conversation
 	fastify.route({
 		url: '/:id',
 		method: 'DELETE',

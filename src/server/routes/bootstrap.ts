@@ -9,6 +9,7 @@ import {addFlag, compileBit} from '../../modules/bitwise.js';
 import {UserFlags} from '../../specs/user.js';
 
 export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
+	// Bootstrap
 	fastify.route({
 		url: '/',
 		method: 'POST',
@@ -39,6 +40,7 @@ export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts)
 				const {platform: platformParams, user: managerUserParams} = request.body;
 				let managerFlag = 0;
 
+				// We use UserFlags.Bootstrap flag to know if the user is instance manager (global superuser)
 				managerFlag = addFlag(managerFlag, compileBit(UserFlags.Bootstrap));
 				managerFlag = addFlag(managerFlag, compileBit(UserFlags.PlatformManager));
 

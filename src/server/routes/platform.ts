@@ -14,6 +14,7 @@ const displayPlatformType = Type.Object({
 });
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
+	// Get default platform for the first look page
 	fastify.route({
 		url: '/',
 		method: 'GET',
@@ -28,6 +29,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 				const platform = await getDefaultPlatform(t);
 
 				if (!platform) {
+					// We expect the frontend to be redirected to bootstrap the instance
 					throw useInexistingResourceError();
 				}
 
@@ -36,6 +38,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		},
 	});
 
+	// Get platform metdata by inviteIdentifier
 	fastify.route({
 		url: '/invite/:inviteIdentifier',
 		method: 'GET',
@@ -55,6 +58,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 				const platform = await getPlatformByInvite(t, request.params.inviteIdentifier);
 
 				if (!platform) {
+					// We need to return the not found error to protect private platforms
 					throw useInexistingResourceError();
 				}
 
@@ -63,6 +67,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		},
 	});
 
+	// Sign up for the platform
 	fastify.route({
 		url: '/invite/:inviteIdentifier',
 		method: 'POST',
