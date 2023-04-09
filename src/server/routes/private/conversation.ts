@@ -1,12 +1,12 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
+import {compileBit, hasFlag} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
-import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {useInexistingResourceError, usePermissionError} from '../../../modules/error.js';
-import {addFlag, compileBit, hasFlag} from '../../../modules/bitwise.js';
-import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
+import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserOwnedConversation, updateConversationDisplayParams} from '../../../specs/conversation.js';
+import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.route({
