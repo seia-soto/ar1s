@@ -105,8 +105,17 @@ export const deleteUser = async (t: Transaction, userId: User['id'], password: s
 		throw useValidationError(ValidationErrorCodes.InvalidCredentials);
 	}
 
+	// Delete all data by userId
 	await Promise.all((await getOwnedConversations(t, userId)).map(async conversation => deleteConversation(t, conversation.conversation)));
 
+	// Delete all messages by userId
+	await t.query(t.sql`delete from ${models.message(t).tableName}
+where author in (
+select id from ${models.conversationMember(t).tableName}
+where "user" = ${userId}
+)`);
+
+	// Delete all conversationMember by userId
 	await models.conversationMember(t).delete({user: userId});
 
 	await models.user(t).delete({id: userId});
