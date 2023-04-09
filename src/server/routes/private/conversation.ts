@@ -5,7 +5,7 @@ import {db, models, useRangedQuery} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import {useInexistingResourceError, usePermissionError} from '../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
-import {ConversationFormats, createConversation, deleteConversation, isUserOwnedConversation, updateConversationDisplayParams} from '../../../specs/conversation.js';
+import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation, updateConversationDisplayParams} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
 import type Message from '../../../modules/database/schema/message.js';
 
@@ -131,7 +131,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 
 			return db.tx(async t => {
 				if (!await isUserOwnedConversation(t, request.session.user, id)) {
-					throw usePermissionError();
+					throw useInexistingResourceError();
 				}
 
 				await updateConversationDisplayParams(t, id, request.body);
@@ -153,7 +153,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 
 			return db.tx(async t => {
 				if (!await isUserOwnedConversation(t, request.session.user, id)) {
-					throw usePermissionError();
+					throw useInexistingResourceError();
 				}
 
 				await deleteConversation(t, id);
@@ -176,6 +176,10 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 			const {from, size} = useRangedQueryParams(request.query, 400);
 
 			return db.tx(async t => {
+				if (!await isUserJoinedConversation(t, request.session.user, id)) {
+					throw useInexistingResourceError();
+				}
+
 				const messages = await t.query(t.sql`select * from ${t.sql.ident(models.message(t).tableName)}
 where id >= ${from}
 and conversation = ${id}
@@ -187,6 +191,41 @@ limit ${size}`) as Message[];
 					createdAt: message.createdAt.getTime(),
 					updatedAt: message.updatedAt.getTime(),
 				}));
+			});
+		},
+	});
+
+	// Create the message on the conversation
+	fastify.route({
+		url: '/:id/message',
+		method: 'POST',
+		schema: {
+			querystring: singleRangedQueryType,
+			body: Type.Object({
+				content: Type.String(),
+			}),
+		},
+		async handler(request, _reply) {
+			const id = useSingleRangedQueryParam(request.query.id);
+
+			return db.tx(async t => {
+				if (!await isUserJoinedConversation(t, request.session.user, id)) {
+					throw useInexistingResourceError();
+				}
+
+				const now = new Date();
+
+				await models.message(t).insert({
+					flag: 0,
+					platform: request.session.platform,
+					author: request.session.user,
+					conversation: id,
+					content: request.body.content,
+					createdAt: now,
+					updatedAt: now,
+				});
+
+				return '';
 			});
 		},
 	});

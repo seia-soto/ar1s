@@ -53,6 +53,16 @@ and flag & ${isUserConversationOwner} = ${isUserConversationOwner}
 	return isOwnedConversation;
 };
 
+export const isUserJoinedConversation = async (t: Transaction, userId: User['id'], conversationId: Conversation['id']) => {
+	const [isOwnedConversation] = await t.query(t.sql`select exists (
+select 1 from ${t.sql.ident(models.conversationMember(t).tableName)}
+where conversation = ${conversationId}
+and user = ${userId}
+)`) as [boolean];
+
+	return isOwnedConversation;
+};
+
 export const getOwnedConversations = async (t: Transaction, userId: User['id']) => {
 	const isUserConversationOwner = addFlag(0, ConversationMemberFlags.IsOwner);
 	const ownedConversations = await models.conversationMember(t)
