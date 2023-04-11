@@ -16,7 +16,7 @@ export const createServer = async (opts?: FastifyServerOptions) => {
 				.status(400)
 				.send({
 					code: 'VALIDATION_ERROR',
-					message: error.validation.map(validation => `${validation.instancePath.replace(/\//g, '.')} ${validation.message ?? 'Unexpected'}.`).join('; '),
+					message: error.validation.map(validation => `${validation.message ?? 'Unexpected type'} for ${validation.instancePath}`).join('; '),
 					statusCode: 400,
 				});
 
