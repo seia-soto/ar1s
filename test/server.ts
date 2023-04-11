@@ -27,7 +27,7 @@ test.serial.before(async t => {
 			},
 		},
 	});
-	const useInject = useInjectWithSession();
+	const useInject = useInjectWithSession('ar1s.seia.io');
 
 	t.context.server = server;
 	t.context.inject = useInject(server);
@@ -42,7 +42,7 @@ test.serial('the working proof of the test code', async t => {
 	t.is(response.statusCode, 404);
 });
 
-test.serial('the default platfrom should be empty if not bootstrap', async t => {
+test.serial('the default platfrom should be empty if the instance is not bootstrapped', async t => {
 	const response = await t.context.inject({
 		url: '/platform',
 		method: 'GET',
@@ -51,7 +51,7 @@ test.serial('the default platfrom should be empty if not bootstrap', async t => 
 	t.is(response.statusCode, 404);
 });
 
-test.serial('bootstrap', async t => {
+test.serial('bootstrap the instance', async t => {
 	const response = await t.context.inject({
 		url: '/bootstrap',
 		method: 'POST',
@@ -70,4 +70,44 @@ test.serial('bootstrap', async t => {
 
 	t.is(response.statusCode, 200);
 	t.is(response.payload, '');
+});
+
+test.serial('the default platform should be available after bootstrap', async t => {
+	const response = await t.context.inject({
+		url: '/platform',
+		method: 'GET',
+	});
+
+	t.is(response.statusCode, 200);
+	t.true(response.payload.includes(testParams.platformDisplayName));
+});
+
+test.serial('the bootstrapped user can sign in to the instance', async t => {
+	const response = await t.context.inject({
+		url: '/session',
+		method: 'POST',
+		payload: {
+			username: testParams.adminUsername,
+			password: testParams.adminPassword,
+			isTrustedEnvironment: true,
+		},
+	});
+
+	t.is(response.statusCode, 200);
+	t.is(response.payload, '');
+	t.truthy(response.headers['set-cookie']);
+});
+
+test.serial('the user can load conversations but empty', async t => {
+	const response = await t.context.inject({
+		url: '/private/conversation',
+		method: 'GET',
+		query: {
+			size: '1',
+			from: '1',
+		},
+	});
+
+	t.is(response.statusCode, 200);
+	t.is(response.payload, '[]');
 });
