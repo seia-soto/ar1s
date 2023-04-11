@@ -24,9 +24,9 @@ export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _op
 				// Get conversation by user identifier
 				const conversationTableName = models.conversation(t).tableName;
 				const conversationMemberTableName = models.conversationMember(t).tableName;
-				const entries = await t.query(t.sql`select c.id, c.flag, c.displayName, c.displayImageUrl, c.updatedAt from ${t.sql.ident(conversationTableName)} c
+				const entries = await t.query(t.sql`select c.id, c.flag, c."displayName", c."displayImageUrl", c."updatedAt" from ${t.sql.ident(conversationTableName)} c
 join ${t.sql.ident(conversationMemberTableName)} cm on c.id = cm.conversation
-join "user" u on m.user = u.id
+join "user" u on cm.user = u.id
 where u.id = ${request.session.user} and
 c.id >= ${from}
 order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'displayName' | 'displayImageUrl' | 'updatedAt'>>;
