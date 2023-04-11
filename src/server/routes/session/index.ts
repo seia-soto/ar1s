@@ -65,7 +65,12 @@ export const sessionRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 					flag: request.body.isTrustedEnvironment ? 0 : addFlag(0, compileBit(TokenFlags.IsTemporaryToken)),
 				});
 
-				void reply.setCookie(SessionCookieNames.Session, token);
+				void reply.setCookie(SessionCookieNames.Session, token, {
+					path: '/',
+					maxAge: 1000 * 60 * 60 * 24 * 2,
+					secure: true,
+					httpOnly: true,
+				});
 
 				return '';
 			});

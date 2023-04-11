@@ -39,7 +39,10 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 				flag: payload.flag,
 			});
 
+			void reply.clearCookie(SessionCookieNames.Session);
 			void reply.setCookie(SessionCookieNames.Session, newToken, {
+				path: '/',
+				maxAge: 1000 * 60 * 60 * 24 * 2,
 				httpOnly: true,
 				secure: true,
 			});
