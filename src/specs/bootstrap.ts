@@ -1,6 +1,18 @@
 import {type Transaction} from '@databases/pg';
 import {addFlag} from '../modules/bitwise.js';
-import {isExist} from '../modules/database/index.js';
+import {models} from '../modules/database/index.js';
 import {PlatformFlags} from './platform.js';
 
-export const isBootstrapRequired = async (t: Transaction) => (await isExist(t, 'platform', 'flag', addFlag(0, PlatformFlags.Default)))[0];
+let __isBootstrapRequired: boolean | undefined;
+
+export const isBootstrapRequired = async (t: Transaction) => {
+	if (typeof __isBootstrapRequired !== 'undefined') {
+		return __isBootstrapRequired;
+	}
+
+	const flag = addFlag(0, PlatformFlags.Default);
+
+	__isBootstrapRequired = !(await t.query(t.sql`select exists (select 1 from ${t.sql.ident(models.platform(t).tableName)} where flag & ${flag} = ${flag})`))[0].exists;
+
+	return __isBootstrapRequired;
+};

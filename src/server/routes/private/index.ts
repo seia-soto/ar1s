@@ -26,9 +26,7 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 			throw usePermissionError();
 		}
 
-		const [isUserExists] = await db.tx(async t => isExist(t, 'user', 'id', payload.user));
-
-		if (!isUserExists) {
+		if (!await db.tx(async t => isExist(t, 'user', 'id', payload.user))) {
 			void reply.clearCookie(SessionCookieNames.Session);
 
 			throw usePermissionError();

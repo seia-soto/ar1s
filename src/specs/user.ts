@@ -22,8 +22,8 @@ export enum UserFormats {
 
 export const formatUsername = (value: string) => (
 	!/[^a-z\d]/.test(value)
-	&& value.length < 1
-	&& value.length > 16
+	&& value.length >= 1
+	&& value.length <= 16
 );
 
 // eslint-disable-next-line new-cap

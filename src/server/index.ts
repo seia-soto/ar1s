@@ -1,13 +1,27 @@
-import useFastify, {type FastifyServerOptions} from 'fastify';
 import useFastifyCookie from '@fastify/cookie';
+import {TypeBoxValidatorCompiler} from '@fastify/type-provider-typebox';
+import useFastify, {type FastifyServerOptions} from 'fastify';
 import {isInexistingResourceError, isPermissionError, isValidationError} from '../modules/error.js';
 import {route} from './routes/index.js';
 
 export const createServer = async (opts?: FastifyServerOptions) => {
-	const fastify = useFastify(opts);
+	const fastify = useFastify(opts)
+		.setValidatorCompiler(TypeBoxValidatorCompiler);
 
 	fastify.setErrorHandler(async (error, request, reply) => {
 		request.log.error(error);
+
+		if (error.validation) {
+			await reply
+				.status(400)
+				.send({
+					code: 'VALIDATION_ERROR',
+					message: error.validation.map(validation => `${validation.instancePath.replace(/\//g, '.')} ${validation.message ?? 'Unexpected'}.`).join('; '),
+					statusCode: 400,
+				});
+
+			return reply;
+		}
 
 		if (isValidationError(error)) {
 			await reply

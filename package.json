@@ -6,10 +6,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc --project ./tsconfig.build.json",
+    "build:test": "tsc --project ./tsconfig.test.json",
     "db:up": "pg-test start",
     "db:down": "pg-test stop",
     "db:push": "pg-migrations apply --directory ./database/migrations",
-    "db:pull": "pg-schema --directory ./src/modules/database/schema"
+    "db:pull": "pg-schema --directory ./src/modules/database/schema",
+    "test": "./test/entrypoint.sh"
   },
   "ava": {
     "extensions": {

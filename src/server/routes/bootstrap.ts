@@ -1,12 +1,11 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {db} from '../../modules/database/index.js';
-import {isBootstrapRequired} from '../../specs/bootstrap.js';
-import {usePermissionError} from '../../modules/error.js';
-import {PlatformFormats, createPlatform} from '../../specs/platform.js';
-import {UserFormats} from '../../specs/user.js';
 import {addFlag, compileBit} from '../../modules/bitwise.js';
-import {UserFlags} from '../../specs/user.js';
+import {db} from '../../modules/database/index.js';
+import {useInexistingResourceError} from '../../modules/error.js';
+import {isBootstrapRequired} from '../../specs/bootstrap.js';
+import {PlatformFormats, createPlatform} from '../../specs/platform.js';
+import {UserFlags, UserFormats} from '../../specs/user.js';
 
 export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Bootstrap
@@ -18,6 +17,9 @@ export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts)
 				platform: Type.Object({
 					inviteIdentifier: Type.String({
 						format: PlatformFormats.InviteIdentifier,
+					}),
+					displayName: Type.String({
+						format: PlatformFormats.DisplayName,
 					}),
 					token: Type.String(),
 				}),
@@ -34,7 +36,7 @@ export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts)
 		async handler(request, _reply) {
 			return db.tx(async t => {
 				if (!await isBootstrapRequired(t)) {
-					throw usePermissionError();
+					throw useInexistingResourceError();
 				}
 
 				const {platform: platformParams, user: managerUserParams} = request.body;
@@ -48,7 +50,6 @@ export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts)
 					t,
 					{
 						...platformParams,
-						displayName: '',
 						displayImageUrl: '',
 					},
 					{
