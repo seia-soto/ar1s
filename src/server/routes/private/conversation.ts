@@ -5,7 +5,7 @@ import {compileBit, hasFlag} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import {useInexistingResourceError} from '../../../modules/error.js';
-import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
+import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
 
@@ -168,7 +168,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 		async handler(request, _reply) {
 			const id = useSingleRangedQueryParam(request.params.id);
-			const {from, size} = useRangedQueryParams(request.query, 400);
+			const {from, size} = useReverseRangedQueryParams(request.query, 400);
 
 			return db.tx(async t => {
 				if (!await isUserJoinedConversation(t, request.session.user, id)) {

@@ -32,11 +32,29 @@ export const useRangedQueryParams = (query: {from: string; size: string}, max: n
 	const fromN = parseInt(query.from, 10);
 	const sizeN = parseInt(query.size, 10);
 
-	if (fromN < 1 || fromN > max) {
+	if (fromN < 1) {
 		throw useValidationError(ValidationErrorCodes.InvalidRangeOfFromId);
 	}
 
-	if (sizeN < 1) {
+	if (sizeN < 1 || sizeN > max) {
+		throw useValidationError(ValidationErrorCodes.InvalidRangeOfSizeId);
+	}
+
+	return {
+		from: fromN,
+		size: sizeN,
+	};
+};
+
+export const useReverseRangedQueryParams = (query: {from: string; size: string}, max: number) => {
+	const fromN = parseInt(query.from, 10);
+	const sizeN = parseInt(query.size, 10);
+
+	if (fromN < 0 || fromN > max) {
+		throw useValidationError(ValidationErrorCodes.InvalidRangeOfFromId);
+	}
+
+	if (sizeN < 1 || sizeN > max) {
 		throw useValidationError(ValidationErrorCodes.InvalidRangeOfSizeId);
 	}
 
