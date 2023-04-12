@@ -8,9 +8,7 @@ import {SessionCookieNames} from '../../session/index.js';
 
 export const platformRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.addHook('preParsing', async (request, _reply) => {
-		const managerFlag = compileBit(UserFlags.PlatformManager);
-
-		if (!await db.tx(async t => isFlagExists(t, 'user', request.session.user, managerFlag))) {
+		if (!await db.tx(async t => isFlagExists(t, 'user', request.session.user, compileBit(UserFlags.PlatformManager)))) {
 			throw usePermissionError();
 		}
 	});

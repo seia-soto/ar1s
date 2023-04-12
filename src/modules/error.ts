@@ -15,9 +15,6 @@ export enum ValidationErrorCodes {
 	PlatformDefaultShouldBeUnique = 'PLATFORM_DEFAULT_SHOULD_BE_UNIQUE',
 	PlatformNotOpenForSignUp = 'PLATFORM_NOT_OPEN_FOR_SIGNUP',
 	PlatformDeactivated = 'PLATFORM_DEACTIVATED',
-
-	// Spec.user
-	UserDeactivated = 'USER_DEACTIVATED',
 }
 
 export const useValidationError = (message: ValidationErrorCodes) => new ValidationError(message);
