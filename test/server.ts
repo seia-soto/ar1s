@@ -110,6 +110,16 @@ test.serial('the user can load the platform data', async t => {
 	t.true(response.payload.includes(testParams.platformDisplayName));
 });
 
+test.serial('the user can load the user data', async t => {
+	const response = await t.context.inject({
+		url: '/private/user',
+		method: 'GET',
+	});
+
+	t.is(response.statusCode, 200);
+	t.true(response.payload.includes(testParams.adminUsername));
+});
+
 test.serial('the user can load conversations but empty', async t => {
 	const response = await t.context.inject({
 		url: '/private/conversation',
