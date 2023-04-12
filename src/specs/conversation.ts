@@ -42,31 +42,31 @@ export type ConversationInsertParams = {
 };
 
 export const isUserOwnedConversation = async (t: Transaction, userId: User['id'], conversationId: Conversation['id']) => {
-	const isUserConversationOwner = addFlag(0, ConversationMemberFlags.IsOwner);
-	const [isOwnedConversation] = await t.query(t.sql`select exists (
+	const flag = addFlag(0, ConversationMemberFlags.IsOwner);
+	const exists = (await t.query(t.sql`select exists (
 select 1 from ${t.sql.ident(models.conversationMember(t).tableName)}
 where conversation = ${conversationId}
 and user = ${userId}
-and flag & ${isUserConversationOwner} = ${isUserConversationOwner}
-)`) as [boolean];
+and flag & ${flag} = ${flag}
+)`))[0].exists as boolean;
 
-	return isOwnedConversation;
+	return exists;
 };
 
 export const isUserJoinedConversation = async (t: Transaction, userId: User['id'], conversationId: Conversation['id']) => {
-	const [isOwnedConversation] = await t.query(t.sql`select exists (
+	const exists = (await t.query(t.sql`select exists (
 select 1 from ${t.sql.ident(models.conversationMember(t).tableName)}
 where conversation = ${conversationId}
 and user = ${userId}
-)`) as [boolean];
+)`))[0].exists as boolean;
 
-	return isOwnedConversation;
+	return exists;
 };
 
 export const getOwnedConversations = async (t: Transaction, userId: User['id']) => {
-	const isUserConversationOwner = addFlag(0, ConversationMemberFlags.IsOwner);
+	const flag = addFlag(0, ConversationMemberFlags.IsOwner);
 	const ownedConversations = await models.conversationMember(t)
-		.find(t.sql`flag & ${isUserConversationOwner} = ${isUserConversationOwner}`)
+		.find(t.sql`flag & ${flag} = ${flag}`)
 		.andWhere({user: userId})
 		.select('conversation')
 		.all();
