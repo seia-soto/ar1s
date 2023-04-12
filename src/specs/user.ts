@@ -112,7 +112,7 @@ export const deleteUser = async (t: Transaction, userId: User['id'], password: s
 	await t.query(t.sql`delete from ${models.message(t).tableName}
 where author in (
 select id from ${models.conversationMember(t).tableName}
-where "user" = ${userId}
+where ${models.user(t).tableName} = ${userId}
 )`);
 
 	// Delete all conversationMember by userId
