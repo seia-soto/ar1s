@@ -16,3 +16,12 @@ export const isBootstrapRequired = async (t: Transaction) => {
 
 	return __isBootstrapRequired;
 };
+
+// Clearing the bootstrap user should result in cleaning up the whole platform
+export const clear = async (t: Transaction) => {
+	await models.message(t).delete({});
+	await models.conversationMember(t).delete({});
+	await models.conversation(t).delete({});
+	await models.user(t).delete({});
+	await models.platform(t).delete({});
+};
