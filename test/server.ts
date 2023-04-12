@@ -100,6 +100,16 @@ test.serial('the bootstrapped user can sign in to the instance', async t => {
 	t.truthy(response.headers['set-cookie']);
 });
 
+test.serial('the user can load the platform data', async t => {
+	const response = await t.context.inject({
+		url: '/private/platform',
+		method: 'GET',
+	});
+
+	t.is(response.statusCode, 200);
+	t.true(response.payload.includes(testParams.platformDisplayName));
+});
+
 test.serial('the user can load conversations but empty', async t => {
 	const response = await t.context.inject({
 		url: '/private/conversation',
