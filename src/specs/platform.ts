@@ -60,6 +60,7 @@ export const getPlatformByInvite = async (t: Transaction, inviteIdentifier: stri
 	.one();
 
 export const createPlatform = async (t: Transaction, platformParams: Pick<Platform_InsertParameters, 'inviteIdentifier' | 'displayName' | 'displayImageUrl' | 'token'>, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
+	// The platform will be created within sign up disabled state
 	let flag = addFlag(0, compileBit(PlatformFlags.IsSignUpDisabled));
 
 	if (makePlatformDefault) {
