@@ -46,7 +46,7 @@ export const isUserOwnedConversation = async (t: Transaction, userId: User['id']
 	const exists = (await t.query(t.sql`select exists (
 select 1 from ${t.sql.ident(models.conversationMember(t).tableName)}
 where conversation = ${conversationId}
-and user = ${userId}
+and "user" = ${userId}
 and flag & ${flag} = ${flag}
 )`))[0].exists as boolean;
 
@@ -57,7 +57,7 @@ export const isUserJoinedConversation = async (t: Transaction, userId: User['id'
 	const exists = (await t.query(t.sql`select exists (
 select 1 from ${t.sql.ident(models.conversationMember(t).tableName)}
 where conversation = ${conversationId}
-and user = ${userId}
+and "user" = ${userId}
 )`))[0].exists as boolean;
 
 	return exists;
