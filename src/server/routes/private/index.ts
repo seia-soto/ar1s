@@ -5,6 +5,7 @@ import {decodeToken, encodeToken, isTokenRequiresRenewal} from '../../../modules
 import {SessionCookieNames} from '../session/index.js';
 import {conversationRouter} from './conversation.js';
 import {bootstrapRoute} from './bootstrap/index.js';
+import {platformRoute} from './platform/index.js';
 
 export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// We should decorate user 'object' into 'null' for performance reason
@@ -57,5 +58,6 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 	});
 
 	await fastify.register(bootstrapRoute, {prefix: '/bootstrap'});
+	await fastify.register(platformRoute, {prefix: '/platform'});
 	await fastify.register(conversationRouter, {prefix: '/conversation'});
 };
