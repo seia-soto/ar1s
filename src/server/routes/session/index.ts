@@ -39,10 +39,6 @@ export const sessionRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 						throw useInexistingResourceError();
 					});
 
-				if (hasFlag(user.flag, compileBit(UserFlags.IsUserDeactivated))) {
-					throw useValidationError(ValidationErrorCodes.UserDeactivated);
-				}
-
 				const platform = await models.platform(t).find({id: user.platform}).select('flag').oneRequired()
 					.catch(error => {
 						request.log.error(error);
