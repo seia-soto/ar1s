@@ -3,5 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./out"
-  }
+  },
+  "include": [
+    "./aatypes",
+    "./src"
+  ]
 }

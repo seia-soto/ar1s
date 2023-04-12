@@ -1,4 +1,4 @@
-import anyTest, {type TestFn} from 'ava';
+import anyTest, {type ExecutionContext, type TestFn} from 'ava';
 import {useInjectWithSession} from 'fastify-inject-with-session';
 import {createServer} from '../src/server/index.js';
 
@@ -10,10 +10,12 @@ const testParams = {
 	adminPassword: 'aa_hifumi_password00',
 };
 
-const test = anyTest as TestFn<{
+type TestContext = {
 	server: Awaited<ReturnType<typeof createServer>>;
 	inject: ReturnType<Awaited<ReturnType<typeof useInjectWithSession>>>;
-}>;
+};
+
+const test = anyTest as TestFn<TestContext>;
 
 test.serial.before(async t => {
 	const server = await createServer({
@@ -110,4 +112,101 @@ test.serial('the user can load conversations but empty', async t => {
 
 	t.is(response.statusCode, 200);
 	t.is(response.payload, '[]');
+});
+
+test.serial('the user can create new conversation', async t => {
+	const response = await t.context.inject({
+		url: '/private/conversation',
+		method: 'POST',
+		payload: {
+			model: 'gpt-3.5',
+			systemMessage: '',
+			displayName: 'Hello Hifumi',
+		},
+	});
+
+	t.is(response.statusCode, 200);
+});
+
+type Conversation = {
+	id: number;
+	flag: number;
+	platform: number;
+	model: string;
+	systemMessage: string;
+	displayName: string;
+	displayImageUrl: string;
+	createdAt: number;
+	updatedAt: number;
+};
+
+const getFirstConversation = async (t: ExecutionContext<TestContext>) => {
+	const conversationListingResponse = await t.context.inject({
+		url: '/private/conversation',
+		method: 'GET',
+		query: {
+			size: '1',
+			from: '1',
+		},
+	});
+	const [conversationListing] = JSON.parse(conversationListingResponse.payload) as Conversation[];
+
+	t.is(conversationListingResponse.statusCode, 200);
+
+	return conversationListing;
+};
+
+test.serial('the user can load the conversation', async t => {
+	const conversationListing = await getFirstConversation(t);
+
+	t.true(conversationListing.displayName === 'Hello Hifumi');
+
+	const conversationResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString(),
+		method: 'GET',
+	});
+	const conversation = JSON.parse(conversationResponse.payload) as Conversation;
+
+	t.is(conversationResponse.statusCode, 200);
+	t.true(conversation.displayName === 'Hello Hifumi');
+});
+
+type Message = {
+	id: number;
+	flag: number;
+	platform: number;
+	conversation: number;
+	author: number;
+	content: string;
+	createdAt: number;
+	updatedAt: number;
+};
+
+test.serial('the user can create a message on the conversation', async t => {
+	const conversationListing = await getFirstConversation(t);
+
+	t.true(conversationListing.displayName === 'Hello Hifumi');
+
+	const messageResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString() + '/message',
+		method: 'POST',
+		payload: {
+			content: 'Hello',
+		},
+	});
+
+	t.is(messageResponse.statusCode, 200);
+
+	const messagesResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString() + '/messages',
+		method: 'GET',
+		query: {
+			size: '1',
+			from: '1',
+		},
+	});
+	const [message] = JSON.parse(messagesResponse.payload) as Message[];
+
+	t.is(messagesResponse.statusCode, 200);
+	t.true(message.content === 'Hello');
 });
