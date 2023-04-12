@@ -98,10 +98,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 						throw useInexistingResourceError();
 					});
 
-				if (
-					hasFlag(platform.flag, compileBit(PlatformFlags.IsSignUpDisabled))
-					|| hasFlag(platform.flag, compileBit(PlatformFlags.IsDeactivated))
-				) {
+				if (hasFlag(platform.flag, compileBit(PlatformFlags.IsSignUpDisabled))) {
 					throw useValidationError(ValidationErrorCodes.PlatformNotOpenForSignUp);
 				}
 
