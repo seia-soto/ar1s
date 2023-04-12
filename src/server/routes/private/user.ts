@@ -90,4 +90,17 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 			});
 		},
 	});
+
+	// Get the platform data
+	fastify.route({
+		url: '/platform',
+		method: 'GET',
+		async handler(request, _reply) {
+			return db.tx(async t => {
+				const platform = await models.platform(t).find({id: request.session.platform}).select('displayName', 'displayImageUrl').oneRequired();
+
+				return platform;
+			});
+		},
+	});
 };
