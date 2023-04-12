@@ -10,7 +10,7 @@ import {UserFlags, UserFormats, createUser} from '../../../../specs/user.js';
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// List users
 	fastify.route({
-		url: '/users',
+		url: '/',
 		method: 'GET',
 		schema: {
 			querystring: rangedQueryType,
@@ -35,7 +35,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 
 	// Get a user
 	fastify.route({
-		url: '/user/:username',
+		url: '/:username',
 		method: 'GET',
 		schema: {
 			params: Type.Object({
@@ -66,7 +66,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 
 	// Create a user
 	fastify.route({
-		url: '/user',
+		url: '/',
 		method: 'POST',
 		schema: {
 			body: Type.Object({
