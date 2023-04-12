@@ -1,6 +1,6 @@
 import {type Transaction} from '@databases/pg';
 import {TypeSystem} from '@sinclair/typebox/system';
-import {addFlag} from '../modules/bitwise.js';
+import {addFlag, compileBit} from '../modules/bitwise.js';
 import {db, isExist, models} from '../modules/database/index.js';
 import type Platform from '../modules/database/schema/platform.js';
 import {type Platform_InsertParameters} from '../modules/database/schema/platform.js';
@@ -35,6 +35,16 @@ export const formatDisplayName = (value: string) => (
 // eslint-disable-next-line new-cap
 TypeSystem.Format(PlatformFormats.DisplayName, formatDisplayName);
 
+export const isDefaultPlatformExists = async (t: Transaction) => {
+	const flag = addFlag(0, PlatformFlags.Default);
+	const exists = (await t.query(t.sql`select exists (
+select 1 from ${t.sql.ident(models.platform(t).tableName)}
+where flag & ${flag} = ${flag}
+)`))[0].exists as boolean;
+
+	return exists;
+};
+
 export const getDefaultPlatform = async (t: Transaction) => {
 	const flag = addFlag(0, PlatformFlags.Default);
 
@@ -50,16 +60,20 @@ export const getPlatformByInvite = async (t: Transaction, inviteIdentifier: stri
 	.one();
 
 export const createPlatform = async (t: Transaction, platformParams: Pick<Platform_InsertParameters, 'inviteIdentifier' | 'displayName' | 'displayImageUrl' | 'token'>, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
-	const defaultFlag = addFlag(0, PlatformFlags.Default);
+	let flag = addFlag(0, compileBit(PlatformFlags.IsSignUpDisabled));
 
-	if (makePlatformDefault && await isExist(t, 'platform', 'flag', defaultFlag)) {
-		throw useValidationError(ValidationErrorCodes.PlatformDefaultShouldBeUnique);
+	if (makePlatformDefault) {
+		if (await isDefaultPlatformExists(t)) {
+			throw useValidationError(ValidationErrorCodes.PlatformDefaultShouldBeUnique);
+		}
+
+		flag = addFlag(flag, compileBit(PlatformFlags.Default));
 	}
 
 	const now = new Date();
 
 	const [platform] = await models.platform(t).insert({
-		flag: defaultFlag,
+		flag,
 		...platformParams,
 		createdAt: now,
 		updatedAt: now,
