@@ -1,22 +1,13 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
 import {addFlag, compileBit} from '../../../../modules/bitwise.js';
-import {UserFlags, UserFormats} from '../../../../specs/user.js';
-import {db, isFlagExists} from '../../../../modules/database/index.js';
-import {usePermissionError} from '../../../../modules/error.js';
+import {db} from '../../../../modules/database/index.js';
 import {clear} from '../../../../specs/bootstrap.js';
-import {SessionCookieNames} from '../../session/index.js';
 import {PlatformFormats, createPlatform} from '../../../../specs/platform.js';
+import {UserFlags, UserFormats} from '../../../../specs/user.js';
+import {SessionCookieNames} from '../../session/index.js';
 
-export const bootstrapRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
-	fastify.addHook('preParsing', async (request, _reply) => {
-		const bootstrapFlag = compileBit(UserFlags.Bootstrap);
-
-		if (!await db.tx(async t => isFlagExists(t, 'user', request.session.user, bootstrapFlag))) {
-			throw usePermissionError();
-		}
-	});
-
+export const instanceRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.route({
 		url: '/',
 		method: 'POST',
