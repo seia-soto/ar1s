@@ -4,11 +4,11 @@ import {Type} from '@sinclair/typebox';
 import {compileBit, hasFlag} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
+import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
 import {useInexistingResourceError} from '../../../modules/error.js';
-import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
+import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
-import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -247,6 +247,41 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 					createdAt: now,
 					updatedAt: now,
 				});
+
+				return '';
+			});
+		},
+	});
+
+	// Delete the message on the conversation
+	fastify.route({
+		url: '/:conversationId/message/:messageId',
+		method: 'DELETE',
+		schema: {
+			params: Type.Object({
+				conversationId: Type.String({
+					format: Formats.NumericInt,
+				}),
+				messageId: Type.String({
+					format: Formats.NumericInt,
+				}),
+			}),
+		},
+		async handler(request, _reply) {
+			const conversationId = useSingleRangedQueryParam(request.params.conversationId);
+			const messageId = useSingleRangedQueryParam(request.params.messageId);
+
+			return db.tx(async t => {
+				const isMessageExists = (await t.query(t.sql`select exists (
+select 1 from ${t.sql.ident(models.message(t).tableName)}
+where id = ${messageId} and conversation = ${conversationId}
+)`))[0].exists as boolean;
+
+				if (!isMessageExists) {
+					throw useInexistingResourceError();
+				}
+
+				await models.message(t).delete({id: messageId});
 
 				return '';
 			});
