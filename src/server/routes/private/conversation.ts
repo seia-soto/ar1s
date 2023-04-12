@@ -32,7 +32,7 @@ where u.id = ${request.session.user} and
 c.id >= ${from}
 order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'displayName' | 'displayImageUrl' | 'updatedAt'>>;
 
-				return entries.map(entry => ({...entry, updatedAt: entry.updatedAt.getTime()}));
+				return entries;
 			});
 		},
 	});
@@ -65,19 +65,12 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 				if (hasFlag(conversationMember.flag, compileBit(ConversationMemberFlags.IsOwner))) {
 					const conversation = await models.conversation(t).findOneRequired({id});
 
-					return {
-						...conversation,
-						createdAt: conversation.createdAt.getTime(),
-						updatedAt: conversation.updatedAt.getTime(),
-					};
+					return conversation;
 				}
 
 				const conversation = await models.conversation(t).find({id}).select('id', 'flag', 'displayName', 'displayImageUrl', 'updatedAt').oneRequired();
 
-				return {
-					...conversation,
-					updatedAt: conversation.updatedAt.getTime(),
-				};
+				return conversation;
 			});
 		},
 	});
@@ -105,11 +98,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 				const owner = await models.user(t).find({id: request.session.user}).select('id', 'flag', 'platform', 'displayName', 'displayAvatarUrl', 'displayBio').oneRequired();
 				const conversation = await createConversation(t, owner, request.body);
 
-				return {
-					...conversation,
-					createdAt: conversation.createdAt.getTime(),
-					updatedAt: conversation.updatedAt.getTime(),
-				};
+				return conversation;
 			});
 		},
 	});
