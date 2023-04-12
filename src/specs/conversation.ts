@@ -1,6 +1,6 @@
 import {type Transaction} from '@databases/pg';
 import {TypeSystem} from '@sinclair/typebox/system';
-import {addFlag} from '../modules/bitwise.js';
+import {addFlag, compileBit} from '../modules/bitwise.js';
 import {models} from '../modules/database/index.js';
 import {type Conversation, type User} from '../modules/database/schema/index.js';
 import {ConversationMemberFlags, createConversationMember, type ConversationMemberInsertParams} from './conversationMember.js';
@@ -88,7 +88,7 @@ export const createConversation = async (t: Transaction, owner: ConversationMemb
 		updatedAt: now,
 	});
 
-	await createConversationMember(t, conversation.id, owner, true);
+	await createConversationMember(t, conversation.id, owner, addFlag(0, compileBit(ConversationMemberFlags.IsOwner)));
 
 	const systemUser = await models.user(t).find({username: 'system:' + owner.platform.toString()})
 		.select('id', 'platform', 'displayName', 'displayBio', 'displayAvatarUrl')
@@ -97,8 +97,8 @@ export const createConversation = async (t: Transaction, owner: ConversationMemb
 		.select('id', 'platform', 'displayName', 'displayBio', 'displayAvatarUrl')
 		.oneRequired();
 
-	await createConversationMember(t, conversation.id, systemUser, false);
-	await createConversationMember(t, conversation.id, assistantUser, false);
+	await createConversationMember(t, conversation.id, systemUser, addFlag(0, compileBit(ConversationMemberFlags.IsSystem)));
+	await createConversationMember(t, conversation.id, assistantUser, addFlag(0, compileBit(ConversationMemberFlags.IsAssistant)));
 
 	return conversation;
 };

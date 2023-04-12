@@ -8,6 +8,7 @@ import {useInexistingResourceError} from '../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
+import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -169,10 +170,13 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				const conversationMembers = await models.conversationMember(t)
-					.find({conversation: id})
-					.select('id', 'flag', 'displayName', 'displayBio', 'displayAvatarUrl', 'createdAt')
-					.all();
+				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm.createdAt,
+COALESCE(u.displayName, cm.displayName) as displayName,
+COALESCE(u.displayAvatarUrl, cm.displayAvatarUrl) as displayAvatarUrl,
+COALESCE(u.displayBio, cm.displayBio) as displayBio
+from ${t.sql.ident(models.conversationMember(t).tableName)} cm
+left join ${t.sql.ident(models.user(t).tableName)} u ON cm."user" = u.id
+where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' | 'displayName' | 'displayAvatarUrl' | 'displayBio' | 'createdAt'>>;
 
 				return conversationMembers;
 			});
