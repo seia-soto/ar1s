@@ -68,15 +68,6 @@ export const updateUserPassword = async (t: Transaction, userId: User['id'], cur
 	});
 };
 
-export const updateUserDisplayParams = async (t: Transaction, userId: User['id'], params: Pick<User, 'displayName' | 'displayBio' | 'displayAvatarUrl'>) => {
-	const now = new Date();
-
-	await models.user(t).update({id: userId}, {
-		...params,
-		updatedAt: now,
-	});
-};
-
 export const deleteUser = async (t: Transaction, userId: User['id']) => {
 	// Delete all data by userId
 	await Promise.all((await getOwnedConversations(t, userId)).map(async conversation => deleteConversation(t, conversation.conversation)));

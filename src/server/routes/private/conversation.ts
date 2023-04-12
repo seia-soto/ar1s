@@ -6,7 +6,7 @@ import type Conversation from '../../../modules/database/schema/conversation.js'
 import type Message from '../../../modules/database/schema/message.js';
 import {useInexistingResourceError} from '../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
-import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation, updateConversationDisplayParams} from '../../../specs/conversation.js';
+import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
@@ -121,10 +121,12 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		schema: {
 			params: singleRangedQueryType,
 			body: Type.Object({
-				displayName: Type.String({
+				// eslint-disable-next-line new-cap
+				displayName: Type.Optional(Type.String({
 					format: ConversationFormats.DisplayName,
-				}),
-				displayImageUrl: Type.String(),
+				})),
+				// eslint-disable-next-line new-cap
+				displayImageUrl: Type.Optional(Type.String()),
 			}),
 		},
 		async handler(request, _reply) {
@@ -135,7 +137,10 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 					throw useInexistingResourceError();
 				}
 
-				await updateConversationDisplayParams(t, id, request.body);
+				await models.conversation(t).update({id}, {
+					...request.body,
+					updatedAt: new Date(),
+				});
 
 				return '';
 			});
