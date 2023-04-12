@@ -19,23 +19,10 @@ export const isExist = async <
 	Table extends keyof DatabaseSchema,
 	Col extends keyof DatabaseSchema[Table]['record'] & string,
 	Value extends DatabaseSchema[Table]['record'][Col],
->(t: Transaction, table: Table, col: Col, value: Value) => (await t.query(t.sql`select exists (select 1 from ${t.sql.ident(table)} where ${t.sql.ident(col)}=${value})`))[0].exists as boolean;
+>(t: Transaction, table: Table, col: Col, value: Value) => (await t.query(t.sql`select exists (select 1 from ${t.sql.ident(table)} where ${t.sql.ident(col)} = ${value})`))[0].exists as boolean;
 
 export const isFlagExists = async <
 	Table extends keyof DatabaseSchema,
 	Col extends keyof DatabaseSchema[Table]['record'] & string,
 	Value extends DatabaseSchema[Table]['record'][Col],
 >(t: Transaction, table: Table, value: Value, flag: number) => (await t.query(t.sql`select exists (select 1 from ${t.sql.ident(table)} where id = ${value} and flag & ${flag} = ${flag})`))[0].exists as boolean;
-
-export const useSingleRangedQuery = async <
-	Table extends keyof DatabaseSchema,
-	RetType extends DatabaseSchema[Table]['record'],
-// @ts-expect-error `{id}` is responsible for valid where condition.
->(t: Transaction, table: Table, id: number): Promise<RetType> => models[table](t).findOneRequired({id});
-
-export const useRangedQuery = async <
-	Table extends keyof DatabaseSchema,
-	RetType extends DatabaseSchema[Table]['record'],
-	Col extends keyof DatabaseSchema[Table]['record'] & string | '*',
-// eslint-disable-next-line max-params
->(t: Transaction, table: Table, col: Col[], from: number, size: number) => t.query(t.sql`select ${t.sql.ident(col.join(', '))} from ${t.sql.ident(table)} where id between ${from} and ${from + size}`) as Promise<RetType[]>;
