@@ -10,7 +10,6 @@ import {UserFlags, createUser, type UserInsertParams} from './user.js';
 export enum PlatformFlags {
 	Default = 0,
 	IsSignUpDisabled,
-	IsGroupConversationDisabled,
 }
 
 export enum PlatformFormats {
