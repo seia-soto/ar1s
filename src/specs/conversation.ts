@@ -90,6 +90,16 @@ export const createConversation = async (t: Transaction, owner: ConversationMemb
 
 	await createConversationMember(t, conversation.id, owner, true);
 
+	const systemUser = await models.user(t).find({username: 'system:' + owner.platform.toString()})
+		.select('id', 'platform', 'displayName', 'displayBio', 'displayAvatarUrl')
+		.oneRequired();
+	const assistantUser = await models.user(t).find({username: 'assistant:' + owner.platform.toString()})
+		.select('id', 'platform', 'displayName', 'displayBio', 'displayAvatarUrl')
+		.oneRequired();
+
+	await createConversationMember(t, conversation.id, systemUser, false);
+	await createConversationMember(t, conversation.id, assistantUser, false);
+
 	return conversation;
 };
 

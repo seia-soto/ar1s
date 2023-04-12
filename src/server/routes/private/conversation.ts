@@ -158,6 +158,27 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 	});
 
+	// Get members on the conversation
+	fastify.route({
+		url: '/:id/members',
+		method: 'GET',
+		schema: {
+			params: singleRangedQueryType,
+		},
+		async handler(request, _reply) {
+			const id = useSingleRangedQueryParam(request.params.id);
+
+			return db.tx(async t => {
+				const conversationMembers = await models.conversationMember(t)
+					.find({conversation: id})
+					.select('id', 'flag', 'displayName', 'displayBio', 'displayAvatarUrl', 'createdAt')
+					.all();
+
+				return conversationMembers;
+			});
+		},
+	});
+
 	// Get messages on the conversation
 	fastify.route({
 		url: '/:id/messages',

@@ -36,15 +36,6 @@ export const createConversationMember = async (t: Transaction, conversationId: C
 	return member;
 };
 
-export const updateConversationMemberDisplayParams = async (t: Transaction, conversationMemberId: ConversationMember['id'], params: Pick<ConversationMember, 'displayName' | 'displayBio' | 'displayAvatarUrl'>) => {
-	const now = new Date();
-
-	await models.conversationMember(t).update({id: conversationMemberId}, {
-		...params,
-		updatedAt: now,
-	});
-};
-
 export const deleteConversationMember = async (t: Transaction, conversationMemberId: ConversationMember['id']) => {
 	await models.message(t).delete({author: conversationMemberId});
 	await models.conversationMember(t).delete({id: conversationMemberId});

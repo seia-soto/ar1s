@@ -86,6 +86,26 @@ export const createPlatform = async (t: Transaction, platformParams: Pick<Platfo
 		platform: platform.id,
 	});
 
+	// Create a system and an assistant user
+	await createUser(t, {
+		flag: addFlag(0, compileBit(UserFlags.System)),
+		platform: platform.id,
+		username: 'system:' + platform.id.toString(),
+		displayName: 'System',
+		displayBio: '',
+		displayAvatarUrl: '',
+		password: '',
+	});
+	await createUser(t, {
+		flag: addFlag(0, compileBit(UserFlags.System)),
+		platform: platform.id,
+		username: 'assistant:' + platform.id.toString(),
+		displayName: 'Assistant',
+		displayBio: '',
+		displayAvatarUrl: '',
+		password: '',
+	});
+
 	return platform;
 };
 

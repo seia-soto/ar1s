@@ -89,7 +89,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 					flag: 0,
 					username: request.body.username,
 					password: request.body.password,
-					displayName: '',
+					displayName: request.body.username,
 					displayAvatarUrl: '',
 					displayBio: '',
 					platform: platform.id,

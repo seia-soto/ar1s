@@ -55,7 +55,7 @@ export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts)
 					{
 						...managerUserParams,
 						flag: managerFlag,
-						displayName: '',
+						displayName: managerUserParams.username,
 						displayAvatarUrl: '',
 						displayBio: '',
 					},

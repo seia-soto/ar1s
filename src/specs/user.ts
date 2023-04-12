@@ -40,7 +40,9 @@ export type UserInsertParams = Omit<User_InsertParameters, 'createdAt' | 'update
 export const createUser = async (t: Transaction, params: UserInsertParams) => {
 	const now = new Date();
 
-	params.password = await createHash(params.password);
+	if (params.password.length) {
+		params.password = await createHash(params.password);
+	}
 
 	const [user] = await models.user(t).insert({
 		...params,
