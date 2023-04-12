@@ -18,7 +18,7 @@ export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _op
 			querystring: rangedQueryType,
 		},
 		async handler(request, _reply) {
-			const {from, size} = useRangedQueryParams(request.query, 100);
+			const {from, size} = useRangedQueryParams(request.query, 200);
 
 			return db.tx(async t => {
 				// Get conversation by user identifier
