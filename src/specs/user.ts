@@ -12,7 +12,6 @@ export enum UserFlags {
 	PlatformManager,
 	System,
 	Assistant,
-	IsUserDeactivated,
 }
 
 export enum UserFormats {
@@ -74,26 +73,6 @@ export const updateUserDisplayParams = async (t: Transaction, userId: User['id']
 
 	await models.user(t).update({id: userId}, {
 		...params,
-		updatedAt: now,
-	});
-};
-
-export const deactivateUser = async (t: Transaction, userId: User['id']) => {
-	const now = new Date();
-	const user = await models.user(t).find({id: userId}).select('flag').oneRequired();
-
-	await models.user(t).update({id: userId}, {
-		flag: addFlag(user.flag, UserFlags.IsUserDeactivated),
-		updatedAt: now,
-	});
-};
-
-export const activateUser = async (t: Transaction, userId: User['id']) => {
-	const now = new Date();
-	const user = await models.user(t).find({id: userId}).select('flag').oneRequired();
-
-	await models.user(t).update({id: userId}, {
-		flag: removeFlag(user.flag, UserFlags.IsUserDeactivated),
 		updatedAt: now,
 	});
 };
