@@ -200,13 +200,13 @@ limit ${size}`) as Message[];
 		url: '/:id/message',
 		method: 'POST',
 		schema: {
-			querystring: singleRangedQueryType,
+			params: singleRangedQueryType,
 			body: Type.Object({
 				content: Type.String(),
 			}),
 		},
 		async handler(request, _reply) {
-			const id = useSingleRangedQueryParam(request.query.id);
+			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
 				if (!await isUserJoinedConversation(t, request.session.user, id)) {
