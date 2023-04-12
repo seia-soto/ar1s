@@ -1,7 +1,7 @@
 import {type Transaction} from '@databases/pg';
 import {TypeSystem} from '@sinclair/typebox/system';
 import {addFlag, compileBit} from '../modules/bitwise.js';
-import {db, isExist, models} from '../modules/database/index.js';
+import {db, models} from '../modules/database/index.js';
 import type Platform from '../modules/database/schema/platform.js';
 import {type Platform_InsertParameters} from '../modules/database/schema/platform.js';
 import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
