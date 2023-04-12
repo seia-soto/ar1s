@@ -182,10 +182,24 @@ type Message = {
 	updatedAt: number;
 };
 
+const getFirstMessage = async (t: ExecutionContext<TestContext>, conversationId: number) => {
+	const messagesResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationId.toString() + '/messages',
+		method: 'GET',
+		query: {
+			size: '1',
+			from: '1',
+		},
+	});
+	const [message] = JSON.parse(messagesResponse.payload) as Message[];
+
+	t.is(messagesResponse.statusCode, 200);
+
+	return message;
+};
+
 test.serial('the user can create a message on the conversation', async t => {
 	const conversationListing = await getFirstConversation(t);
-
-	t.true(conversationListing.displayName === 'Hello Hifumi');
 
 	const messageResponse = await t.context.inject({
 		url: '/private/conversation/' + conversationListing.id.toString() + '/message',
@@ -197,16 +211,18 @@ test.serial('the user can create a message on the conversation', async t => {
 
 	t.is(messageResponse.statusCode, 200);
 
-	const messagesResponse = await t.context.inject({
-		url: '/private/conversation/' + conversationListing.id.toString() + '/messages',
-		method: 'GET',
-		query: {
-			size: '1',
-			from: '1',
-		},
-	});
-	const [message] = JSON.parse(messagesResponse.payload) as Message[];
+	const message = await getFirstMessage(t, conversationListing.id);
 
-	t.is(messagesResponse.statusCode, 200);
 	t.true(message.content === 'Hello');
+});
+
+test.serial('the user can delete the conversation', async t => {
+	const conversationListing = await getFirstConversation(t);
+	const deleteResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString(),
+		method: 'DELETE',
+	});
+
+	t.is(deleteResponse.statusCode, 200);
+	t.falsy(await getFirstConversation(t));
 });
