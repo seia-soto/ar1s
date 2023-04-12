@@ -1,6 +1,5 @@
 import {type Transaction} from '@databases/pg';
 import {TypeSystem} from '@sinclair/typebox/system';
-import {addFlag, removeFlag} from '../modules/bitwise.js';
 import {models} from '../modules/database/index.js';
 import {type User, type User_InsertParameters} from '../modules/database/schema/index.js';
 import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
