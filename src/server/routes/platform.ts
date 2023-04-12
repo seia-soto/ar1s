@@ -1,29 +1,16 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {db, models} from '../../modules/database/index.js';
-import {PlatformFlags, PlatformFormats, getDefaultPlatform, getPlatformByInvite} from '../../specs/platform.js';
-import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../modules/error.js';
-import {UserFormats, createUser} from '../../specs/user.js';
 import {compileBit, hasFlag} from '../../modules/bitwise.js';
-
-const displayPlatformType = Type.Object({
-	id: Type.Number(),
-	flag: Type.Number(),
-	displayName: Type.String(),
-	displayImageUrl: Type.String(),
-});
+import {db, models} from '../../modules/database/index.js';
+import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../modules/error.js';
+import {PlatformFlags, PlatformFormats, getDefaultPlatform, getPlatformByInvite} from '../../specs/platform.js';
+import {UserFormats, createUser} from '../../specs/user.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get default platform for the first look page
 	fastify.route({
 		url: '/',
 		method: 'GET',
-		schema: {
-			response: {
-				// eslint-disable-next-line @typescript-eslint/naming-convention
-				200: displayPlatformType,
-			},
-		},
 		async handler(_request, _reply) {
 			return db.tx(async t => {
 				const platform = await getDefaultPlatform(t);
@@ -48,10 +35,6 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 					format: PlatformFormats.InviteIdentifier,
 				}),
 			}),
-			response: {
-				// eslint-disable-next-line @typescript-eslint/naming-convention
-				200: displayPlatformType,
-			},
 		},
 		async handler(request, _reply) {
 			return db.tx(async t => {
