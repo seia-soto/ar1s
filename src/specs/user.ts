@@ -77,13 +77,7 @@ export const updateUserDisplayParams = async (t: Transaction, userId: User['id']
 	});
 };
 
-export const deleteUser = async (t: Transaction, userId: User['id'], password: string) => {
-	const user = await models.user(t).find({id: userId}).select('password').oneRequired();
-
-	if (!await validateHash(user.password, password)) {
-		throw useValidationError(ValidationErrorCodes.InvalidCredentials);
-	}
-
+export const deleteUser = async (t: Transaction, userId: User['id']) => {
 	// Delete all data by userId
 	await Promise.all((await getOwnedConversations(t, userId)).map(async conversation => deleteConversation(t, conversation.conversation)));
 
