@@ -1,0 +1,31 @@
+{
+  "name": "@ar1s/spec",
+  "version": "1.0.0",
+  "description": "The entity specs for ar1s.",
+  "main": "out/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project ./tsconfig.build.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "HoJeong Go <seia@outlook.kr>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@sinclair/typebox": "^0.26.8",
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.26.8",
+    "@types/node": "^18.15.11"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": ">=5.57.0",
+    "@typescript-eslint/parser": ">=5.57.0",
+    "eslint": ">=8.0.0",
+    "eslint-config-xo": "^0.43.1",
+    "eslint-config-xo-typescript": "^0.57.0",
+    "typescript": "^5.0.4"
+  }
+}

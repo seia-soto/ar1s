@@ -1,5 +1,5 @@
 {
-  "name": "ar1s",
+  "name": "@ar1s/server",
   "version": "1.0.0",
   "description": "Ar1s platform for ChatGPT.",
   "main": "index.js",

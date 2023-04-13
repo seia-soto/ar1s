@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "packages/server"
+		},
+		{
+			"path": "packages/spec"
 		}
 	],
 	"settings": {}
