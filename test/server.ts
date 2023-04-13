@@ -239,6 +239,36 @@ test.serial('the user can load the conversation', async t => {
 	t.true(conversation.displayName === 'Hello Hifumi');
 });
 
+test.serial('the user can modify the conversation', async t => {
+	const conversationListing = await getFirstConversation(t);
+
+	t.true(conversationListing.displayName === 'Hello Hifumi');
+
+	const conversationModifyResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString(),
+		method: 'PATCH',
+		payload: {
+			displayName: 'Hi Hifumi',
+			displayImageUrl: '',
+		},
+	});
+
+	t.is(conversationModifyResponse.statusCode, 200);
+
+	const aConversationListing = await getFirstConversation(t);
+
+	t.true(aConversationListing.displayName === 'Hi Hifumi');
+
+	await t.context.inject({
+		url: '/private/conversation/' + aConversationListing.id.toString(),
+		method: 'PATCH',
+		payload: {
+			displayName: 'Hello Hifumi',
+			displayImageUrl: '',
+		},
+	});
+});
+
 type Message = {
 	id: number;
 	flag: number;
