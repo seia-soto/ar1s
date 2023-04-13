@@ -204,8 +204,8 @@ type Conversation = {
 	systemMessage: string;
 	displayName: string;
 	displayImageUrl: string;
-	createdAt: number;
-	updatedAt: number;
+	createdAt: string;
+	updatedAt: string;
 };
 
 const getFirstConversation = async (t: ExecutionContext<TestContext>) => {
@@ -269,6 +269,35 @@ test.serial('the user can modify the conversation', async t => {
 	});
 });
 
+type ConversationMember = {
+	id: number;
+	flag: number;
+	displayName: string;
+	displayAvatarUrl: string;
+	displayBio: string;
+	createdAt: string;
+};
+
+const getConversationMembers = async (t: ExecutionContext<TestContext>, conversationId: number) => {
+	const response = await t.context.inject({
+		url: '/private/conversation/' + conversationId.toString() + '/members',
+		method: 'GET',
+	});
+	const members = JSON.parse(response.payload) as ConversationMember[];
+
+	return members;
+};
+
+test.serial('the user can list up conversation members', async t => {
+	const conversationListing = await getFirstConversation(t);
+
+	t.true(conversationListing.displayName === 'Hello Hifumi');
+
+	const conversationMemberListing = await getConversationMembers(t, conversationListing.id);
+
+	t.truthy(conversationMemberListing.find(member => member.displayName.includes('Hifumi')));
+});
+
 type Message = {
 	id: number;
 	flag: number;
@@ -276,8 +305,8 @@ type Message = {
 	conversation: number;
 	author: number;
 	content: string;
-	createdAt: number;
-	updatedAt: number;
+	createdAt: string;
+	updatedAt: string;
 };
 
 const getFirstMessage = async (t: ExecutionContext<TestContext>, conversationId: number) => {
