@@ -19,7 +19,7 @@
  * By doing so, WebSocket client will know 101 switching protocol was not returned and the server will closed the connection by returning response.
  */
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
-import {type RouteOptions, type FastifyReply, type FastifyRequest} from 'fastify';
+import {type FastifyReply, type FastifyRequest, type RouteOptions} from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import {ServerResponse} from 'http';
 import type internal from 'stream';
