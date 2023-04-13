@@ -144,6 +144,30 @@ test.serial('the user can modify the user data', async t => {
 	});
 });
 
+test.serial('the user can modify the user password', async t => {
+	const newPassword = testParams.adminPassword + '!@';
+
+	const response = await t.context.inject({
+		url: '/private/user/password',
+		method: 'PATCH',
+		payload: {
+			currentPassword: testParams.adminPassword,
+			newPassword,
+		},
+	});
+
+	t.is(response.statusCode, 200);
+
+	await t.context.inject({
+		url: '/private/user/password',
+		method: 'PATCH',
+		payload: {
+			currentPassword: newPassword,
+			newPassword: testParams.adminPassword,
+		},
+	});
+});
+
 test.serial('the user can load conversations but empty', async t => {
 	const response = await t.context.inject({
 		url: '/private/conversation',
