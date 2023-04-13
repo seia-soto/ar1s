@@ -4,6 +4,9 @@ importers:
 
   packages/server:
     dependencies:
+      '@ar1s/spec':
+        specifier: link:../spec
+        version: link:../spec
       '@fastify/cookie':
         specifier: ^8.3.0
         version: 8.3.0

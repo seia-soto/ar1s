@@ -1,38 +1,12 @@
+import {PlatformFlags} from '@ar1s/spec/out/platform.js';
+import {UserFlags} from '@ar1s/spec/out/user.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type Transaction} from '@databases/pg';
-import {TypeSystem} from '@sinclair/typebox/system';
-import {addFlag, compileBit} from '../modules/bitwise.js';
 import {db, models} from '../modules/database/index.js';
 import type Platform from '../modules/database/schema/platform.js';
 import {type Platform_InsertParameters} from '../modules/database/schema/platform.js';
 import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
-import {UserFlags, createUser, type UserInsertParams} from './user.js';
-
-export enum PlatformFlags {
-	Default = 0,
-	IsSignUpDisabled,
-}
-
-export enum PlatformFormats {
-	InviteIdentifier = 'ar1s.platform.inviteIdentifier',
-	DisplayName = 'ar1s.platform.displayName',
-}
-
-export const formatInviteIdentifier = (value: string) => (
-	!/[^a-zA-Z0-9]/.test(value)
-	&& value.length >= 4
-	&& value.length <= 24
-);
-
-// eslint-disable-next-line new-cap
-TypeSystem.Format(PlatformFormats.InviteIdentifier, formatInviteIdentifier);
-
-export const formatDisplayName = (value: string) => (
-	value.length >= 4
-	&& value.length <= 24
-);
-
-// eslint-disable-next-line new-cap
-TypeSystem.Format(PlatformFormats.DisplayName, formatDisplayName);
+import {createUser, type UserInsertParams} from './user.js';
 
 export const isDefaultPlatformExists = async (t: Transaction) => {
 	const flag = addFlag(0, PlatformFlags.Default);

@@ -1,11 +1,12 @@
+import {UserFlags, UserFormats} from '@ar1s/spec/out/user.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {greaterThan} from '@databases/pg-typed';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {addFlag, compileBit} from '../../../../modules/bitwise.js';
 import {db, models} from '../../../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../../modules/error.js';
 import {rangedQueryType, useRangedQueryParams} from '../../../../modules/formats.js';
-import {UserFlags, UserFormats, createUser} from '../../../../specs/user.js';
+import {createUser} from '../../../../specs/user.js';
 
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// List users

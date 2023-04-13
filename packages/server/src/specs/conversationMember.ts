@@ -2,12 +2,6 @@ import {type Transaction} from '@databases/pg';
 import {models} from '../modules/database/index.js';
 import {type Conversation, type ConversationMember, type User} from '../modules/database/schema/index.js';
 
-export enum ConversationMemberFlags {
-	IsOwner = 0,
-	IsSystem,
-	IsAssistant,
-}
-
 export const getConversationMembers = async (t: Transaction, conversationId: Conversation['id']) => models.conversationMember(t)
 	.find({conversation: conversationId});
 

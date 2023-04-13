@@ -2,8 +2,8 @@
  * Token modules for generating and validating the account scoped authentication sessions.
  * We can use cookies but for better scalability, it's better to mix token blacklist and paseto.
  */
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {V4 as paseto} from 'paseto';
-import {compileBit, hasFlag} from './bitwise.js';
 import {shouldEnvBeString} from './env.js';
 
 export enum TokenFlags {

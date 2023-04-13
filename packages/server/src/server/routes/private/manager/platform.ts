@@ -1,9 +1,10 @@
+import {PlatformFlags} from '@ar1s/spec/out/platform.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
 import {db, models} from '../../../../modules/database/index.js';
-import {PlatformFlags, deletePlatform} from '../../../../specs/platform.js';
+import {deletePlatform} from '../../../../specs/platform.js';
 import {SessionCookieNames} from '../../session/index.js';
-import {addFlag, compileBit} from '../../../../modules/bitwise.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.route({

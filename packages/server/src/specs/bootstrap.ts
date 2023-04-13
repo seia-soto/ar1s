@@ -1,7 +1,7 @@
+import {PlatformFlags} from '@ar1s/spec/out/platform.js';
+import {addFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {type Transaction} from '@databases/pg';
-import {addFlag} from '../modules/bitwise.js';
 import {models} from '../modules/database/index.js';
-import {PlatformFlags} from './platform.js';
 
 let __isBootstrapRequired: boolean | undefined;
 

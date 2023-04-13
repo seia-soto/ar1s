@@ -1,12 +1,13 @@
+import {UserFlags, UserFormats} from '@ar1s/spec/out/user.js';
+import {compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
 import {db, isFlagExists, models} from '../../../modules/database/index.js';
-import {UserFlags, UserFormats, deleteUser} from '../../../specs/user.js';
-import {createHash, validateHash} from '../../../modules/hash.js';
 import {ValidationErrorCodes, useValidationError} from '../../../modules/error.js';
-import {compileBit} from '../../../modules/bitwise.js';
-import {SessionCookieNames} from '../session/index.js';
+import {createHash, validateHash} from '../../../modules/hash.js';
 import {deletePlatform} from '../../../specs/platform.js';
+import {deleteUser} from '../../../specs/user.js';
+import {SessionCookieNames} from '../session/index.js';
 
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.route({

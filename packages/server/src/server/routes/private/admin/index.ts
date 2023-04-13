@@ -1,8 +1,8 @@
+import {UserFlags} from '@ar1s/spec/out/user.js';
+import {compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
-import {compileBit} from '../../../../modules/bitwise.js';
 import {db, isFlagExists} from '../../../../modules/database/index.js';
 import {usePermissionError} from '../../../../modules/error.js';
-import {UserFlags} from '../../../../specs/user.js';
 import {instanceRouter} from './instance.js';
 
 export const adminRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) => {

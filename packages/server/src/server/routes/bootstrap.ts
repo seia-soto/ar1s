@@ -1,11 +1,12 @@
+import {PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {UserFlags, UserFormats} from '@ar1s/spec/out/user.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {addFlag, compileBit} from '../../modules/bitwise.js';
 import {db} from '../../modules/database/index.js';
 import {useInexistingResourceError} from '../../modules/error.js';
 import {isBootstrapRequired} from '../../specs/bootstrap.js';
-import {PlatformFormats, createPlatform} from '../../specs/platform.js';
-import {UserFlags, UserFormats} from '../../specs/user.js';
+import {createPlatform} from '../../specs/platform.js';
 
 export const bootstrapRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Bootstrap

@@ -1,11 +1,11 @@
+import {UserFormats} from '@ar1s/spec/out/user.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {addFlag, compileBit} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {validateHash} from '../../../modules/hash.js';
 import {TokenFlags, encodeToken} from '../../../modules/token.js';
-import {UserFormats} from '../../../specs/user.js';
 
 export enum SessionCookieNames {
 	Session = '__Host-ab_session',

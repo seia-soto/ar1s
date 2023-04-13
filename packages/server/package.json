@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "ws:up": "pnpm up '@ar1s/*'",
     "build": "tsc --project ./tsconfig.build.json",
     "build:test": "tsc --project ./tsconfig.test.json",
     "db:up": "pg-test start",
@@ -41,6 +42,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@ar1s/spec": "link:../spec",
     "@fastify/cookie": "^8.3.0",
     "@fastify/type-provider-typebox": "^3.0.0",
     "@sinclair/typebox": "^0.26.8",

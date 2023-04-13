@@ -1,14 +1,15 @@
+import {ConversationFormats} from '@ar1s/spec/out/conversation.js';
+import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {lessThan} from '@databases/pg-typed';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {compileBit, hasFlag} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
-import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
-import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
+import {createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user

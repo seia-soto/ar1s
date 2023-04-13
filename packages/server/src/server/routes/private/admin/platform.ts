@@ -1,12 +1,13 @@
+import {PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {UserFlags, UserFormats} from '@ar1s/spec/out/user.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {greaterThan} from '@databases/pg-typed';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {addFlag, compileBit} from '../../../../modules/bitwise.js';
 import {db, models} from '../../../../modules/database/index.js';
 import {useInexistingResourceError} from '../../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../../modules/formats.js';
-import {PlatformFormats, createPlatform, deletePlatform} from '../../../../specs/platform.js';
-import {UserFlags, UserFormats} from '../../../../specs/user.js';
+import {createPlatform, deletePlatform} from '../../../../specs/platform.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.route({

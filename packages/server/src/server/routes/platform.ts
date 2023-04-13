@@ -1,10 +1,12 @@
+import {PlatformFlags, PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {UserFormats} from '@ar1s/spec/out/user.js';
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {compileBit, hasFlag} from '../../modules/bitwise.js';
 import {db, models} from '../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../modules/error.js';
-import {PlatformFlags, PlatformFormats, getDefaultPlatform, getPlatformByInvite} from '../../specs/platform.js';
-import {UserFormats, createUser} from '../../specs/user.js';
+import {getDefaultPlatform, getPlatformByInvite} from '../../specs/platform.js';
+import {createUser} from '../../specs/user.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get default platform for the first look page
