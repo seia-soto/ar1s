@@ -5,6 +5,7 @@ class ValidationError extends Error {
 export enum ValidationErrorCodes {
 	// Generic
 	InvalidCredentials = 'INVALID_CREDENTIALS',
+	InvalidData = 'INVALID_DATA',
 
 	// Generic Ranged Queries
 	InvalidRangeOfFromId = 'INVALID_RANGE_OF_FROM_ID; Query `from` should be in valid range',

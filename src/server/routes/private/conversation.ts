@@ -5,7 +5,7 @@ import {compileBit, hasFlag} from '../../../modules/bitwise.js';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
-import {useInexistingResourceError} from '../../../modules/error.js';
+import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {ConversationFormats, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {ConversationMemberFlags} from '../../../specs/conversationMember.js';
@@ -151,6 +151,62 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 				}
 
 				await deleteConversation(t, id);
+
+				return '';
+			});
+		},
+	});
+
+	// Get the profile on the conversation
+	fastify.route({
+		url: '/:id/profile',
+		method: 'GET',
+		schema: {
+			params: singleRangedQueryType,
+		},
+		async handler(request, _reply) {
+			const id = useSingleRangedQueryParam(request.params.id);
+
+			return db.tx(async t => {
+				const conversationMember = await t.query(t.sql`select cm.id, cm.flag, cm.createdAt,
+COALESCE(cm.displayName, u.displayName) as displayName,
+COALESCE(cm.displayAvatarUrl, u.displayAvatarUrl) as displayAvatarUrl,
+COALESCE(cm.displayBio, u.displayBio) as displayBio
+from ${t.sql.ident(models.conversationMember(t).tableName)} cm
+left join ${t.sql.ident(models.user(t).tableName)} u ON cm."user" = u.id
+where cm.conversation = ${id}
+and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'flag' | 'displayName' | 'displayAvatarUrl' | 'displayBio' | 'createdAt'>];
+
+				if (conversationMember.length !== 1) {
+					throw useValidationError(ValidationErrorCodes.InvalidData);
+				}
+
+				return conversationMember;
+			});
+		},
+	});
+
+	// Modify the profile on the conversation
+	fastify.route({
+		url: '/:id/profile',
+		method: 'PATCH',
+		schema: {
+			params: singleRangedQueryType,
+			body: Type.Object({
+				displayName: Type.String(),
+				displayAvatarUrl: Type.String(),
+				displayBio: Type.String(),
+			}),
+		},
+		async handler(request, _reply) {
+			const id = useSingleRangedQueryParam(request.params.id);
+
+			return db.tx(async t => {
+				await models.conversationMember(t)
+					.update({
+						user: request.session.user,
+						conversation: id,
+					}, request.body);
 
 				return '';
 			});
