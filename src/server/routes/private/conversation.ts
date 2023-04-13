@@ -168,10 +168,10 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				const conversationMember = await t.query(t.sql`select cm.id, cm.flag, cm.createdAt,
-COALESCE(cm.displayName, u.displayName) as displayName,
-COALESCE(cm.displayAvatarUrl, u.displayAvatarUrl) as displayAvatarUrl,
-COALESCE(cm.displayBio, u.displayBio) as displayBio
+				const conversationMember = await t.query(t.sql`select cm.id, cm.flag, cm."createdAt",
+coalesce(nullif(cm."displayName", ''), u."displayName") as "displayName",
+coalesce(nullif(cm."displayAvatarUrl", ''), u."displayAvatarUrl") as "displayAvatarUrl",
+coalesce(nullif(cm."displayBio", ''), u."displayBio") as "displayBio"
 from ${t.sql.ident(models.conversationMember(t).tableName)} cm
 left join ${t.sql.ident(models.user(t).tableName)} u ON cm."user" = u.id
 where cm.conversation = ${id}
@@ -181,7 +181,7 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 					throw useValidationError(ValidationErrorCodes.InvalidData);
 				}
 
-				return conversationMember;
+				return conversationMember[0];
 			});
 		},
 	});
@@ -224,10 +224,10 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm.createdAt,
-COALESCE(cm.displayName, u.displayName) as displayName,
-COALESCE(cm.displayAvatarUrl, u.displayAvatarUrl) as displayAvatarUrl,
-COALESCE(cm.displayBio, u.displayBio) as displayBio
+				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm."createdAt",
+coalesce(nullif(cm."displayName", ''), u."displayName") as "displayName",
+coalesce(nullif(cm."displayAvatarUrl", ''), u."displayAvatarUrl") as "displayAvatarUrl",
+coalesce(nullif(cm."displayBio", ''), u."displayBio") as "displayBio"
 from ${t.sql.ident(models.conversationMember(t).tableName)} cm
 left join ${t.sql.ident(models.user(t).tableName)} u ON cm."user" = u.id
 where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' | 'displayName' | 'displayAvatarUrl' | 'displayBio' | 'createdAt'>>;
