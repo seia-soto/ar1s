@@ -300,7 +300,7 @@ test.serial('the user can load the profile on the conversation', async t => {
 	const profile = JSON.parse(profileResponse.payload) as ConversationMember;
 
 	t.is(profileResponse.statusCode, 200);
-	t.is(profile.displayName, 'Hifumi');
+	t.is(profile.displayName, 'Hifumi'); // Should load the value from "user"."displayName" as "conversationMember"."displayName" is empty
 });
 
 test.serial('the user can list up conversation members', async t => {
