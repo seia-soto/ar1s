@@ -227,7 +227,7 @@ const getFirstConversation = async (t: ExecutionContext<TestContext>) => {
 test.serial('the user can load the conversation', async t => {
 	const conversationListing = await getFirstConversation(t);
 
-	t.true(conversationListing.displayName === 'Hello Hifumi');
+	t.is(conversationListing.displayName, 'Hello Hifumi');
 
 	const conversationResponse = await t.context.inject({
 		url: '/private/conversation/' + conversationListing.id.toString(),
@@ -236,13 +236,13 @@ test.serial('the user can load the conversation', async t => {
 	const conversation = JSON.parse(conversationResponse.payload) as Conversation;
 
 	t.is(conversationResponse.statusCode, 200);
-	t.true(conversation.displayName === 'Hello Hifumi');
+	t.is(conversation.displayName, 'Hello Hifumi');
 });
 
 test.serial('the user can modify the conversation', async t => {
 	const conversationListing = await getFirstConversation(t);
 
-	t.true(conversationListing.displayName === 'Hello Hifumi');
+	t.is(conversationListing.displayName, 'Hello Hifumi');
 
 	const conversationModifyResponse = await t.context.inject({
 		url: '/private/conversation/' + conversationListing.id.toString(),
@@ -257,7 +257,7 @@ test.serial('the user can modify the conversation', async t => {
 
 	const aConversationListing = await getFirstConversation(t);
 
-	t.true(aConversationListing.displayName === 'Hi Hifumi');
+	t.is(aConversationListing.displayName, 'Hi Hifumi');
 
 	await t.context.inject({
 		url: '/private/conversation/' + aConversationListing.id.toString(),
@@ -288,10 +288,25 @@ const getConversationMembers = async (t: ExecutionContext<TestContext>, conversa
 	return members;
 };
 
+test.serial('the user can load the profile on the conversation', async t => {
+	const conversationListing = await getFirstConversation(t);
+
+	t.is(conversationListing.displayName, 'Hello Hifumi');
+
+	const profileResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString() + '/profile',
+		method: 'GET',
+	});
+	const profile = JSON.parse(profileResponse.payload) as ConversationMember;
+
+	t.is(profileResponse.statusCode, 200);
+	t.is(profile.displayName, 'Hifumi');
+});
+
 test.serial('the user can list up conversation members', async t => {
 	const conversationListing = await getFirstConversation(t);
 
-	t.true(conversationListing.displayName === 'Hello Hifumi');
+	t.is(conversationListing.displayName, 'Hello Hifumi');
 
 	const conversationMemberListing = await getConversationMembers(t, conversationListing.id);
 
@@ -340,7 +355,7 @@ test.serial('the user can create a message on the conversation', async t => {
 
 	const message = await getFirstMessage(t, conversationListing.id);
 
-	t.true(message.content === 'Hello');
+	t.is(message.content, 'Hello');
 });
 
 test.serial('the user can delete the conversation', async t => {
