@@ -111,12 +111,10 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		schema: {
 			params: singleRangedQueryType,
 			body: Type.Object({
-				// eslint-disable-next-line new-cap
-				displayName: Type.Optional(Type.String({
+				displayName: Type.String({
 					format: ConversationFormats.DisplayName,
-				})),
-				// eslint-disable-next-line new-cap
-				displayImageUrl: Type.Optional(Type.String()),
+				}),
+				displayImageUrl: Type.String(),
 			}),
 		},
 		async handler(request, _reply) {
