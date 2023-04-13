@@ -120,6 +120,30 @@ test.serial('the user can load the user data', async t => {
 	t.true(response.payload.includes(testParams.adminUsername));
 });
 
+test.serial('the user can modify the user data', async t => {
+	const response = await t.context.inject({
+		url: '/private/user',
+		method: 'PATCH',
+		payload: {
+			displayName: 'Faust',
+			displayBio: 'Hifumi is not Faust.',
+			displayAvatarUrl: '',
+		},
+	});
+
+	t.is(response.statusCode, 200);
+
+	await t.context.inject({
+		url: '/private/user',
+		method: 'PATCH',
+		payload: {
+			displayName: 'Hifumi',
+			displayBio: 'Hifumi is not Faust.',
+			displayAvatarUrl: '',
+		},
+	});
+});
+
 test.serial('the user can load conversations but empty', async t => {
 	const response = await t.context.inject({
 		url: '/private/conversation',
