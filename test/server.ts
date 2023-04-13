@@ -358,6 +358,19 @@ test.serial('the user can create a message on the conversation', async t => {
 	t.is(message.content, 'Hello');
 });
 
+test.serial('the user can delete the message on the conversation', async t => {
+	const conversationListing = await getFirstConversation(t);
+	const message = await getFirstMessage(t, conversationListing.id);
+
+	const deleteResponse = await t.context.inject({
+		url: '/private/conversation/' + conversationListing.id.toString() + '/message/' + message.id.toString(),
+		method: 'DELETE',
+	});
+
+	t.is(deleteResponse.statusCode, 200);
+	t.falsy(await getFirstMessage(t, conversationListing.id));
+});
+
 test.serial('the user can delete the conversation', async t => {
 	const conversationListing = await getFirstConversation(t);
 	const deleteResponse = await t.context.inject({
