@@ -1,7 +1,10 @@
+/* eslint-disable new-cap */
 /**
  * Parcel is not the data type for core models.
  * It's used to receive data updates via WebSocket and live transactions.
  */
+import {Type} from '@sinclair/typebox';
+
 export enum ParcelTypes {
 	PlatformUpdate = 'ar1s.platform.update',
 	ConversationCreate = 'ar1s.conversation.create',
@@ -14,123 +17,131 @@ export enum ParcelTypes {
 	MessageUpdate = 'ar1s.message.update',
 	MessageDelete = 'ar1s.message.delete',
 	NotifyMessageCreateOnConversation = 'ar1s._notify.messageCreateOnConversation',
-	Subscribe = 'ar1s._client.subscribe',
-	Acknowledge = 'ar1s._generic.ack',
+	Acknowledge = 'ar1s._server.ack',
+	Ignore = 'ar1s._server.ig',
 }
 
-export type PlatformUpdateParcel = {
-	type: ParcelTypes.PlatformUpdate;
-	payload: {
-		displayName: string;
-		displayImageUrl: string;
-	};
-};
+export const streamablePlatformType = Type.Object({
+	displayName: Type.String(),
+	displayImageUrl: Type.String(),
+});
 
-export type StreamableConversation = {
-	id: number;
-	flag: number;
-	displayName: string;
-	displayImageUrl: string;
-	updatedAt: string;
-};
+export const platformUpdateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.PlatformUpdate),
+	payload: streamablePlatformType,
+});
 
-export type ConversationCreateParcel = {
-	type: ParcelTypes.ConversationCreate;
-	payload: StreamableConversation;
-};
+export const streamableConversationType = Type.Object({
+	id: Type.Number(),
+	flag: Type.Number(),
+	displayName: Type.String(),
+	displayImageUrl: Type.String(),
+	updatedAt: Type.String(),
+});
 
-export type ConversationUpdateParcel = {
-	type: ParcelTypes.ConversationUpdate;
-	payload: StreamableConversation;
-};
+export const conversationCreateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.ConversationCreate),
+	payload: streamableConversationType,
+});
 
-export type ConversationDeleteParcel = {
-	type: ParcelTypes.ConversationDelete;
-	payload: {
-		id: number;
-	};
-};
+export const conversationUpdateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.ConversationUpdate),
+	payload: streamableConversationType,
+});
 
-export type StreamableConversationMember = {
-	id: number;
-	flag: number;
-	createdAt: number;
-	displayName: string;
-	displayAvatarUrl: string;
-	displayBio: string;
-};
+export const conversationDeleteParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.ConversationDelete),
+	payload: Type.Number(),
+});
 
-export type ConversationMemberCreateParcel = {
-	type: ParcelTypes.ConversationMemberCreate;
-	payload: StreamableConversationMember;
-};
+export const streamableConversationMemberType = Type.Object({
+	id: Type.Number(),
+	flag: Type.Number(),
+	createdAt: Type.String(),
+	displayName: Type.String(),
+	displayAvatarUrl: Type.String(),
+	displayBio: Type.String(),
+});
 
-export type ConversationMemberUpdateParcel = {
-	type: ParcelTypes.ConversationMemberUpdate;
-	payload: StreamableConversationMember;
-};
+export const conversationMemberCreateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.ConversationMemberCreate),
+	payload: streamableConversationMemberType,
+});
 
-export type ConversationMemberDeleteParcel = {
-	type: ParcelTypes.ConversationMemberDelete;
-	payload: {
-		id: number;
-	};
-};
+export const conversationMemberUpdateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.ConversationMemberUpdate),
+	payload: streamableConversationMemberType,
+});
 
-export type StreamableMessage = {
-	id: number;
-	flag: number;
-	platform: number;
-	author: number;
-	conversation: number;
-	content: string;
-	createdAt: string;
-	updatedAt: string;
-};
+export const conversationMemberDeleteParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.ConversationMemberDelete),
+	payload: Type.Number(),
+});
 
-export type MessageCreateParcel = {
-	type: ParcelTypes.MessageCreate;
-	payload: StreamableMessage;
-};
+export const streamableMessageType = Type.Object({
+	id: Type.Number(),
+	flag: Type.Number(),
+	platform: Type.Number(),
+	author: Type.Number(),
+	conversation: Type.Number(),
+	content: Type.String(),
+	createdAt: Type.String(),
+	updatedAt: Type.String(),
+});
 
-export type MessageUpdateParcel = {
-	type: ParcelTypes.MessageUpdate;
-	payload: StreamableMessage;
-};
+export const messageCreateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.MessageCreate),
+	payload: streamableMessageType,
+});
 
-export type MessageDeleteParcel = {
-	type: ParcelTypes.MessageDelete;
-	payload: StreamableMessage;
-};
+export const messageUpdateParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.MessageUpdate),
+	payload: streamableMessageType,
+});
 
-export type NotifyMessageCreateOnConversationParcel = {
-	type: ParcelTypes.NotifyMessageCreateOnConversation;
-	payload: {
-		conversationId: number;
-	};
-};
+export const messageDeleteParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.MessageDelete),
+	payload: Type.Number(),
+});
 
-export type SubscribeParcel = {
-	type: ParcelTypes.Subscribe;
-	payload: {
-		conversationId: number;
-	};
-};
+export const notifyMessageCreateOnConversationParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.NotifyMessageCreateOnConversation),
+	payload: Type.Number(),
+});
 
-export type AcknowledgeParcel = {
-	type: ParcelTypes.Acknowledge;
-};
+export const acknowledgeParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.Acknowledge),
+});
 
-export type Parcel = PlatformUpdateParcel
-| ConversationCreateParcel
-| ConversationUpdateParcel
-| ConversationDeleteParcel
-| ConversationMemberCreateParcel
-| ConversationMemberUpdateParcel
-| ConversationMemberDeleteParcel
-| MessageCreateParcel
-| MessageUpdateParcel
-| MessageDeleteParcel
-| NotifyMessageCreateOnConversationParcel
-| SubscribeParcel
-| AcknowledgeParcel;
+export const ignoreParcelType = Type.Object({
+	type: Type.Literal(ParcelTypes.Ignore),
+});
+
+export const parcelTypes = Type.Union([
+	platformUpdateParcelType,
+	conversationCreateParcelType,
+	conversationUpdateParcelType,
+	conversationDeleteParcelType,
+	conversationMemberCreateParcelType,
+	conversationMemberUpdateParcelType,
+	conversationMemberDeleteParcelType,
+	messageCreateParcelType,
+	messageUpdateParcelType,
+	messageDeleteParcelType,
+	notifyMessageCreateOnConversationParcelType,
+	acknowledgeParcelType,
+	ignoreParcelType,
+]);
+
+export enum ClientParcelTypes {
+	Subscribe = 'ar1s._client.subscribe',
+}
+
+export const clientSubscribeParcelType = Type.Object({
+	type: Type.Literal(ClientParcelTypes.Subscribe),
+	payload: Type.Number(),
+});
+
+export const clientParcelTypes = Type.Union([
+	clientSubscribeParcelType,
+]);
