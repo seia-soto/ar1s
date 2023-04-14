@@ -1,6 +1,7 @@
 import useFastifyCookie from '@fastify/cookie';
 import {TypeBoxValidatorCompiler} from '@fastify/type-provider-typebox';
 import useFastify, {type FastifyServerOptions} from 'fastify';
+import {subscribe} from '../modules/delivery/pubsub.js';
 import {isInexistingResourceError, isPermissionError, isValidationError} from '../modules/error.js';
 import {useWebSocket} from '../modules/ws.js';
 import {route} from './routes/index.js';
@@ -74,6 +75,8 @@ export const createServer = async (opts?: FastifyServerOptions) => {
 	await fastify.register(useFastifyCookie);
 	await fastify.register(useWebSocket);
 	await fastify.register(route, {prefix: '/'});
+
+	await subscribe();
 
 	return fastify;
 };
