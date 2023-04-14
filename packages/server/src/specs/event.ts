@@ -1,6 +1,28 @@
 import {customAlphabet} from 'nanoid';
 import {shouldEnvBeTypeOrFallback} from '../modules/env.js';
 import {keydb} from '../modules/keydb.js';
+import {TypeSystem} from '@sinclair/typebox/system';
+
+export enum EventFormats {
+	Pin = 'ar1s.event.pin',
+}
+
+export const formatPin = (value: string) => {
+	if (value.length < 13 + 16 - 1) {
+		return false;
+	}
+
+	const ts = value.slice(0, 13);
+
+	if (ts.includes('.') || isNaN(parseInt(ts, 10))) {
+		return false;
+	}
+
+	return true;
+};
+
+// eslint-disable-next-line new-cap
+TypeSystem.Format(EventFormats.Pin, formatPin);
 
 shouldEnvBeTypeOrFallback('EVENT_TICKET_EXPIRATION', 1000 * 60 * 1);
 
