@@ -8,8 +8,8 @@
     "ws:up": "pnpm up '@ar1s/*'",
     "build": "tsc --project ./tsconfig.build.json",
     "build:test": "tsc --project ./tsconfig.test.json",
-    "db:up": "pg-test start",
-    "db:down": "pg-test stop",
+    "stack:up": ". ./test/deps/aavars.sh && zsh ./test/deps/keydb.up.sh && zsh ./test/deps/postgres.up.sh",
+    "stack:down": ". ./test/deps/aavars.sh && zsh ./test/deps/keydb.down.sh && zsh ./test/deps/postgres.down.sh",
     "db:push": "pg-migrations apply --directory ./database/migrations",
     "db:pull": "pg-schema --directory ./src/modules/database/schema",
     "test": "./test/entrypoint.sh"
@@ -27,7 +27,6 @@
     "@databases/pg": "^5.4.1",
     "@databases/pg-migrations": "^5.0.2",
     "@databases/pg-schema-cli": "^4.3.1",
-    "@databases/pg-test": "^3.1.2",
     "@databases/pg-typed": "^4.4.1",
     "@types/node": "^18.15.11",
     "@types/tough-cookie": "^4.0.2",
