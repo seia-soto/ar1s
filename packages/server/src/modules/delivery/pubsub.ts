@@ -4,9 +4,9 @@ import {getLocalPeer, getPeer} from './peer.js';
 
 const pubsubNamespace = 'ar1s.delivery.pubsub';
 
-export const pack = (platform: number, user: number, message: string) => JSON.stringify({platform, user, message});
+const pack = (platform: number, user: number, message: string) => JSON.stringify({platform, user, message});
 
-export const unpack = (intertransactional: string) => JSON.parse(intertransactional) as {platform: number; user: number; message: string};
+const unpack = (intertransactional: string) => JSON.parse(intertransactional) as {platform: number; user: number; message: string};
 
 export const publish = async (platform: number, user: number, message: string) => {
 	const peer = await getPeer(platform, user);
