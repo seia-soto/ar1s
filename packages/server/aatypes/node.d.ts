@@ -8,5 +8,6 @@ declare namespace NodeJS {
 		TOKEN_RENEWAL_PERIOD: string;
 		KEYDB_POOL_MIN: string;
 		KEYDB_POOL_MAX: string;
+		EVENT_TICKET_EXPIRATION: string;
 	};
 }

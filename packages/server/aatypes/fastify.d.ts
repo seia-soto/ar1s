@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import 'fastify';
 import {type WebSocketServer} from 'ws';
+import {type TokenPayload} from '../src/modules/token.js';
 import {type WebSocketWithConnection} from '../src/modules/ws.js';
 
 declare module 'fastify' {

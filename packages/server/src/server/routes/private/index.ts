@@ -5,6 +5,7 @@ import {decodeToken, encodeToken, isTokenRequiresRenewal} from '../../../modules
 import {SessionCookieNames} from '../session/index.js';
 import {adminRoute} from './admin/index.js';
 import {conversationRouter} from './conversation.js';
+import {eventRouter} from './event.js';
 import {managerRoute} from './manager/index.js';
 import {platformRouter} from './platform.js';
 import {userRouter} from './user.js';
@@ -62,6 +63,7 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 	await fastify.register(adminRoute, {prefix: '/admin'});
 	await fastify.register(managerRoute, {prefix: '/manager'});
 	await fastify.register(conversationRouter, {prefix: '/conversation'});
+	await fastify.register(eventRouter, {prefix: '/event'});
 	await fastify.register(platformRouter, {prefix: '/platform'});
 	await fastify.register(userRouter, {prefix: '/user'});
 };
