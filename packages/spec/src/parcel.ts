@@ -3,7 +3,7 @@
  * Parcel is not the data type for core models.
  * It's used to receive data updates via WebSocket and live transactions.
  */
-import {Type} from '@sinclair/typebox';
+import {type Static, Type} from '@sinclair/typebox';
 
 export enum ParcelTypes {
 	PlatformUpdate = 'ar1s.platform.update',
@@ -133,6 +133,8 @@ export const parcelTypes = Type.Union([
 	ignoreParcelType,
 ]);
 
+export type StaticParcelTypes = Static<typeof parcelTypes>;
+
 export enum ClientParcelTypes {
 	Subscribe = 'ar1s._client.subscribe',
 }
@@ -145,3 +147,5 @@ export const clientSubscribeParcelType = Type.Object({
 export const clientParcelTypes = Type.Union([
 	clientSubscribeParcelType,
 ]);
+
+export type StaticClientParcelTypes = Static<typeof clientParcelTypes>;
