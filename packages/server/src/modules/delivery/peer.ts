@@ -5,12 +5,16 @@ type Peer = {
 	connection: WebSocketWithConnection;
 	platform: number;
 	user: number;
+	data: {
+		focusedOnConversation: number;
+	};
 };
 
 export const pool: Record<string, Peer> = {};
 
 export const statusNamespace = 'ar1s.delivery.status';
 
+// Generation of the key with platform id reduces futher computational resource uses
 export const generateKey = (platform: number, user: number) => `${platform}:${user}`;
 
 export const getLocalPeer = (platform: number, user: number) => pool[generateKey(platform, user)];
@@ -34,6 +38,9 @@ export const setPeer = async (platform: number, user: number, connection: WebSoc
 		connection,
 		platform,
 		user,
+		data: {
+			focusedOnConversation: 0,
+		},
 	};
 
 	const c = await keydb.acquire();
@@ -63,4 +70,21 @@ export const delPeer = async (platform: number, user: number) => {
 	}
 
 	await c.hIncrBy(statusNamespace, key, -1);
+};
+
+export const isPeerFocusingOnConversation = async (platform: number, user: number, conversation: number) => {
+	const peer = await getPeer(platform, user);
+
+	if (typeof peer.local !== 'undefined' && peer.local.data.focusedOnConversation !== conversation) {
+		return false;
+	}
+
+	// If peer is remotely connected, we cannot determine the focusing state
+	// It's undeterminable as peer can use multiple devices at the time
+	// Just publish!
+	if (typeof peer.remote !== 'undefined') {
+		return true;
+	}
+
+	return false;
 };
