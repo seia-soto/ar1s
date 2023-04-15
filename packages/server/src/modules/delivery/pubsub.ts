@@ -1,8 +1,9 @@
-import {type parcelTypes} from '@ar1s/spec/out/parcel.js';
+import {ParcelTypes, type notifyMessageCreateOnConversationParcelType, type parcelTypes} from '@ar1s/spec/out/parcel.js';
 import {type Static} from '@sinclair/typebox';
 import {createClient} from 'redis';
 import {keydb} from '../keydb.js';
-import {getLocalPeer, getPeer} from './peer.js';
+import {getConversationIdFromMessageParcel, isMessageParcel, validateServerParcelType} from './parcel.js';
+import {getLocalPeer, getPeer, isPeerFocusingOnConversation} from './peer.js';
 
 const pubsubNamespace = 'ar1s.delivery.pubsub';
 
@@ -18,6 +19,7 @@ export const publish = async (platform: number, user: number, message: Static<ty
 		peer.local.connection.socket.send(payload);
 	};
 
+	// We DO CHECK the focusing state on subscription section in REMOTE
 	const toRemote = async () => {
 		const c = await keydb.acquire();
 
@@ -47,9 +49,29 @@ export const subscribe = async () => {
 	const client = createClient();
 
 	await client.connect();
-	await client.subscribe(pubsubNamespace, (message: string, _channel: string) => {
+	await client.subscribe(pubsubNamespace, async (message: string, _channel: string) => {
 		const transaction = unpack(message);
 		const peer = getLocalPeer(transaction.platform, transaction.user);
+
+		const parcel = JSON.parse(transaction.message) as unknown;
+
+		// Ignore invalid message
+		if (!validateServerParcelType(parcel)) {
+			return;
+		}
+
+		if (isMessageParcel(parcel)) {
+			const conversationId = getConversationIdFromMessageParcel(parcel);
+
+			if (!await isPeerFocusingOnConversation(transaction.platform, transaction.user, conversationId)) {
+				const notificationPayload: Static<typeof notifyMessageCreateOnConversationParcelType> = {
+					type: ParcelTypes.NotifyMessageCreateOnConversation,
+					payload: conversationId,
+				};
+
+				peer.connection.socket.send(JSON.stringify(notificationPayload));
+			}
+		}
 
 		if (peer) {
 			peer.connection.socket.send(transaction.message);
