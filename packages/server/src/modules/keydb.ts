@@ -1,6 +1,6 @@
 import {createClient} from 'redis';
 import genericPool from 'generic-pool';
-import {shouldEnvBeTypeOrFallback} from './env';
+import {shouldEnvBeTypeOrFallback} from './env.js';
 
 shouldEnvBeTypeOrFallback('KEYDB_POOL_MIN', 2);
 shouldEnvBeTypeOrFallback('KEYDB_POOL_MAX', 10);
