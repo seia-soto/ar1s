@@ -1,4 +1,4 @@
-import {ParcelTypes, type notifyMessageCreateOnConversationParcelType, type parcelTypes} from '@ar1s/spec/out/parcel.js';
+import {ParcelTypes, type StaticParcelTypes, type notifyMessageCreateOnConversationParcelType} from '@ar1s/spec/out/parcel.js';
 import {type Static} from '@sinclair/typebox';
 import {createClient} from 'redis';
 import {keydb} from '../keydb.js';
@@ -11,12 +11,31 @@ const pack = (platform: number, user: number, message: string) => JSON.stringify
 
 const unpack = (intertransactional: string) => JSON.parse(intertransactional) as {platform: number; user: number; message: string};
 
-export const publish = async (platform: number, user: number, message: Static<typeof parcelTypes>) => {
+const useNotificationPayloadIfUserIsOutfocusedOnConversation = async (platformId: number, userId: number, parcel: StaticParcelTypes) => {
+	if (isMessageParcel(parcel)) {
+		const conversationId = getConversationIdFromMessageParcel(parcel);
+
+		if (!await isPeerFocusingOnConversation(platformId, userId, conversationId)) {
+			const notificationPayload: Static<typeof notifyMessageCreateOnConversationParcelType> = {
+				type: ParcelTypes.NotifyMessageCreateOnConversation,
+				payload: conversationId,
+			};
+
+			return notificationPayload;
+		}
+	}
+
+	return parcel;
+};
+
+export const publish = async (platform: number, user: number, message: StaticParcelTypes) => {
 	const peer = await getPeer(platform, user);
 	const payload = JSON.stringify(message);
 
 	const toLocal = async () => {
-		peer.local.connection.socket.send(payload);
+		const data = await useNotificationPayloadIfUserIsOutfocusedOnConversation(platform, user, message);
+
+		peer.local.connection.socket.send(JSON.stringify(data));
 	};
 
 	// We DO CHECK the focusing state on subscription section in REMOTE
@@ -53,25 +72,14 @@ export const subscribe = async () => {
 		const transaction = unpack(message);
 		const peer = getLocalPeer(transaction.platform, transaction.user);
 
-		const parcel = JSON.parse(transaction.message) as unknown;
+		let parcel = JSON.parse(transaction.message) as unknown;
 
 		// Ignore invalid message
 		if (!validateServerParcelType(parcel)) {
 			return;
 		}
 
-		if (isMessageParcel(parcel)) {
-			const conversationId = getConversationIdFromMessageParcel(parcel);
-
-			if (!await isPeerFocusingOnConversation(transaction.platform, transaction.user, conversationId)) {
-				const notificationPayload: Static<typeof notifyMessageCreateOnConversationParcelType> = {
-					type: ParcelTypes.NotifyMessageCreateOnConversation,
-					payload: conversationId,
-				};
-
-				peer.connection.socket.send(JSON.stringify(notificationPayload));
-			}
-		}
+		parcel = await useNotificationPayloadIfUserIsOutfocusedOnConversation(transaction.platform, transaction.user, parcel);
 
 		if (peer) {
 			peer.connection.socket.send(transaction.message);
