@@ -1,5 +1,6 @@
 import {ConversationFormats} from '@ar1s/spec/out/conversation.js';
 import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
+import {ParcelTypes} from '@ar1s/spec/out/parcel.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {lessThan} from '@databases/pg-typed';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
@@ -7,6 +8,7 @@ import {Type} from '@sinclair/typebox';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
+import {publish} from '../../../modules/delivery/pubsub.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
@@ -99,6 +101,18 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 				// Get the details of the user to supply as the owner
 				const owner = await models.user(t).find({id: request.session.user}).select('id', 'flag', 'platform', 'displayName', 'displayAvatarUrl', 'displayBio').oneRequired();
 				const conversation = await createConversation(t, owner, request.body);
+
+				// Send to this user only
+				void publish([request.session.user], {
+					type: ParcelTypes.ConversationCreate,
+					payload: {
+						id: conversation.id,
+						flag: conversation.flag,
+						displayName: conversation.displayName,
+						displayImageUrl: conversation.displayImageUrl,
+						updatedAt: conversation.updatedAt.toString(),
+					},
+				});
 
 				return conversation;
 			});
