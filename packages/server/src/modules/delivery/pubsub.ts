@@ -1,88 +1,86 @@
 import {ParcelTypes, type StaticParcelTypes, type notifyMessageCreateOnConversationParcelType} from '@ar1s/spec/out/parcel.js';
 import {type Static} from '@sinclair/typebox';
-import {createClient} from 'redis';
 import {keydb} from '../keydb.js';
 import {getConversationIdFromMessageParcel, isMessageParcel, validateServerParcelType} from './parcel.js';
-import {getLocalPeer, getPeer, isPeerFocusingOnConversation} from './peer.js';
+import {getPeersByUser, isAllUserPeersOnlyConnectedInLocal, isPeerFocusingOnConversation} from './peer.js';
 
 const pubsubNamespace = 'ar1s.delivery.pubsub';
 
-const pack = (platform: number, user: number, message: string) => JSON.stringify({platform, user, message});
-
-const unpack = (intertransactional: string) => JSON.parse(intertransactional) as {platform: number; user: number; message: string};
-
-const useNotificationPayloadIfUserIsOutfocusedOnConversation = async (platformId: number, userId: number, parcel: StaticParcelTypes) => {
-	if (isMessageParcel(parcel)) {
-		const conversationId = getConversationIdFromMessageParcel(parcel);
-
-		if (!await isPeerFocusingOnConversation(platformId, userId, conversationId)) {
-			const notificationPayload: Static<typeof notifyMessageCreateOnConversationParcelType> = {
-				type: ParcelTypes.NotifyMessageCreateOnConversation,
-				payload: conversationId,
-			};
-
-			return notificationPayload;
-		}
-	}
-
-	return parcel;
+type Package = {
+	users: number[];
+	parcel: StaticParcelTypes;
 };
 
-export const publish = async (platform: number, user: number, message: StaticParcelTypes) => {
-	const peer = await getPeer(platform, user);
-	const payload = JSON.stringify(message);
+const unpack = (intertransactional: string) => JSON.parse(intertransactional) as Package;
 
-	const toLocal = async () => {
-		const data = await useNotificationPayloadIfUserIsOutfocusedOnConversation(platform, user, message);
+const useNotificationPayloadIfPeerIsOutfocusedOnConversation = (peerId: string, parcel: StaticParcelTypes) => {
+	if (!isMessageParcel(parcel)) {
+		return parcel;
+	}
 
-		peer.local.connection.socket.send(JSON.stringify(data));
+	const conversationId = getConversationIdFromMessageParcel(parcel);
+
+	if (isPeerFocusingOnConversation(peerId, conversationId)) {
+		return parcel;
+	}
+
+	const notificationPayload: Static<typeof notifyMessageCreateOnConversationParcelType> = {
+		type: ParcelTypes.NotifyMessageCreateOnConversation,
+		payload: conversationId,
 	};
 
-	// We DO CHECK the focusing state on subscription section in REMOTE
-	const toRemote = async () => {
-		const c = await keydb.acquire();
+	return notificationPayload;
+};
 
-		await c.publish(pubsubNamespace, pack(platform, user, payload));
-		await keydb.release(c);
-	};
+const publishToLocalPeers = (user: number, parcel: StaticParcelTypes) => {
+	const peers = getPeersByUser(user);
 
-	// The peer is connected on local
-	if (typeof peer.local !== 'undefined') {
-		await toLocal();
+	for (const peer of peers) {
+		peer.connection.socket.send(JSON.stringify(useNotificationPayloadIfPeerIsOutfocusedOnConversation(peer.id, parcel)));
+	}
+};
 
-		// The peer is connected on local and remote indicates there are more connections
-		if (typeof peer.remote === 'string' && peer.remote !== '1') {
-			await toRemote();
-		}
-
+const handleIncomingMessage = (pkg: Package) => {
+	// Ignore invalid message
+	if (!validateServerParcelType(pkg.parcel)) {
 		return;
 	}
 
-	// The peer is connected on remote
-	if (typeof peer.remote === 'string') {
-		await toRemote();
+	const {users, parcel} = pkg;
+
+	for (const user of users) {
+		publishToLocalPeers(user, parcel);
 	}
 };
 
+export const publish = async (users: number[], parcel: StaticParcelTypes) => {
+	const isUsersConnectedOnlyInLocal = await Promise.all(users.map(async user => isAllUserPeersOnlyConnectedInLocal(user)));
+	const usersInRemoteConnections: number[] = [];
+
+	for (let i = 0; i < users.length; i++) {
+		const user = users[i];
+
+		if (!isUsersConnectedOnlyInLocal[i]) {
+			usersInRemoteConnections.push(user);
+
+			continue;
+		}
+
+		publishToLocalPeers(user, parcel);
+	}
+
+	const c = await keydb.acquire();
+
+	await c.publish(pubsubNamespace, JSON.stringify({users: usersInRemoteConnections, parcel}));
+	await keydb.release(c);
+};
+
 export const subscribe = async () => {
-	const client = createClient();
+	const client = await keydb.acquire();
 
-	await client.connect();
-	await client.subscribe(pubsubNamespace, async (message: string, _channel: string) => {
-		const transaction = unpack(message);
-		const peer = getLocalPeer(transaction.platform, transaction.user);
+	await client.subscribe(pubsubNamespace, (data: string) => {
+		const pkg = unpack(data);
 
-		let parcel = JSON.parse(transaction.message) as unknown;
-
-		// Ignore invalid message
-		if (!validateServerParcelType(parcel)) {
-			return;
-		}
-
-		parcel = await useNotificationPayloadIfUserIsOutfocusedOnConversation(transaction.platform, transaction.user, parcel);
-
-		if (peer) {
-			peer.connection.socket.send(transaction.message);
-		}
+		handleIncomingMessage(pkg);
 	});
 };

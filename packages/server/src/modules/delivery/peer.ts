@@ -1,90 +1,119 @@
+import {nanoid} from 'nanoid';
 import {keydb} from '../keydb.js';
 import {type WebSocketWithConnection} from '../ws.js';
 
 type Peer = {
-	connection: WebSocketWithConnection;
-	platform: number;
+	id: string;
 	user: number;
+	connection: WebSocketWithConnection;
 	data: {
 		focusedOnConversation: number;
 	};
 };
 
-export const pool: Record<string, Peer> = {};
+export const pool = new Map<string, Peer>();
+export const poolMappedByUser: Record<number, Peer[]> = {};
 
-export const statusNamespace = 'ar1s.delivery.status';
+export const statusNamespace = 'ar1s.delivery.peer';
 
-// Generation of the key with platform id reduces futher computational resource uses
-export const generateKey = (platform: number, user: number) => `${platform}:${user}`;
+export const getPeerConnectionCountInCluster = async (c: Awaited<ReturnType<typeof keydb['acquire']>>, userIdStr: string) => {
+	const v = await c.hGet(statusNamespace, userIdStr);
 
-export const getLocalPeer = (platform: number, user: number) => pool[generateKey(platform, user)];
+	if (!v) {
+		return 0;
+	}
 
-export const getPeer = async (platform: number, user: number) => {
-	const key = generateKey(platform, user);
+	return parseInt(v, 10);
+};
 
-	const c = await keydb.acquire();
-	const v = await c.hGet(statusNamespace, key);
+export const peerIdLocks: Record<string, false> = {};
+
+const createPeerId = () => {
+	let id: string;
+
+	do {
+		id = nanoid(16);
+	} while (!pool.has(id) && typeof peerIdLocks[id] === 'undefined');
+
+	peerIdLocks[id] = false;
+
+	const unlock = () => {
+		// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+		delete peerIdLocks[id];
+	};
 
 	return {
-		local: pool[key],
-		remote: v,
+		id,
+		unlock,
 	};
 };
 
-export const setPeer = async (platform: number, user: number, connection: WebSocketWithConnection) => {
-	const key = generateKey(platform, user);
-
-	pool[key] = {
-		connection,
-		platform,
+export const registerPeer = async (user: number, connection: WebSocketWithConnection) => {
+	const {id, unlock} = createPeerId();
+	const peer = {
+		id,
 		user,
+		connection,
 		data: {
 			focusedOnConversation: 0,
 		},
 	};
 
-	const c = await keydb.acquire();
-	const connectionSizeString = await c.hGet(statusNamespace, key);
+	pool.set(id, peer);
 
-	if (!connectionSizeString) {
-		await c.hSet(statusNamespace, key, 1);
+	unlock();
 
-		return;
-	}
-
-	await c.hIncrBy(statusNamespace, key, 1);
-};
-
-export const delPeer = async (platform: number, user: number) => {
-	const key = generateKey(platform, user);
-
-	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-	delete pool[key];
+	poolMappedByUser[user] ||= [];
+	poolMappedByUser[user].push(peer);
 
 	const c = await keydb.acquire();
 
-	if (await c.hGet(statusNamespace, key) === '1') {
-		await c.hDel(statusNamespace, key);
+	await c.hIncrBy(statusNamespace, user.toString(), 1);
+};
 
+export const unregisterPeer = async (id: string) => {
+	const peer = pool.get(id);
+
+	if (!peer) {
 		return;
 	}
 
-	await c.hIncrBy(statusNamespace, key, -1);
+	const u = peer.user.toString();
+	const c = await keydb.acquire();
+	const v = await getPeerConnectionCountInCluster(c, u);
+
+	if (v === 1) {
+		await c.hDel(statusNamespace, u);
+	} else {
+		await c.hIncrBy(statusNamespace, u, -1);
+	}
+
+	// Release but there's no need wait
+	void keydb.release(c);
+
+	// Filter by comparing the Object reference
+	poolMappedByUser[peer.user] = poolMappedByUser[peer.user].filter(mapped => mapped !== peer);
+
+	// Delete
+	pool.delete(id);
 };
 
-export const isPeerFocusingOnConversation = async (platform: number, user: number, conversation: number) => {
-	const peer = await getPeer(platform, user);
+export const getPeersByUser = (user: number) => poolMappedByUser[user] || [];
 
-	if (typeof peer.local !== 'undefined' && peer.local.data.focusedOnConversation !== conversation) {
+export const getPeerById = (id: string) => pool.get(id);
+
+export const isAllUserPeersOnlyConnectedInLocal = async (user: number) => {
+	const c = await keydb.acquire();
+
+	return poolMappedByUser[user].length === await getPeerConnectionCountInCluster(c, user.toString());
+};
+
+export const isPeerFocusingOnConversation = (id: string, conversation: number) => {
+	const peer = getPeerById(id);
+
+	if (!peer) {
 		return false;
 	}
 
-	// If peer is remotely connected, we cannot determine the focusing state
-	// It's undeterminable as peer can use multiple devices at the time
-	// Just publish!
-	if (typeof peer.remote !== 'undefined') {
-		return true;
-	}
-
-	return false;
+	return peer.data.focusedOnConversation === conversation;
 };
