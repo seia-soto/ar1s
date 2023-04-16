@@ -1,8 +1,8 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {registerPeer, unregisterPeer} from '../../../modules/delivery/peer.js';
-import {usePermissionError} from '../../../modules/error.js';
-import {EventFormats, issueTicket, retrieveTicket} from '../../../specs/event.js';
+import {registerPeer, unregisterPeer} from '../../modules/delivery/peer.js';
+import {usePermissionError} from '../../modules/error.js';
+import {EventFormats, issueTicket, retrieveTicket} from '../../specs/event.js';
 
 export const eventRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Issue ticket for the WebSocket connection
