@@ -104,7 +104,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 				const conversation = await createConversation(t, owner, request.body);
 
 				// Send to this user only
-				void publish([request.session.user], {
+				await publish([request.session.user], {
 					type: ParcelTypes.ConversationCreate,
 					payload: {
 						id: conversation.id,
@@ -146,7 +146,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 					updatedAt: new Date(),
 				});
 
-				void publish(await getHumanConversationMemberIds(t, id), {
+				await publish(await getHumanConversationMemberIds(t, id), {
 					type: ParcelTypes.ConversationUpdate,
 					payload: {
 						id,
@@ -177,7 +177,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 					throw useInexistingResourceError();
 				}
 
-				void publish(await getHumanConversationMemberIds(t, id), {
+				await publish(await getHumanConversationMemberIds(t, id), {
 					type: ParcelTypes.ConversationDelete,
 					payload: id,
 				});
@@ -240,7 +240,7 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 						conversation: id,
 					}, request.body);
 
-				void publish(await getHumanConversationMemberIds(t, id), {
+				await publish(await getHumanConversationMemberIds(t, id), {
 					type: ParcelTypes.ConversationMemberUpdate,
 					payload: {
 						id: conversationMember.id,
@@ -346,7 +346,7 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 					updatedAt: now,
 				});
 
-				void publish(await getHumanConversationMemberIds(t, id), {
+				await publish(await getHumanConversationMemberIds(t, id), {
 					type: ParcelTypes.MessageCreate,
 					payload: {
 						...message,
@@ -389,6 +389,11 @@ where id = ${messageId} and conversation = ${conversationId}
 				}
 
 				await models.message(t).delete({id: messageId});
+
+				await publish(await getHumanConversationMemberIds(t, conversationId), {
+					type: ParcelTypes.MessageDelete,
+					payload: messageId,
+				});
 
 				return '';
 			});
