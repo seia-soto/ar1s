@@ -177,6 +177,11 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 					throw useInexistingResourceError();
 				}
 
+				void publish(await getHumanConversationMemberIds(t, id), {
+					type: ParcelTypes.ConversationDelete,
+					payload: id,
+				});
+
 				await deleteConversation(t, id);
 
 				return '';
