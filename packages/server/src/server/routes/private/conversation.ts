@@ -336,7 +336,7 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 
 				const now = new Date();
 
-				await models.message(t).insert({
+				const [message] = await models.message(t).insert({
 					flag: 0,
 					platform: request.session.platform,
 					author: request.session.user,
@@ -344,6 +344,15 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 					content: request.body.content,
 					createdAt: now,
 					updatedAt: now,
+				});
+
+				void publish(await getHumanConversationMemberIds(t, id), {
+					type: ParcelTypes.MessageCreate,
+					payload: {
+						...message,
+						createdAt: message.createdAt.toString(),
+						updatedAt: message.updatedAt.toString(),
+					},
 				});
 
 				return '';
