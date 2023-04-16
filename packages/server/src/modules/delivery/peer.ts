@@ -69,6 +69,8 @@ export const registerPeer = async (user: number, connection: WebSocketWithConnec
 	const c = await keydb.acquire();
 
 	await c.hIncrBy(statusNamespace, user.toString(), 1);
+
+	return id;
 };
 
 export const unregisterPeer = async (id: string) => {

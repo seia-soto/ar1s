@@ -1,6 +1,6 @@
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
-import {registerPeer} from '../../../modules/delivery/peer.js';
+import {registerPeer, unregisterPeer} from '../../../modules/delivery/peer.js';
 import {usePermissionError} from '../../../modules/error.js';
 import {EventFormats, issueTicket, retrieveTicket} from '../../../specs/event.js';
 
@@ -41,8 +41,14 @@ export const eventRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => 
 			}
 
 			const ws = await request.resolveWebSocket();
+			const id = await registerPeer(pin.userId, ws);
 
-			await registerPeer(pin.userId, ws);
+			const unregister = () => {
+				void unregisterPeer(id);
+			};
+
+			ws.socket.once('close', unregister);
+			ws.socket.once('error', unregister);
 		},
 	});
 };
