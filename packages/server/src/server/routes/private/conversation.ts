@@ -12,6 +12,7 @@ import {publish} from '../../../modules/delivery/pubsub.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
+import {getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -140,9 +141,20 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 					throw useInexistingResourceError();
 				}
 
-				await models.conversation(t).update({id}, {
+				const [conversation] = await models.conversation(t).update({id}, {
 					...request.body,
 					updatedAt: new Date(),
+				});
+
+				void publish(await getHumanConversationMemberIds(t, id), {
+					type: ParcelTypes.ConversationUpdate,
+					payload: {
+						id,
+						flag: conversation.flag,
+						displayName: conversation.displayName,
+						displayImageUrl: conversation.displayImageUrl,
+						updatedAt: conversation.updatedAt.toString(),
+					},
 				});
 
 				return '';

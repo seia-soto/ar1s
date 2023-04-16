@@ -9,10 +9,11 @@ export const getConversationMembers = async (t: Transaction, conversationId: Con
 
 export const getHumanConversationMemberIds = async (t: Transaction, conversationId: Conversation['id']) => {
 	const ownerFlag = addFlag(0, compileBit(ConversationMemberFlags.IsOwner));
-
-	return t.query(t.sql`select id from ${models.conversationMember(t).tableName}
+	const members = await t.query(t.sql`select id from ${models.conversationMember(t).tableName}
 conversation = ${conversationId}
-and (flag = 0 or flag & ${ownerFlag} = ${ownerFlag})`) as Promise<Array<Pick<ConversationMember, 'id'>>>;
+and (flag = 0 or flag & ${ownerFlag} = ${ownerFlag})`) as Array<Pick<ConversationMember, 'id'>>;
+
+	return members.map(member => member.id);
 };
 
 export type ConversationMemberInsertParams = Pick<User, 'id' | 'platform' | 'displayName' | 'displayAvatarUrl' | 'displayBio'>;
