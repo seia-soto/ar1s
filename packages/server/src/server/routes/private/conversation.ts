@@ -234,11 +234,23 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				await models.conversationMember(t)
+				const [conversationMember] = await models.conversationMember(t)
 					.update({
 						user: request.session.user,
 						conversation: id,
 					}, request.body);
+
+				void publish(await getHumanConversationMemberIds(t, id), {
+					type: ParcelTypes.ConversationMemberUpdate,
+					payload: {
+						id: conversationMember.id,
+						flag: conversationMember.flag,
+						createdAt: conversationMember.createdAt.toString(),
+						displayName: conversationMember.displayName,
+						displayAvatarUrl: conversationMember.displayAvatarUrl,
+						displayBio: conversationMember.displayBio,
+					},
+				});
 
 				return '';
 			});
