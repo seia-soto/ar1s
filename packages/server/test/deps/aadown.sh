@@ -15,11 +15,13 @@ fi;
 while true; do
   echo "Waiting the port $PORT to be released...";
 
-  if [[ -z "$(lsof -i -P | grep 'LISTEN' | grep ":$PORT")" ]]; then
+  if [[ -z "$(lsof -i -n -P | grep 'LISTEN' | grep ":$PORT")" ]]; then
     echo "Released!";
 
     break;
   fi;
+
+  sleep 1;
 done;
 
 echo "Shutted down $CONTAINER_NAME ($IMAGE)";
