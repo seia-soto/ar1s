@@ -163,7 +163,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 		},
 	});
 
-	// Delete the conversation
+	// Delete the conversation, or quit the conversation unless the owner is requester
 	fastify.route({
 		url: '/:id',
 		method: 'DELETE',
@@ -174,8 +174,22 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				if (!await isUserOwnedConversation(t, request.session.user, id)) {
+				if (!await isUserJoinedConversation(t, request.session.user, id)) {
 					throw useInexistingResourceError();
+				}
+
+				if (!await isUserOwnedConversation(t, request.session.user, id)) {
+					const conversationMember = await models.conversationMember(t).find({conversation: id}).select('id').oneRequired();
+
+					await models.message(t).delete({author: conversationMember.id});
+					await models.conversationMember(t).delete({id: conversationMember.id});
+
+					void publish(await getHumanConversationMemberIds(t, id), {
+						type: ParcelTypes.ConversationMemberDelete,
+						payload: conversationMember.id,
+					});
+
+					return '';
 				}
 
 				void publish(await getHumanConversationMemberIds(t, id), {
