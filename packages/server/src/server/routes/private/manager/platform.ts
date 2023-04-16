@@ -28,7 +28,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 	});
 
 	fastify.route({
-		url: '/flag',
+		url: '/opt',
 		method: 'PATCH',
 		schema: {
 			body: Type.Object({
