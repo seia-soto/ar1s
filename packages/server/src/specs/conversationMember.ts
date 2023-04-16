@@ -1,9 +1,19 @@
+import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type Transaction} from '@databases/pg';
 import {models} from '../modules/database/index.js';
 import {type Conversation, type ConversationMember, type User} from '../modules/database/schema/index.js';
 
 export const getConversationMembers = async (t: Transaction, conversationId: Conversation['id']) => models.conversationMember(t)
 	.find({conversation: conversationId});
+
+export const getHumanConversationMemberIds = async (t: Transaction, conversationId: Conversation['id']) => {
+	const ownerFlag = addFlag(0, compileBit(ConversationMemberFlags.IsOwner));
+
+	return t.query(t.sql`select id from ${models.conversationMember(t).tableName}
+conversation = ${conversationId}
+and (flag = 0 or flag & ${ownerFlag} = ${ownerFlag})`) as Promise<Array<Pick<ConversationMember, 'id'>>>;
+};
 
 export type ConversationMemberInsertParams = Pick<User, 'id' | 'platform' | 'displayName' | 'displayAvatarUrl' | 'displayBio'>;
 
