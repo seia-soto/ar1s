@@ -9,8 +9,8 @@ export const getConversationMembers = async (t: Transaction, conversationId: Con
 
 export const getHumanConversationMemberIds = async (t: Transaction, conversationId: Conversation['id']) => {
 	const ownerFlag = addFlag(0, compileBit(ConversationMemberFlags.IsOwner));
-	const members = await t.query(t.sql`select id from ${models.conversationMember(t).tableName}
-conversation = ${conversationId}
+	const members = await t.query(t.sql`select id from ${t.sql.ident(models.conversationMember(t).tableName)}
+where conversation = ${conversationId}
 and (flag = 0 or flag & ${ownerFlag} = ${ownerFlag})`) as Array<Pick<ConversationMember, 'id'>>;
 
 	return members.map(member => member.id);
