@@ -16,7 +16,7 @@ and (flag = 0 or flag & ${ownerFlag} = ${ownerFlag})`) as Array<Pick<Conversatio
 	return members.map(member => member.id);
 };
 
-export type ConversationMemberInsertParams = Pick<User, 'id' | 'platform' | 'displayName' | 'displayAvatarUrl' | 'displayBio'>;
+export type ConversationMemberInsertParams = Pick<User, 'id' | 'platform'>;
 
 export const createConversationMember = async (t: Transaction, conversationId: Conversation['id'], user: ConversationMemberInsertParams, flag = 0) => {
 	const now = new Date();

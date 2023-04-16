@@ -1,7 +1,7 @@
 import {ConversationFormats} from '@ar1s/spec/out/conversation.js';
 import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {ParcelTypes} from '@ar1s/spec/out/parcel.js';
-import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
+import {addFlag, compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {lessThan} from '@databases/pg-typed';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
@@ -12,7 +12,8 @@ import {publish} from '../../../modules/delivery/pubsub.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
-import {getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
+import {createConversationMember, getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
+import {UserFlags} from '@ar1s/spec/out/user.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -277,6 +278,49 @@ left join ${t.sql.ident(models.user(t).tableName)} u ON cm."user" = u.id
 where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' | 'displayName' | 'displayAvatarUrl' | 'displayBio' | 'createdAt'>>;
 
 				return conversationMembers;
+			});
+		},
+	});
+
+	// Add member to the conversation
+	fastify.route({
+		url: '/:conversation/member/:user',
+		method: 'POST',
+		schema: {
+			params: Type.Object({
+				conversation: Type.String({
+					format: Formats.NumericInt,
+				}),
+				user: Type.String({
+					format: Formats.NumericInt,
+				}),
+			}),
+		},
+		async handler(request, _reply) {
+			const conversationId = useSingleRangedQueryParam(request.params.conversation);
+			const userId = useSingleRangedQueryParam(request.params.user);
+
+			const systemFlag = addFlag(0, compileBit(UserFlags.System));
+			const assistantFlag = addFlag(0, compileBit(UserFlags.Assistant));
+
+			return db.tx(async t => {
+				const user = await models.user(t)
+					.find({
+						id: userId,
+						platform: request.session.platform,
+					})
+					.andWhere(t.sql`not flag ^ ${systemFlag} = ${systemFlag} and flag ^ ${assistantFlag} = ${assistantFlag}`)
+					.select('id', 'platform')
+					.oneRequired()
+					.catch(error => {
+						request.log.error(error);
+
+						throw useInexistingResourceError();
+					});
+
+				await createConversationMember(t, conversationId, user, 0);
+
+				return '';
 			});
 		},
 	});
