@@ -8,6 +8,7 @@ import {conversationRouter} from './conversation.js';
 import {managerRoute} from './manager/index.js';
 import {platformRouter} from './platform.js';
 import {userRouter} from './user.js';
+import {eventRouter} from './event.js';
 
 export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// We should decorate user 'object' into 'null' for performance reason
@@ -62,6 +63,7 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 	await fastify.register(adminRoute, {prefix: '/admin'});
 	await fastify.register(managerRoute, {prefix: '/manager'});
 	await fastify.register(conversationRouter, {prefix: '/conversation'});
+	await fastify.register(eventRouter, {prefix: '/event'});
 	await fastify.register(platformRouter, {prefix: '/platform'});
 	await fastify.register(userRouter, {prefix: '/user'});
 };
