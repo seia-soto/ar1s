@@ -381,3 +381,14 @@ test.serial('the user can delete the conversation', async t => {
 	t.is(deleteResponse.statusCode, 200);
 	t.falsy(await getFirstConversation(t));
 });
+
+test.serial('the user can issue an authorized url to connect websocket', async t => {
+	const response = await t.context.inject({
+		url: '/private/event',
+		method: 'POST',
+	});
+	const json = JSON.parse(response.payload) as {ticket: string};
+
+	t.is(response.statusCode, 200);
+	t.truthy(json.ticket);
+});
