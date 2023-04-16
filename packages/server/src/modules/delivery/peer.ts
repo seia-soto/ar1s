@@ -107,7 +107,7 @@ export const getPeerById = (id: string) => pool.get(id);
 export const isAllUserPeersOnlyConnectedInLocal = async (user: number) => {
 	const c = await keydb.acquire();
 
-	return poolMappedByUser[user].length === await getPeerConnectionCountInCluster(c, user.toString());
+	return getPeersByUser(user).length === await getPeerConnectionCountInCluster(c, user.toString());
 };
 
 export const isPeerFocusingOnConversation = (id: string, conversation: number) => {
