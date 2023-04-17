@@ -1,5 +1,5 @@
 import {PlatformFlags, PlatformFormats} from '@ar1s/spec/out/platform.js';
-import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
+import {addFlag, compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
@@ -154,6 +154,55 @@ export class Platform extends Context {
 		});
 
 		return this;
+	}
+
+	async pushDisplayParams(params: {displayName?: Platform['displayName']; displayImageUrl?: Platform['displayImageUrl']}) {
+		this.requestElevationToPlatformManager();
+
+		await this._context.fetcher('private/manager/platform', {
+			method: 'patch',
+			json: params,
+		});
+
+		this.displayName = params.displayName ?? this.displayName;
+		this.displayImageUrl = params.displayImageUrl ?? this.displayImageUrl;
+
+		return this;
+	}
+
+	async pushOpt(params: {isSignUpDisabled: boolean}) {
+		this.requestElevationToPlatformManager();
+
+		await this._context.fetcher('private/manager/platform/opt', {
+			method: 'patch',
+			json: params,
+		});
+
+		if (params.isSignUpDisabled) {
+			this.flag = addFlag(this.flag, compileBit(PlatformFlags.IsSignUpDisabled));
+		}
+
+		return this;
+	}
+
+	isSelfMemberOfPlatform() {
+		try {
+			this.requestElevationToPlatformMember();
+
+			return true;
+		} catch (_e) {
+			return false;
+		}
+	}
+
+	isSelfPlatformManager() {
+		try {
+			this.requestElevationToPlatformManager();
+
+			return true;
+		} catch (_e) {
+			return false;
+		}
 	}
 
 	private requestElevationToPlatformMember() {
