@@ -1,7 +1,7 @@
 import {ConversationFormats} from '@ar1s/spec/out/conversation.js';
-import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {ParcelTypes} from '@ar1s/spec/out/parcel.js';
-import {addFlag, compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
+import {UserFlags} from '@ar1s/spec/out/user.js';
+import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {lessThan} from '@databases/pg-typed';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
@@ -11,9 +11,8 @@ import type ConversationMember from '../../../modules/database/schema/conversati
 import {publish} from '../../../modules/delivery/pubsub.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
-import {createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
+import {conversationStandardDataTypeObjectParams, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {createConversationMember, getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
-import {UserFlags} from '@ar1s/spec/out/user.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -31,12 +30,12 @@ export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _op
 				const userTableName = models.user(t).tableName;
 				const conversationTableName = models.conversation(t).tableName;
 				const conversationMemberTableName = models.conversationMember(t).tableName;
-				const entries = await t.query(t.sql`select c.id, c.flag, c."displayName", c."displayImageUrl", c."updatedAt" from ${t.sql.ident(conversationTableName)} c
+				const entries = await t.query(t.sql`select c.id, c.flag, c."displayName", c."displayImageUrl", c."createdAt", c."updatedAt" from ${t.sql.ident(conversationTableName)} c
 join ${t.sql.ident(conversationMemberTableName)} cm on c.id = cm.conversation
 join ${t.sql.ident(userTableName)} u on cm.user = u.id
 where u.id = ${request.session.user} and
 c.id >= ${from}
-order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'displayName' | 'displayImageUrl' | 'updatedAt'>>;
+order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'displayName' | 'displayImageUrl' | 'createdAt' | 'updatedAt'>>;
 
 				return entries;
 			});
@@ -55,26 +54,7 @@ order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'd
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				// Get if the user is the member of the conversation
-				const conversationMember = await models.conversationMember(t)
-					.find({user: request.session.user})
-					.andWhere({conversation: id})
-					.select('flag')
-					.oneRequired()
-					.catch(error => {
-						request.log.error(error);
-
-						throw useInexistingResourceError();
-					});
-
-				// If the user is the owner of the conversation
-				if (hasFlag(conversationMember.flag, compileBit(ConversationMemberFlags.IsOwner))) {
-					const conversation = await models.conversation(t).findOneRequired({id});
-
-					return conversation;
-				}
-
-				const conversation = await models.conversation(t).find({id}).select('id', 'flag', 'displayName', 'displayImageUrl', 'updatedAt').oneRequired();
+				const conversation = await models.conversation(t).find({id}).select(...conversationStandardDataTypeObjectParams).oneRequired();
 
 				return conversation;
 			});

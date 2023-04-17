@@ -5,6 +5,8 @@ import {models} from '../modules/database/index.js';
 import {type Conversation, type User} from '../modules/database/schema/index.js';
 import {createConversationMember, type ConversationMemberInsertParams} from './conversationMember.js';
 
+export const conversationStandardDataTypeObjectParams: [keyof Conversation, ...Array<keyof Conversation>] = ['id', 'flag', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt'];
+
 export type ConversationInsertParams = {
 	model: string;
 	systemMessage: string;
