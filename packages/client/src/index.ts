@@ -1,5 +1,5 @@
 import type ky from 'ky';
-import {getDefaultPlatform, getPlatformByInvite, signUpOnPlatform} from './specs/platform';
+import {getDefaultPlatform, getPlatformByInvite, signUpOnPlatform} from './specs/platform.js';
 
 export type Options = {
 	fetcher: typeof ky;
