@@ -91,16 +91,12 @@ export class Platform extends Context {
 	async pullUsers() {
 		this.requestElevationToPlatformMember();
 
-		if (typeof this._context.user === 'undefined') {
-			throw new Error('Unauthorized: You cannot call users');
-		}
-
 		const response = await this._context.fetcher('private/platform/users', {method: 'get'});
 		const json: UserReflection[] = await response.json();
 
 		json.map(data => this.users.add(new User(this._context, data)));
 
-		this.users.add(this._context.user);
+		this.users.add(this._context.user!); // The existence of user is checked on `requestElevationToPlatformMember`
 
 		return this;
 	}
