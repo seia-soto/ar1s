@@ -10,7 +10,10 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		method: 'GET',
 		async handler(request, _reply) {
 			return db.tx(async t => {
-				const platform = await models.platform(t).find({id: request.session.platform}).select('displayName', 'displayImageUrl').oneRequired();
+				const platform = await models.platform(t)
+					.find({id: request.session.platform})
+					.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl')
+					.oneRequired();
 
 				return platform;
 			});
