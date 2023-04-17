@@ -10,7 +10,7 @@ import {ValidationErrorCodes, useValidationError} from '../../../modules/error.j
 import {createHash, validateHash} from '../../../modules/hash.js';
 import {getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
 import {deletePlatform} from '../../../specs/platform.js';
-import {deleteUser} from '../../../specs/user.js';
+import {deleteUser, userStandardDataTypeObjectParams} from '../../../specs/user.js';
 import {SessionCookieNames} from '../session/index.js';
 
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
@@ -21,7 +21,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 			return db.tx(async t => {
 				const user = await models.user(t)
 					.find({id: request.session.user})
-					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
+					.select(...userStandardDataTypeObjectParams)
 					.oneRequired();
 
 				return user;

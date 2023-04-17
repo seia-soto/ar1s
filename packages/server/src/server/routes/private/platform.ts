@@ -3,6 +3,7 @@ import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {db, models} from '../../../modules/database/index.js';
 import {platformStandardDataTypeObjectParams} from '../../../specs/platform.js';
+import {userStandardDataTypeObjectParams} from '../../../specs/user.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get the platform data
@@ -35,7 +36,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 						platform: request.session.platform,
 					})
 					.andWhere(t.sql`not flag & ${systemFlag} = ${systemFlag} or flag & ${assistantFlag} = ${assistantFlag}`)
-					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
+					.select(...userStandardDataTypeObjectParams)
 					.all();
 
 				return users;

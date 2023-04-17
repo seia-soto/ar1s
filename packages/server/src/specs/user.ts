@@ -5,6 +5,8 @@ import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
 import {createHash, validateHash} from '../modules/hash.js';
 import {deleteConversation, getOwnedConversations} from './conversation.js';
 
+export const userStandardDataTypeObjectParams: [keyof User, ...Array<keyof User>] = ['id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt'];
+
 export type UserInsertParams = Omit<User_InsertParameters, 'createdAt' | 'updatedAt'>;
 
 export const createUser = async (t: Transaction, params: UserInsertParams) => {
