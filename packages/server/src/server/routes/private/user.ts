@@ -19,7 +19,10 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 		method: 'GET',
 		async handler(request, _reply) {
 			return db.tx(async t => {
-				const user = await models.user(t).find({id: request.session.user}).select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt').oneRequired();
+				const user = await models.user(t)
+					.find({id: request.session.user})
+					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
+					.oneRequired();
 
 				return user;
 			});

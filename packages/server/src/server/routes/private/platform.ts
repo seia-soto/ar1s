@@ -31,7 +31,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 						platform: request.session.platform,
 					})
 					.andWhere(t.sql`not flag & ${systemFlag} = ${systemFlag} or flag & ${assistantFlag} = ${assistantFlag}`)
-					.select('id', 'flag', 'username', 'displayName', 'displayAvatarUrl')
+					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
 					.all();
 
 				return users;

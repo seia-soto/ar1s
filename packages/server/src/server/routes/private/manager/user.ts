@@ -25,7 +25,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 						id: greaterThan(from - 1),
 						platform: request.session.platform,
 					})
-					.select('id', 'flag', 'username', 'displayName', 'displayBio', 'displayAvatarUrl', 'createdAt', 'updatedAt')
+					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
 					.orderByAsc('id')
 					.limit(size);
 
@@ -52,7 +52,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 						platform: request.session.platform,
 						username: request.params.username,
 					})
-					.select('id', 'flag', 'username', 'displayName', 'displayBio', 'displayAvatarUrl', 'createdAt', 'updatedAt')
+					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
 					.oneRequired()
 					.catch(error => {
 						request.log.error(error);
