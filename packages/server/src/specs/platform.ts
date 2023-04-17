@@ -23,13 +23,13 @@ export const getDefaultPlatform = async (t: Transaction) => {
 
 	return models.platform(t)
 		.find(db.sql`flag & ${flag} = ${flag}`)
-		.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl')
+		.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt')
 		.one();
 };
 
 export const getPlatformByInvite = async (t: Transaction, inviteIdentifier: string) => models.platform(t)
 	.find({inviteIdentifier})
-	.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl')
+	.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt')
 	.one();
 
 export const createPlatform = async (t: Transaction, platformParams: Pick<Platform_InsertParameters, 'inviteIdentifier' | 'displayName' | 'displayImageUrl' | 'token'>, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {

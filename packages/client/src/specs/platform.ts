@@ -16,8 +16,8 @@ type PlatformReflection = {
 	inviteIdentifier: Platform['inviteIdentifier'];
 	displayName: Platform['displayName'];
 	displayImageUrl: Platform['displayImageUrl'];
-	createdAt?: string | Platform['createdAt'];
-	updatedAt?: string | Platform['updatedAt'];
+	createdAt: string | Platform['createdAt'];
+	updatedAt: string | Platform['updatedAt'];
 };
 
 export class Platform extends Context {
@@ -31,6 +31,8 @@ export class Platform extends Context {
 			inviteIdentifier: Platform['inviteIdentifier'];
 			displayName: Platform['displayName'];
 			displayImageUrl: Platform['displayImageUrl'];
+			createdAt: string;
+			updatedAt: string;
 		} = await platformResponse.json();
 
 		const platform = new Platform(context, platformData);
@@ -49,8 +51,8 @@ export class Platform extends Context {
 	readonly inviteIdentifier: string;
 	displayName: string;
 	displayImageUrl: string;
-	createdAt?: Date;
-	updatedAt?: Date;
+	readonly createdAt: Date;
+	updatedAt: Date;
 
 	users = new Collection<User>();
 
@@ -67,14 +69,8 @@ export class Platform extends Context {
 		this.inviteIdentifier = params.inviteIdentifier;
 		this.displayName = params.displayName;
 		this.displayImageUrl = params.displayImageUrl;
-
-		if (params.createdAt) {
-			this.createdAt = new Date(params.createdAt);
-		}
-
-		if (params.updatedAt) {
-			this.updatedAt = new Date(params.updatedAt);
-		}
+		this.createdAt = new Date(params.createdAt);
+		this.updatedAt = new Date(params.updatedAt);
 	}
 
 	update(params: PlatformReflection) {
@@ -83,14 +79,7 @@ export class Platform extends Context {
 		this.flag = params.flag;
 		this.displayName = params.displayName;
 		this.displayImageUrl = params.displayImageUrl;
-
-		if (params.createdAt) {
-			this.createdAt = new Date(params.createdAt);
-		}
-
-		if (params.updatedAt) {
-			this.updatedAt = new Date(params.updatedAt);
-		}
+		this.updatedAt = new Date(params.updatedAt);
 
 		this._copyUpdatedAt = new Date();
 

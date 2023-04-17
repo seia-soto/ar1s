@@ -12,7 +12,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 			return db.tx(async t => {
 				const platform = await models.platform(t)
 					.find({id: request.session.platform})
-					.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl')
+					.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt')
 					.oneRequired();
 
 				return platform;
