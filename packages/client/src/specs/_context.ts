@@ -31,4 +31,8 @@ export class Collection<T extends Context> {
 
 		return true;
 	}
+
+	values() {
+		return Object.values(this.map);
+	}
 }
