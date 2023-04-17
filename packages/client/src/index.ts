@@ -1,22 +1,39 @@
 import type ky from 'ky';
-import {bootstrap} from './specs/bootstrap.js';
-import {getDefaultPlatform, getPlatformByInvite, signUpOnPlatform} from './specs/platform.js';
+import {Platform} from './specs/platform.js';
+import {type User} from './specs/user.js';
 
 export type Options = {
 	fetcher: typeof ky;
 };
 
-export const ar1s = async (opts: Options) => {
-	opts.fetcher = opts.fetcher.extend({
-		throwHttpErrors: true, // Do not allow non-2xx codes
-	});
+export class Aris {
+	platform?: Platform;
+	user?: User;
 
-	return {
-		public: {
-			getDefaultPlatform: getDefaultPlatform.bind(null, opts),
-			getPlatformByInvite: getPlatformByInvite.bind(null, opts),
-			signUpOnPlatform: signUpOnPlatform.bind(null, opts),
-			bootstrap: bootstrap.bind(null, opts),
-		},
-	};
-};
+	constructor(
+		readonly fetcher: typeof ky,
+	) {}
+
+	async signIn(platformInviteIdentifier: Platform['inviteIdentifier'], username: User['username'], password: string, isTrustedEnvironment: boolean) {
+		this.platform = await Platform.from(this, platformInviteIdentifier);
+
+		await this.fetcher('session', {
+			method: 'post',
+			json: {
+				username,
+				password,
+				isTrustedEnvironment,
+			},
+		});
+	}
+
+	async signUp(platformInviteIdentifier: Platform['inviteIdentifier'], username: User['username'], password: string, signInImmediately: false | {isTrustedEnvironment: boolean} = false) {
+		this.platform = await Platform.from(this, platformInviteIdentifier);
+
+		await this.platform.signUp(username, password);
+
+		if (signInImmediately) {
+			await this.signIn(platformInviteIdentifier, username, password, signInImmediately.isTrustedEnvironment);
+		}
+	}
+}

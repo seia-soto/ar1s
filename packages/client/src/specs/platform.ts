@@ -1,52 +1,93 @@
 import {PlatformFormats} from '@ar1s/spec/out/platform.js';
 import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
-import {type Options} from '../index.js';
+import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
-import {type User} from './user.js';
+import {Context} from './_context.js';
+import {checkPassword, checkUsername} from './user.js';
 
-export type Platform = {
+export const checkInvite = createCompiledType(Type.String({
+	format: PlatformFormats.InviteIdentifier,
+}));
+
+export class Platform extends Context {
+	public static async from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']) {
+		const platformResponse = inviteIdentifier
+			? await context.fetcher('platform/invite/' + inviteIdentifier, {method: 'get'})
+			: await context.fetcher('platform', {method: 'get'});
+		const platformData: {
+			id: Platform['id'];
+			flag: Platform['flag'];
+			inviteIdentifier: Platform['inviteIdentifier'];
+			displayName: Platform['displayName'];
+			displayImageUrl: Platform['displayImageUrl'];
+		} = await platformResponse.json();
+
+		const platform = new Platform(context, platformData);
+
+		return platform;
+	}
+
 	id: number;
 	flag: number;
 	inviteIdentifier: string;
 	displayName: string;
 	displayImageUrl: string;
-	createdAt: string;
-	updatedAt: string;
-};
+	createdAt?: Date;
+	updatedAt?: Date;
 
-export const inviteType = createCompiledType(Type.String({
-	format: PlatformFormats.InviteIdentifier,
-}));
-
-export const getDefaultPlatform = async (opts: Options) => {
-	const response = await opts.fetcher('platform');
-	const json = await response.json<Pick<Platform, 'id' | 'flag' | 'displayName' | 'displayImageUrl'>>();
-
-	return json;
-};
-
-export const getPlatformByInvite = async (opts: Options, invite: Platform['inviteIdentifier']) => {
-	if (!inviteType.check(invite)) {
-		throw useFormatError(inviteType.errors(invite));
-	}
-
-	const response = await opts.fetcher('platform/invite/' + invite);
-	const json = await response.json <Pick<Platform, 'id' | 'flag' | 'displayName' | 'displayImageUrl'>>();
-
-	return json;
-};
-
-export const signUpOnPlatform = async (opts: Options, invite: Platform['inviteIdentifier'], user: {username: User['username']; password: string}) => {
-	if (!inviteType.check(invite)) {
-		throw useFormatError(inviteType.errors(invite));
-	}
-
-	await opts.fetcher('platform/invite/' + invite, {
-		method: 'post',
-		json: {
-			username: user.username,
-			password: user.password,
+	constructor(
+		context: Aris,
+		params: {
+			id: Platform['id'];
+			flag: Platform['flag'];
+			inviteIdentifier: Platform['inviteIdentifier'];
+			displayName: Platform['displayName'];
+			displayImageUrl: Platform['displayImageUrl'];
+			createdAt?: string | Platform['createdAt'];
+			updatedAt?: string | Platform['updatedAt'];
 		},
-	});
-};
+	) {
+		super(context);
+
+		this.id = params.id;
+		this.flag = params.flag;
+
+		if (checkInvite.check(params.inviteIdentifier)) {
+			this.inviteIdentifier = params.inviteIdentifier;
+		} else {
+			throw useFormatError(checkInvite.errors(params.inviteIdentifier));
+		}
+
+		this.displayName = params.displayName;
+		this.displayImageUrl = params.displayImageUrl;
+
+		if (params.createdAt) {
+			this.createdAt = new Date(params.createdAt);
+		}
+
+		if (params.updatedAt) {
+			this.updatedAt = new Date(params.updatedAt);
+		}
+	}
+
+	async signUp(username: string, password: string) {
+		if (!checkUsername.check(username)) {
+			throw useFormatError(checkUsername.errors(username));
+		}
+
+		if (!checkPassword.check(password)) {
+			throw useFormatError(checkPassword.errors(password));
+		}
+
+		await this._context.fetcher('platform/invite/' + this.inviteIdentifier, {
+			method: 'post',
+			json: {
+				username,
+				password,
+			},
+		});
+
+		return this;
+	}
+}
