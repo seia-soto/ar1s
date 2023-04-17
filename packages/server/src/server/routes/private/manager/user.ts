@@ -9,31 +9,6 @@ import {rangedQueryType, useRangedQueryParams} from '../../../../modules/formats
 import {createUser, userStandardDataTypeObjectParams} from '../../../../specs/user.js';
 
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
-	// List users
-	fastify.route({
-		url: '/',
-		method: 'GET',
-		schema: {
-			querystring: rangedQueryType,
-		},
-		async handler(request, _reply) {
-			const {from, size} = useRangedQueryParams(request.query, 100);
-
-			return db.tx(async t => {
-				const users = await models.user(t)
-					.find({
-						id: greaterThan(from - 1),
-						platform: request.session.platform,
-					})
-					.select(...userStandardDataTypeObjectParams)
-					.orderByAsc('id')
-					.limit(size);
-
-				return users;
-			});
-		},
-	});
-
 	// Get a user
 	fastify.route({
 		url: '/:username',
