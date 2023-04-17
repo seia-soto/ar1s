@@ -1,4 +1,5 @@
-import {UserFormats} from '@ar1s/spec/out/user.js';
+import {UserFlags, UserFormats} from '@ar1s/spec/out/user.js';
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
@@ -95,7 +96,62 @@ export class User extends Context {
 		return this;
 	}
 
-	get platform() {
+	get platform(): Platform | number {
 		return this._context.platforms.get(this._platform) ?? this._platform;
+	}
+
+	async pushDisplayParams(params: {displayName?: User['displayName']; displayBio?: User['displayBio']; displayAvatarUrl?: User['displayAvatarUrl']}) {
+		this.requestElevationToSelfProfile();
+
+		await this._context.fetcher('private/user', {
+			method: 'patch',
+			json: params,
+		});
+
+		this.displayName = params.displayName ?? this.displayName;
+		this.displayBio = params.displayBio ?? this.displayBio;
+		this.displayAvatarUrl = params.displayAvatarUrl ?? this.displayAvatarUrl;
+
+		return this;
+	}
+
+	async pushPassword(currentPassword: string, newPassword: string) {
+		this.requestElevationToSelfProfile();
+
+		if (!checkPassword.check(currentPassword)) {
+			throw useFormatError(checkPassword.errors(currentPassword));
+		}
+
+		if (!checkPassword.check(newPassword)) {
+			throw useFormatError(checkPassword.errors(newPassword));
+		}
+
+		await this._context.fetcher('private/user/password', {
+			method: 'patch',
+			json: {
+				currentPassword,
+				newPassword,
+			},
+		});
+
+		return this;
+	}
+
+	async resign() {
+		this.requestElevationToSelfProfile();
+
+		await this._context.fetcher('private/user', {method: 'delete'});
+
+		if (hasFlag(this.flag, compileBit(UserFlags.PlatformManager))) {
+			if (typeof this.platform !== 'number') {
+				this._context.platforms.del(this.platform._enumerable);
+			}
+		}
+	}
+
+	private requestElevationToSelfProfile() {
+		if (this._context.user !== this) {
+			throw new Error('Unauthorized: Current user is not them!');
+		}
 	}
 }

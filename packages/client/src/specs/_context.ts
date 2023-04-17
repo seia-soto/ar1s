@@ -25,9 +25,9 @@ export class Collection<T extends Context> {
 		return true;
 	}
 
-	del(entry: T) {
+	del(index: EnumerableIndex) {
 		// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-		delete this.map[entry._enumerable];
+		delete this.map[index];
 
 		return true;
 	}
