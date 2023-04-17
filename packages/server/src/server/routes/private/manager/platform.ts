@@ -32,7 +32,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		method: 'PATCH',
 		schema: {
 			body: Type.Object({
-				isSignUpAllowed: Type.Boolean({
+				isSignUpDisabled: Type.Boolean({
 					default: false,
 				}),
 			}),
@@ -40,7 +40,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		async handler(request, _reply) {
 			let flag = 0;
 
-			if (request.body.isSignUpAllowed) {
+			if (request.body.isSignUpDisabled) {
 				flag = addFlag(flag, compileBit(PlatformFlags.IsSignUpDisabled));
 			}
 
