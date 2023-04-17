@@ -2,6 +2,37 @@ lockfileVersion: '6.0'
 
 importers:
 
+  packages/client:
+    dependencies:
+      '@ar1s/spec':
+        specifier: link:../spec
+        version: link:../spec
+      '@sinclair/typebox':
+        specifier: ^0.26.8
+        version: 0.26.8
+      ky:
+        specifier: ^0.33.3
+        version: 0.33.3
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: '>=5.57.0'
+        version: 5.57.1(@typescript-eslint/parser@5.57.1)(eslint@8.37.0)(typescript@5.0.4)
+      '@typescript-eslint/parser':
+        specifier: '>=5.57.0'
+        version: 5.57.1(eslint@8.37.0)(typescript@5.0.4)
+      eslint:
+        specifier: '>=8.0.0'
+        version: 8.37.0
+      eslint-config-xo:
+        specifier: ^0.43.1
+        version: 0.43.1(eslint@8.37.0)
+      eslint-config-xo-typescript:
+        specifier: ^0.57.0
+        version: 0.57.0(@typescript-eslint/eslint-plugin@5.57.1)(@typescript-eslint/parser@5.57.1)(eslint@8.37.0)(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
+
   packages/server:
     dependencies:
       '@ar1s/spec':
@@ -2340,6 +2371,11 @@ packages:
   /json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
     dev: true
+
+  /ky@0.33.3:
+    resolution: {integrity: sha512-CasD9OCEQSFIam2U8efFK81Yeg8vNMTBUqtMOHlrcWQHqUX3HeCl9Dr31u4toV7emlH8Mymk5+9p0lL6mKb/Xw==}
+    engines: {node: '>=14.16'}
+    dev: false
 
   /levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
