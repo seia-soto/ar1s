@@ -6,6 +6,7 @@ import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {Collection, Context} from './_context.js';
 import {User, checkPassword, checkUsername, type UserReflection} from './user.js';
+import {UserFlags} from '@ar1s/spec/out/user.js';
 
 export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
@@ -88,6 +89,8 @@ export class Platform extends Context {
 	}
 
 	async pullUsers() {
+		this.requestElevationToPlatformMember();
+
 		if (typeof this._context.user === 'undefined') {
 			throw new Error('Unauthorized: You cannot call users');
 		}
@@ -151,5 +154,17 @@ export class Platform extends Context {
 		});
 
 		return this;
+	}
+
+	private requestElevationToPlatformMember() {
+		if (typeof this._context.user === 'undefined' || this._context.user.platform !== this.id) {
+			throw new Error('Unauthorized: Current user is not a member of the platform!');
+		}
+	}
+
+	private requestElevationToPlatformManager() {
+		if (typeof this._context.user === 'undefined' || !hasFlag(this._context.user.flag, compileBit(UserFlags.PlatformManager))) {
+			throw new Error('Unauthorized: Current user is not the platform manager!');
+		}
 	}
 }
