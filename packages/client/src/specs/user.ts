@@ -31,14 +31,7 @@ export type UserReflection = {
 export class User extends Context {
 	public static async self(context: Aris) {
 		const response = await context.fetcher('private/user', {method: 'get'});
-		const json: {
-			id: User['id'];
-			flag: User['flag'];
-			platform: Platform['id'];
-			username: User['username'];
-			displayName: User['displayName'];
-			displayAvatarUrl: User['displayAvatarUrl'];
-			displayBio: User['displayBio'];
+		const json: UserReflection & {
 			createdAt: string;
 			updatedAt: string;
 		} = await response.json();

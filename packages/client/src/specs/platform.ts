@@ -27,12 +27,7 @@ export class Platform extends Context {
 		const platformResponse = inviteIdentifier
 			? await context.fetcher('platform/invite/' + inviteIdentifier, {method: 'get'})
 			: await context.fetcher('platform', {method: 'get'});
-		const platformData: {
-			id: Platform['id'];
-			flag: Platform['flag'];
-			inviteIdentifier: Platform['inviteIdentifier'];
-			displayName: Platform['displayName'];
-			displayImageUrl: Platform['displayImageUrl'];
+		const platformData: PlatformReflection & {
 			createdAt: string;
 			updatedAt: string;
 		} = await platformResponse.json();
