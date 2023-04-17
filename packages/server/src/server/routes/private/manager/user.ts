@@ -6,7 +6,7 @@ import {Type} from '@sinclair/typebox';
 import {db, models} from '../../../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../../modules/error.js';
 import {rangedQueryType, useRangedQueryParams} from '../../../../modules/formats.js';
-import {createUser} from '../../../../specs/user.js';
+import {createUser, userStandardDataTypeObjectParams} from '../../../../specs/user.js';
 
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// List users
@@ -25,7 +25,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 						id: greaterThan(from - 1),
 						platform: request.session.platform,
 					})
-					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
+					.select(...userStandardDataTypeObjectParams)
 					.orderByAsc('id')
 					.limit(size);
 
@@ -52,7 +52,7 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 						platform: request.session.platform,
 						username: request.params.username,
 					})
-					.select('id', 'flag', 'platform', 'username', 'displayName', 'displayAvatarUrl', 'displayBio', 'createdAt', 'updatedAt')
+					.select(...userStandardDataTypeObjectParams)
 					.oneRequired()
 					.catch(error => {
 						request.log.error(error);

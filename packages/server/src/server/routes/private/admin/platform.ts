@@ -7,7 +7,7 @@ import {Type} from '@sinclair/typebox';
 import {db, models} from '../../../../modules/database/index.js';
 import {useInexistingResourceError} from '../../../../modules/error.js';
 import {rangedQueryType, singleRangedQueryType, useRangedQueryParams, useSingleRangedQueryParam} from '../../../../modules/formats.js';
-import {createPlatform, deletePlatform} from '../../../../specs/platform.js';
+import {createPlatform, deletePlatform, platformStandardDataTypeObjectParams} from '../../../../specs/platform.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	fastify.route({
@@ -22,7 +22,7 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 			return db.tx(async t => {
 				const platforms = await models.platform(t)
 					.find({id: greaterThan(from - 1)})
-					.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl')
+					.select(...platformStandardDataTypeObjectParams)
 					.orderByAsc('id')
 					.limit(size);
 
@@ -41,7 +41,10 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				const platform = await models.platform(t).find({id}).select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl').oneRequired()
+				const platform = await models.platform(t)
+					.find({id})
+					.select(...platformStandardDataTypeObjectParams)
+					.oneRequired()
 					.catch(error => {
 						request.log.error(error);
 
