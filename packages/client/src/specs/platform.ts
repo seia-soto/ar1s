@@ -1,4 +1,5 @@
 import {PlatformFlags, PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {UserFlags} from '@ar1s/spec/out/user.js';
 import {addFlag, compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
@@ -6,7 +7,6 @@ import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {Collection, Context} from './_context.js';
 import {User, checkPassword, checkUsername, type UserReflection} from './user.js';
-import {UserFlags} from '@ar1s/spec/out/user.js';
 
 export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
@@ -183,6 +183,14 @@ export class Platform extends Context {
 		}
 
 		return this;
+	}
+
+	async delete() {
+		this.requestElevationToPlatformManager();
+
+		await this._context.fetcher('private/manager/platform', {method: 'delete'});
+
+		this._context.platforms.del(this._enumerable);
 	}
 
 	isSelfMemberOfPlatform() {
