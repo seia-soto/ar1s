@@ -15,12 +15,13 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		method: 'GET',
 		async handler(_request, _reply) {
 			return db.tx(async t => {
-				const platform = await getDefaultPlatform(t);
+				const platform = await getDefaultPlatform(t)
+					.catch(error => {
+						fastify.log.error(error);
 
-				if (!platform) {
-					// We expect the frontend to be redirected to bootstrap the instance
-					throw useInexistingResourceError();
-				}
+						// We expect the frontend to be redirected to bootstrap the instance
+						throw useInexistingResourceError();
+					});
 
 				return platform;
 			});
@@ -40,12 +41,13 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		},
 		async handler(request, _reply) {
 			return db.tx(async t => {
-				const platform = await getPlatformByInvite(t, request.params.inviteIdentifier);
+				const platform = await getPlatformByInvite(t, request.params.inviteIdentifier)
+					.catch(error => {
+						fastify.log.error(error);
 
-				if (!platform) {
-					// We need to return the not found error to protect private platforms
-					throw useInexistingResourceError();
-				}
+						// We need to return the not found error to protect private platforms
+						throw useInexistingResourceError();
+					});
 
 				return platform;
 			});

@@ -8,6 +8,8 @@ import {type Platform_InsertParameters} from '../modules/database/schema/platfor
 import {ValidationErrorCodes, useValidationError} from '../modules/error.js';
 import {createUser, type UserInsertParams} from './user.js';
 
+export const platformStandardDataTypeObjectParams: [keyof Platform, ...Array<keyof Platform>] = ['id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt'];
+
 export const isDefaultPlatformExists = async (t: Transaction) => {
 	const flag = addFlag(0, PlatformFlags.Default);
 	const exists = (await t.query(t.sql`select exists (
@@ -23,14 +25,19 @@ export const getDefaultPlatform = async (t: Transaction) => {
 
 	return models.platform(t)
 		.find(db.sql`flag & ${flag} = ${flag}`)
-		.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt')
-		.one();
+		.select(...platformStandardDataTypeObjectParams)
+		.oneRequired();
 };
+
+export const getPlatformById = async (t: Transaction, id: Platform['id']) => models.platform(t)
+	.find({id})
+	.select(...platformStandardDataTypeObjectParams)
+	.oneRequired();
 
 export const getPlatformByInvite = async (t: Transaction, inviteIdentifier: string) => models.platform(t)
 	.find({inviteIdentifier})
-	.select('id', 'flag', 'inviteIdentifier', 'displayName', 'displayImageUrl', 'createdAt', 'updatedAt')
-	.one();
+	.select(...platformStandardDataTypeObjectParams)
+	.oneRequired();
 
 export const createPlatform = async (t: Transaction, platformParams: Pick<Platform_InsertParameters, 'inviteIdentifier' | 'displayName' | 'displayImageUrl' | 'token'>, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
 	// The platform will be created within sign up disabled state
