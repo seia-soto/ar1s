@@ -19,12 +19,7 @@ export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _op
 	fastify.route({
 		url: '/',
 		method: 'GET',
-		schema: {
-			querystring: rangedQueryType,
-		},
 		async handler(request, _reply) {
-			const {from, size} = useRangedQueryParams(request.query, 200);
-
 			return db.tx(async t => {
 				// Get conversation by user identifier
 				const userTableName = models.user(t).tableName;
@@ -33,9 +28,7 @@ export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _op
 				const entries = await t.query(t.sql`select c.id, c.flag, c."displayName", c."displayImageUrl", c."createdAt", c."updatedAt" from ${t.sql.ident(conversationTableName)} c
 join ${t.sql.ident(conversationMemberTableName)} cm on c.id = cm.conversation
 join ${t.sql.ident(userTableName)} u on cm.user = u.id
-where u.id = ${request.session.user} and
-c.id >= ${from}
-order by c.id asc limit ${size}`) as Array<Pick<Conversation, 'id' | 'flag' | 'displayName' | 'displayImageUrl' | 'createdAt' | 'updatedAt'>>;
+where u.id = ${request.session.user}`) as Array<Pick<Conversation, 'id' | 'flag' | 'displayName' | 'displayImageUrl' | 'createdAt' | 'updatedAt'>>;
 
 				return entries;
 			});

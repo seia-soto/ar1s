@@ -172,10 +172,6 @@ test.serial('the user can load conversations but empty', async t => {
 	const response = await t.context.inject({
 		url: '/private/conversation',
 		method: 'GET',
-		query: {
-			size: '1',
-			from: '1',
-		},
 	});
 
 	t.is(response.statusCode, 200);
@@ -212,10 +208,6 @@ const getFirstConversation = async (t: ExecutionContext<TestContext>) => {
 	const conversationListingResponse = await t.context.inject({
 		url: '/private/conversation',
 		method: 'GET',
-		query: {
-			size: '1',
-			from: '1',
-		},
 	});
 	const [conversationListing] = JSON.parse(conversationListingResponse.payload) as Conversation[];
 
