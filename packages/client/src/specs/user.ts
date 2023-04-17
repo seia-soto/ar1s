@@ -4,8 +4,9 @@ import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
-import {Context} from './_context.js';
+import {Collection, Context} from './_context.js';
 import {type Platform} from './platform.js';
+import {type ConversationReflection, Conversation} from './conversation.js';
 
 export const checkUsername = createCompiledType(Type.String({
 	format: UserFormats.Username,
@@ -60,6 +61,8 @@ export class User extends Context {
 	readonly createdAt: Date;
 	updatedAt: Date;
 
+	conversations = new Collection<Conversation>();
+
 	private readonly _platform: number;
 
 	constructor(
@@ -98,6 +101,19 @@ export class User extends Context {
 
 	get platform(): Platform | number {
 		return this._context.platforms.get(this._platform) ?? this._platform;
+	}
+
+	async pullConversations() {
+		this.requestElevationToSelfProfile();
+
+		const response = await this._context.fetcher('private/conversation', {
+			method: 'get',
+		});
+		const json: ConversationReflection[] = await response.json();
+
+		json.map(data => this.conversations.add(new Conversation(this._context, data)));
+
+		return this;
 	}
 
 	async pushDisplayParams(params: {displayName?: User['displayName']; displayBio?: User['displayBio']; displayAvatarUrl?: User['displayAvatarUrl']}) {

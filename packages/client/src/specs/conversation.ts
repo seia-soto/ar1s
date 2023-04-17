@@ -2,7 +2,7 @@ import {type Aris} from '../index.js';
 import {Context} from './_context.js';
 import {type Platform} from './platform.js';
 
-type ConversationReflection = {
+export type ConversationReflection = {
 	id: Conversation['id'];
 	flag: Conversation['flag'];
 	platform: Conversation['_platform'];
