@@ -29,16 +29,6 @@ export const getDefaultPlatform = async (t: Transaction) => {
 		.oneRequired();
 };
 
-export const getPlatformById = async (t: Transaction, id: Platform['id']) => models.platform(t)
-	.find({id})
-	.select(...platformStandardDataTypeObjectParams)
-	.oneRequired();
-
-export const getPlatformByInvite = async (t: Transaction, inviteIdentifier: string) => models.platform(t)
-	.find({inviteIdentifier})
-	.select(...platformStandardDataTypeObjectParams)
-	.oneRequired();
-
 export const createPlatform = async (t: Transaction, platformParams: Pick<Platform_InsertParameters, 'inviteIdentifier' | 'displayName' | 'displayImageUrl' | 'token'>, managerUserParams: Omit<UserInsertParams, 'platform'>, makePlatformDefault: boolean) => {
 	// The platform will be created within sign up disabled state
 	let flag = addFlag(0, compileBit(PlatformFlags.IsSignUpDisabled));

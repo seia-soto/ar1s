@@ -5,7 +5,7 @@ import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {Type} from '@sinclair/typebox';
 import {db, models} from '../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../modules/error.js';
-import {getDefaultPlatform, getPlatformByInvite} from '../../specs/platform.js';
+import {getDefaultPlatform, platformStandardDataTypeObjectParams} from '../../specs/platform.js';
 import {createUser} from '../../specs/user.js';
 
 export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
@@ -41,7 +41,12 @@ export const platformRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) 
 		},
 		async handler(request, _reply) {
 			return db.tx(async t => {
-				const platform = await getPlatformByInvite(t, request.params.inviteIdentifier)
+				const platform = await models.platform(t)
+					.find({
+						inviteIdentifier: request.params.inviteIdentifier,
+					})
+					.select(...platformStandardDataTypeObjectParams)
+					.oneRequired()
 					.catch(error => {
 						fastify.log.error(error);
 
