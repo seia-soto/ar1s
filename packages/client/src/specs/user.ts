@@ -91,6 +91,8 @@ export class User extends Context {
 		this.updatedAt = new Date(params.updatedAt);
 
 		this._copyUpdatedAt = new Date();
+
+		return this;
 	}
 
 	get platform() {

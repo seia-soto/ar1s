@@ -1,10 +1,11 @@
-import {PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {PlatformFlags, PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {Collection, Context} from './_context.js';
-import {type User, checkPassword, checkUsername} from './user.js';
+import {User, checkPassword, checkUsername, type UserReflection} from './user.js';
 
 export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
@@ -86,6 +87,48 @@ export class Platform extends Context {
 		return this;
 	}
 
+	async pullUsers() {
+		if (typeof this._context.user === 'undefined') {
+			throw new Error('Unauthorized: You cannot call users');
+		}
+
+		const response = await this._context.fetcher('private/platform/users', {method: 'get'});
+		const json: UserReflection[] = await response.json();
+
+		json.map(data => this.users.add(new User(this._context, data)));
+
+		this.users.add(this._context.user);
+
+		return this;
+	}
+
+	async signIn(username: string, password: string, isTrustedEnvironment: boolean) {
+		if (!checkUsername.check(username)) {
+			throw useFormatError(checkUsername.errors(username));
+		}
+
+		if (!checkPassword.check(password)) {
+			throw useFormatError(checkPassword.errors(password));
+		}
+
+		// Promise will be thrown if sign in failed with non 2xx status code
+		await this._context.fetcher('session', {
+			method: 'post',
+			json: {
+				username,
+				password,
+				isTrustedEnvironment,
+			},
+		});
+
+		const user = await User.self(this._context);
+
+		this._context.user = user;
+		this.users.add(user);
+
+		return this;
+	}
+
 	async signUp(username: string, password: string) {
 		if (!checkUsername.check(username)) {
 			throw useFormatError(checkUsername.errors(username));
@@ -93,6 +136,10 @@ export class Platform extends Context {
 
 		if (!checkPassword.check(password)) {
 			throw useFormatError(checkPassword.errors(password));
+		}
+
+		if (hasFlag(this.flag, compileBit(PlatformFlags.IsSignUpDisabled))) {
+			throw new Error('Unauthorized: This platform is not open for the sign up!');
 		}
 
 		await this._context.fetcher('platform/invite/' + this.inviteIdentifier, {
