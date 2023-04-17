@@ -1,6 +1,6 @@
 import {PlatformFormats} from '@ar1s/spec/out/platform.js';
 import {Type} from '@sinclair/typebox';
-import {useFormatError, type ServerError} from '../error.js';
+import {useFormatError} from '../error.js';
 import {type Options} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {type User} from './user.js';
@@ -42,19 +42,11 @@ export const signUpOnPlatform = async (opts: Options, invite: Platform['inviteId
 		throw useFormatError(inviteType.errors(invite));
 	}
 
-	const response = await opts.fetcher('platform/invite/' + invite, {
+	await opts.fetcher('platform/invite/' + invite, {
 		method: 'post',
 		json: {
 			username: user.username,
 			password: user.password,
 		},
 	});
-
-	if (response.status !== 200) {
-		const json = await response.json<ServerError>();
-
-		throw new Error(json.message);
-	}
-
-	return true;
 };
