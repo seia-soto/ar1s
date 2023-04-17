@@ -21,8 +21,9 @@ export type UserReflection = {
 	username: User['username'];
 	displayName: User['displayName'];
 	displayAvatarUrl: User['displayAvatarUrl'];
-	displayBio?: User['displayBio'];
-	createdAt?: string | User['createdAt'];
+	displayBio: User['displayBio'];
+	createdAt: string | User['createdAt'];
+	updatedAt: string | User['updatedAt'];
 };
 
 export class User extends Context {
@@ -36,7 +37,8 @@ export class User extends Context {
 			displayName: User['displayName'];
 			displayAvatarUrl: User['displayAvatarUrl'];
 			displayBio: User['displayBio'];
-			createdAt: User['createdAt'];
+			createdAt: string;
+			updatedAt: string;
 		} = await response.json();
 
 		return new User(context, json);
@@ -53,8 +55,9 @@ export class User extends Context {
 	readonly username: string;
 	displayName: string;
 	displayAvatarUrl: string;
-	displayBio?: string;
-	createdAt?: Date;
+	displayBio: string;
+	readonly createdAt: Date;
+	updatedAt: Date;
 
 	private readonly _platform: number;
 
@@ -74,10 +77,8 @@ export class User extends Context {
 		this.displayName = params.displayName;
 		this.displayAvatarUrl = params.displayAvatarUrl;
 		this.displayBio = params.displayBio;
-
-		if (params.createdAt) {
-			this.createdAt = new Date(params.createdAt);
-		}
+		this.createdAt = new Date(params.createdAt);
+		this.updatedAt = new Date(params.updatedAt);
 	}
 
 	update(params: UserReflection) {
@@ -87,10 +88,7 @@ export class User extends Context {
 		this.displayName = params.displayName;
 		this.displayAvatarUrl = params.displayAvatarUrl;
 		this.displayBio = params.displayBio;
-
-		if (params.createdAt) {
-			this.createdAt = new Date(params.createdAt);
-		}
+		this.updatedAt = new Date(params.updatedAt);
 
 		this._copyUpdatedAt = new Date();
 	}
