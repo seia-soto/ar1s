@@ -1,13 +1,18 @@
+import {PlatformFlags} from '@ar1s/spec/out/platform.js';
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import type ky from 'ky';
+import {Collection} from './specs/_context.js';
 import {Platform} from './specs/platform.js';
-import {type User} from './specs/user.js';
+import {User} from './specs/user.js';
 
 export type Options = {
 	fetcher: typeof ky;
 };
 
 export class Aris {
-	platform?: Platform;
+	platforms = new Collection<Platform>();
+	users = new Collection<User>();
+
 	user?: User;
 
 	constructor(
@@ -15,8 +20,11 @@ export class Aris {
 	) {}
 
 	async signIn(platformInviteIdentifier: Platform['inviteIdentifier'], username: User['username'], password: string, isTrustedEnvironment: boolean) {
-		this.platform = await Platform.from(this, platformInviteIdentifier);
+		const platform = await Platform.from(this, platformInviteIdentifier);
 
+		this.platforms.add(platform);
+
+		// Promise will be thrown if sign in failed with non 2xx status code
 		await this.fetcher('session', {
 			method: 'post',
 			json: {
@@ -25,15 +33,28 @@ export class Aris {
 				isTrustedEnvironment,
 			},
 		});
+
+		const user = await User.self(this);
+
+		this.user = user;
+
+		platform.users.add(user);
+		this.users.add(user);
+
+		return this;
 	}
 
-	async signUp(platformInviteIdentifier: Platform['inviteIdentifier'], username: User['username'], password: string, signInImmediately: false | {isTrustedEnvironment: boolean} = false) {
-		this.platform = await Platform.from(this, platformInviteIdentifier);
+	async signUp(platformInviteIdentifier: Platform['inviteIdentifier'], username: User['username'], password: string) {
+		const platform = await Platform.from(this, platformInviteIdentifier);
 
-		await this.platform.signUp(username, password);
+		this.platforms.add(platform);
 
-		if (signInImmediately) {
-			await this.signIn(platformInviteIdentifier, username, password, signInImmediately.isTrustedEnvironment);
+		if (hasFlag(platform.flag, compileBit(PlatformFlags.IsSignUpDisabled))) {
+			throw new Error('Unauthorized: This platform is not open for sign up!');
 		}
+
+		await platform.signUp(username, password);
+
+		return this;
 	}
 }

@@ -3,12 +3,22 @@ import {Type} from '@sinclair/typebox';
 import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
-import {Context} from './_context.js';
-import {checkPassword, checkUsername} from './user.js';
+import {Collection, Context} from './_context.js';
+import {type User, checkPassword, checkUsername} from './user.js';
 
 export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
 }));
+
+type PlatformReflection = {
+	id: Platform['id'];
+	flag: Platform['flag'];
+	inviteIdentifier: Platform['inviteIdentifier'];
+	displayName: Platform['displayName'];
+	displayImageUrl: Platform['displayImageUrl'];
+	createdAt?: string | Platform['createdAt'];
+	updatedAt?: string | Platform['updatedAt'];
+};
 
 export class Platform extends Context {
 	public static async from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']) {
@@ -28,37 +38,33 @@ export class Platform extends Context {
 		return platform;
 	}
 
-	id: number;
+	public static validate(params: PlatformReflection) {
+		if (!checkInvite.check(params.inviteIdentifier)) {
+			throw useFormatError(checkInvite.errors(params.inviteIdentifier));
+		}
+	}
+
+	readonly id: number;
 	flag: number;
-	inviteIdentifier: string;
+	readonly inviteIdentifier: string;
 	displayName: string;
 	displayImageUrl: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 
+	users = new Collection<User>();
+
 	constructor(
 		context: Aris,
-		params: {
-			id: Platform['id'];
-			flag: Platform['flag'];
-			inviteIdentifier: Platform['inviteIdentifier'];
-			displayName: Platform['displayName'];
-			displayImageUrl: Platform['displayImageUrl'];
-			createdAt?: string | Platform['createdAt'];
-			updatedAt?: string | Platform['updatedAt'];
-		},
+		params: PlatformReflection,
 	) {
-		super(context);
+		super(context, params.id);
+
+		Platform.validate(params);
 
 		this.id = params.id;
 		this.flag = params.flag;
-
-		if (checkInvite.check(params.inviteIdentifier)) {
-			this.inviteIdentifier = params.inviteIdentifier;
-		} else {
-			throw useFormatError(checkInvite.errors(params.inviteIdentifier));
-		}
-
+		this.inviteIdentifier = params.inviteIdentifier;
 		this.displayName = params.displayName;
 		this.displayImageUrl = params.displayImageUrl;
 
@@ -69,6 +75,26 @@ export class Platform extends Context {
 		if (params.updatedAt) {
 			this.updatedAt = new Date(params.updatedAt);
 		}
+	}
+
+	update(params: PlatformReflection) {
+		Platform.validate(params);
+
+		this.flag = params.flag;
+		this.displayName = params.displayName;
+		this.displayImageUrl = params.displayImageUrl;
+
+		if (params.createdAt) {
+			this.createdAt = new Date(params.createdAt);
+		}
+
+		if (params.updatedAt) {
+			this.updatedAt = new Date(params.updatedAt);
+		}
+
+		this._copyUpdatedAt = new Date();
+
+		return this;
 	}
 
 	async signUp(username: string, password: string) {
