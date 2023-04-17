@@ -5,8 +5,8 @@ import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {Collection, Context} from './_context.js';
+import {Conversation, type ConversationReflection} from './conversation.js';
 import {type Platform} from './platform.js';
-import {type ConversationReflection, Conversation} from './conversation.js';
 
 export const checkUsername = createCompiledType(Type.String({
 	format: UserFormats.Username,
@@ -104,7 +104,12 @@ export class User extends Context {
 		});
 		const json: ConversationReflection[] = await response.json();
 
-		json.map(data => this.conversations.add(new Conversation(this._context, data)));
+		for (const data of json) {
+			const entity = new Conversation(this._context, data);
+
+			this.conversations.add(entity);
+			this._context.conversations.add(entity);
+		}
 
 		return this;
 	}
@@ -159,17 +164,11 @@ export class User extends Context {
 	}
 
 	isSelfProfile() {
-		try {
-			this.requestElevationToSelfProfile();
-
-			return true;
-		} catch (_e) {
-			return false;
-		}
+		return this._context.user === this;
 	}
 
 	requestElevationToSelfProfile() {
-		if (this._context.user !== this) {
+		if (!this.isSelfProfile()) {
 			throw new Error('Unauthorized: Current user is not them!');
 		}
 	}

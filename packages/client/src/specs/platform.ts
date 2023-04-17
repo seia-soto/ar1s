@@ -208,33 +208,21 @@ export class Platform extends Context {
 	}
 
 	isSelfMemberOfPlatform() {
-		try {
-			this.requestElevationToPlatformMember();
-
-			return true;
-		} catch (_e) {
-			return false;
-		}
+		return typeof this._context.user !== 'undefined' && this._context.user.platform === this.id;
 	}
 
 	isSelfPlatformManager() {
-		try {
-			this.requestElevationToPlatformManager();
-
-			return true;
-		} catch (_e) {
-			return false;
-		}
+		return typeof this._context.user !== 'undefined' && hasFlag(this._context.user.flag, compileBit(UserFlags.PlatformManager));
 	}
 
 	requestElevationToPlatformMember() {
-		if (typeof this._context.user === 'undefined' || this._context.user.platform !== this.id) {
+		if (!this.isSelfMemberOfPlatform()) {
 			throw new Error('Unauthorized: Current user is not a member of the platform!');
 		}
 	}
 
 	requestElevationToPlatformManager() {
-		if (typeof this._context.user === 'undefined' || !hasFlag(this._context.user.flag, compileBit(UserFlags.PlatformManager))) {
+		if (!this.isSelfPlatformManager()) {
 			throw new Error('Unauthorized: Current user is not the platform manager!');
 		}
 	}
