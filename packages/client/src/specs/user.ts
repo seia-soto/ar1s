@@ -168,7 +168,7 @@ export class User extends Context {
 		}
 	}
 
-	private requestElevationToSelfProfile() {
+	requestElevationToSelfProfile() {
 		if (this._context.user !== this) {
 			throw new Error('Unauthorized: Current user is not them!');
 		}

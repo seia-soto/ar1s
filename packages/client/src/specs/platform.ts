@@ -184,6 +184,29 @@ export class Platform extends Context {
 		this._context.platforms.del(this._enumerable);
 	}
 
+	async createUser(username: User['username'], password: string) {
+		this.requestElevationToPlatformManager();
+
+		await this._context.fetcher('private/manager/user', {
+			method: 'post',
+			json: {
+				username,
+				password,
+			},
+		});
+
+		const response = await this._context.fetcher('private/manager/user/' + username, {
+			method: 'get',
+		});
+		const json: UserReflection = await response.json();
+
+		const user = new User(this._context, json);
+
+		this.users.add(user);
+
+		return user;
+	}
+
 	isSelfMemberOfPlatform() {
 		try {
 			this.requestElevationToPlatformMember();
@@ -204,13 +227,13 @@ export class Platform extends Context {
 		}
 	}
 
-	private requestElevationToPlatformMember() {
+	requestElevationToPlatformMember() {
 		if (typeof this._context.user === 'undefined' || this._context.user.platform !== this.id) {
 			throw new Error('Unauthorized: Current user is not a member of the platform!');
 		}
 	}
 
-	private requestElevationToPlatformManager() {
+	requestElevationToPlatformManager() {
 		if (typeof this._context.user === 'undefined' || !hasFlag(this._context.user.flag, compileBit(UserFlags.PlatformManager))) {
 			throw new Error('Unauthorized: Current user is not the platform manager!');
 		}
