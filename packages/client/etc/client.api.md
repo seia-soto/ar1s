@@ -4,17 +4,28 @@
 
 ```ts
 
-import type ky from 'ky';
+import ky from 'ky';
+import { KyInstance } from 'ky/distribution/types/ky.js';
 
 // @public
 export class Aris {
     constructor(fetcher: typeof ky);
+    bootstrap(params: {
+        platformInviteIdentifier: Platform['inviteIdentifier'];
+        platformDisplayName: Platform['displayName'];
+        platformToken: string;
+        userUsername: User['username'];
+        userPassword: string;
+    }): Promise<this>;
     // (undocumented)
     conversationMembers: Collection<ConversationMember>;
     // (undocumented)
     conversations: Collection<Conversation>;
     // (undocumented)
+    static createFetcher(baseUrl: string): KyInstance;
+    // (undocumented)
     readonly fetcher: typeof ky;
+    isBootstrapRequired(): Promise<boolean>;
     // (undocumented)
     platforms: Collection<Platform>;
     // (undocumented)

@@ -29,3 +29,11 @@ declare class Aris
 |  [user?](./client.aris.user.md) |  | [User](./client.user.md) | _(Optional)_ |
 |  [users](./client.aris.users.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; |  |
 
+## Methods
+
+|  Method | Modifiers | Description |
+|  --- | --- | --- |
+|  [bootstrap(params)](./client.aris.bootstrap.md) |  | Bootstrap the instance |
+|  [createFetcher(baseUrl)](./client.aris.createfetcher.md) | <code>static</code> |  |
+|  [isBootstrapRequired()](./client.aris.isbootstraprequired.md) |  | Check if an instance requires bootstrap |
+

@@ -12,7 +12,7 @@ export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
 }));
 
-type PlatformReflection = {
+export type PlatformReflection = {
 	id: Platform['id'];
 	flag: Platform['flag'];
 	inviteIdentifier: Platform['inviteIdentifier'];
