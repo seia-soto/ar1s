@@ -4,9 +4,6 @@ import {type Transaction} from '@databases/pg';
 import {models} from '../modules/database/index.js';
 import {type Conversation, type ConversationMember, type User} from '../modules/database/schema/index.js';
 
-export const getConversationMembers = async (t: Transaction, conversationId: Conversation['id']) => models.conversationMember(t)
-	.find({conversation: conversationId});
-
 export const getHumanConversationMemberIds = async (t: Transaction, conversationId: Conversation['id']) => {
 	const ownerFlag = addFlag(0, compileBit(ConversationMemberFlags.IsOwner));
 	const members = await t.query(t.sql`select id from ${t.sql.ident(models.conversationMember(t).tableName)}
