@@ -126,7 +126,6 @@ export class Message extends Context {
     get conversation(): Conversation | Message['_conversation'];
     // (undocumented)
     readonly createdAt: Date;
-    // (undocumented)
     delete(): Promise<void>;
     // (undocumented)
     flag: number;
@@ -134,7 +133,9 @@ export class Message extends Context {
     readonly id: number & {
         __type: 'message.id';
     };
+    isSelfMessageAuthor(strict?: boolean): boolean;
     get platform(): Platform | Message['_platform'];
+    requestElevationToAuthor(strict?: boolean): void;
     // (undocumented)
     updatedAt: Date;
 }

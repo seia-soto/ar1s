@@ -37,5 +37,7 @@ export declare class Message extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [delete()](./client.message.delete.md) |  |  |
+|  [delete()](./client.message.delete.md) |  | Delete the message |
+|  [isSelfMessageAuthor(strict)](./client.message.isselfmessageauthor.md) |  | Check if current user is the message author |
+|  [requestElevationToAuthor(strict)](./client.message.requestelevationtoauthor.md) |  | Throw an error if current user is not the message author |
 

@@ -67,11 +67,41 @@ export class Message extends Context {
 		return this._context.conversationMembers.get(this._author) ?? this._author;
 	}
 
+	/**
+	 * Delete the message
+	 */
 	async delete() {
 		await this._context.fetcher('private/conversation/' + this._conversation.toString() + '/message/' + this.id.toString(), {method: 'delete'});
 
 		if (typeof this.conversation !== 'number') {
 			this.conversation.messages.del(this.id);
+		}
+	}
+
+	/**
+	 * Check if current user is the message author
+	 * @param strict Allow returning true if required data is not pulled
+	 * @returns True if current user is the message author
+	 */
+	isSelfMessageAuthor(strict = true) {
+		if (typeof this.author === 'number') {
+			return !strict;
+		}
+
+		if (typeof this.author.user === 'number') {
+			return !strict;
+		}
+
+		return this.author.user === this._context.user;
+	}
+
+	/**
+	 * Throw an error if current user is not the message author
+	 * @param strict Allow bypassing the check if required data is not pulled
+	 */
+	requestElevationToAuthor(strict = true) {
+		if (!this.isSelfMessageAuthor(strict)) {
+			throw new Error('Unauthorized: Current user is not the message author!');
 		}
 	}
 }

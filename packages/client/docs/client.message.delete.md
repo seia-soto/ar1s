@@ -4,6 +4,8 @@
 
 ## Message.delete() method
 
+Delete the message
+
 **Signature:**
 
 ```typescript
