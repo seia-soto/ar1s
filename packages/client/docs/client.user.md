@@ -43,7 +43,7 @@ export declare class User extends Context
 |  [pushDisplayParams(params)](./client.user.pushdisplayparams.md) |  | Update user display related parameters |
 |  [pushPassword(currentPassword, newPassword)](./client.user.pushpassword.md) |  | Update user password |
 |  [requestElevationToSelfProfile()](./client.user.requestelevationtoselfprofile.md) |  | Throw error if this user is not current user |
-|  [resign()](./client.user.resign.md) |  | Delete user |
+|  [resign()](./client.user.resign.md) |  | Delete user, this will have same effect deleting the platform if the user is the platform manager |
 |  [self(context)](./client.user.self.md) | <code>static</code> | Create self-reflected <code>User</code> instance |
 |  [update(params)](./client.user.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.user.validate.md) | <code>static</code> | Validate the parameters in User reflection object |

@@ -1,8 +1,10 @@
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {type Aris} from '../index.js';
 import {Collection, Context, Series} from './_context.js';
 import {ConversationMember, type ConversationMemberReflection} from './conversationMember.js';
 import {type MessageReflection, Message} from './message.js';
 import {type Platform} from './platform.js';
+import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 
 export type ConversationReflection = {
 	id: Conversation['id'];
@@ -98,5 +100,32 @@ export class Conversation extends Context {
 		}
 
 		return this;
+	}
+
+	/**
+	 * Check if the user is the owner of this conversation
+	 * @returns True if the user is the owner of this conversation
+	 */
+	isSelfConversationOwner() {
+		if (!this._context.user) {
+			return false;
+		}
+
+		const me = this.members.values().find(member => member.user === this._context.user);
+
+		if (!me) {
+			return false;
+		}
+
+		return hasFlag(me.flag, compileBit(ConversationMemberFlags.IsOwner));
+	}
+
+	/**
+	 * Throw an error if current user is not the owner of this conversation
+	 */
+	requestElevationToConversationOwner() {
+		if (!this.isSelfConversationOwner()) {
+			throw new Error('Unauthorized: Current user is not the conversation owner!');
+		}
 	}
 }

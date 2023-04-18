@@ -38,7 +38,9 @@ export declare class Conversation extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [isSelfConversationOwner()](./client.conversation.isselfconversationowner.md) |  | Check if the user is the owner of this conversation |
 |  [pullMembers()](./client.conversation.pullmembers.md) |  | Pull available conversation members of conversation from the server |
 |  [pullMessages()](./client.conversation.pullmessages.md) |  | Pull available messages of conversation from the server |
+|  [requestElevationToConversationOwner()](./client.conversation.requestelevationtoconversationowner.md) |  | Throw an error if current user is not the owner of this conversation |
 |  [update(params)](./client.conversation.update.md) |  | Update data depends on reflection object |
 

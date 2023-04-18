@@ -187,7 +187,7 @@ export class User extends Context {
 	}
 
 	/**
-	 * Delete user
+	 * Delete user, this will have same effect deleting the platform if the user is the platform manager
 	 */
 	async resign() {
 		this.requestElevationToSelfProfile();
