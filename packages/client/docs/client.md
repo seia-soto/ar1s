@@ -9,6 +9,11 @@
 |  Class | Description |
 |  --- | --- |
 |  [Aris](./client.aris.md) |  |
+|  [Conversation](./client.conversation.md) |  |
+|  [ConversationMember](./client.conversationmember.md) |  |
+|  [Message](./client.message.md) |  |
+|  [Platform](./client.platform.md) |  |
+|  [User](./client.user.md) |  |
 
 ## Type Aliases
 

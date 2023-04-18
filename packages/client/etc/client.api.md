@@ -9,33 +9,229 @@ import type ky from 'ky';
 // @public (undocumented)
 export class Aris {
     constructor(fetcher: typeof ky);
-    // Warning: (ae-forgotten-export) The symbol "ConversationMember" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     conversationMembers: Collection<ConversationMember>;
-    // Warning: (ae-forgotten-export) The symbol "Conversation" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     conversations: Collection<Conversation>;
     // (undocumented)
     readonly fetcher: typeof ky;
     // Warning: (ae-forgotten-export) The symbol "Collection" needs to be exported by the entry point index.d.ts
-    // Warning: (ae-forgotten-export) The symbol "Platform" needs to be exported by the entry point index.d.ts
     //
     // (undocumented)
     platforms: Collection<Platform>;
     // (undocumented)
     user?: User;
-    // Warning: (ae-forgotten-export) The symbol "User" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     users: Collection<User>;
+}
+
+// Warning: (ae-forgotten-export) The symbol "Context" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export class Conversation extends Context {
+    // Warning: (ae-forgotten-export) The symbol "ConversationReflection" needs to be exported by the entry point index.d.ts
+    constructor(_context: Aris, params: ConversationReflection);
+    // (undocumented)
+    readonly _context: Aris;
+    // (undocumented)
+    readonly createdAt: Date;
+    // (undocumented)
+    flag: number;
+    // (undocumented)
+    readonly id: number & {
+        __type: 'conversation.id';
+    };
+    // (undocumented)
+    members: Collection<ConversationMember>;
+    // Warning: (ae-forgotten-export) The symbol "Series" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    messages: Series<Message>;
+    // (undocumented)
+    readonly model: string;
+    // (undocumented)
+    get platform(): Platform | number;
+    // (undocumented)
+    pullMembers(): Promise<this>;
+    // (undocumented)
+    pullMessages(): Promise<this>;
+    // (undocumented)
+    readonly systemMessage: string;
+    // (undocumented)
+    update(params: ConversationReflection): this;
+    // (undocumented)
+    updatedAt: Date;
+}
+
+// @public (undocumented)
+export class ConversationMember extends Context {
+    // Warning: (ae-forgotten-export) The symbol "ConversationMemberReflection" needs to be exported by the entry point index.d.ts
+    constructor(_context: Aris, params: ConversationMemberReflection);
+    // (undocumented)
+    readonly _context: Aris;
+    // (undocumented)
+    get conversation(): Conversation | ConversationMember['_conversation'];
+    // (undocumented)
+    readonly createdAt: Date;
+    // (undocumented)
+    displayAvatarUrl: string;
+    // (undocumented)
+    displayBio: string;
+    // (undocumented)
+    displayName: string;
+    // (undocumented)
+    flag: number;
+    // (undocumented)
+    readonly id: number & {
+        __type: 'conversationMember.id';
+    };
+    // (undocumented)
+    get platform(): Platform | ConversationMember['_platform'];
+    // (undocumented)
+    updatedAt: Date;
+    // (undocumented)
+    get user(): User | ConversationMember['_user'];
+}
+
+// @public (undocumented)
+export class Message extends Context {
+    // Warning: (ae-forgotten-export) The symbol "MessageReflection" needs to be exported by the entry point index.d.ts
+    constructor(_context: Aris, params: MessageReflection);
+    // (undocumented)
+    get author(): ConversationMember | Message['_author'];
+    // (undocumented)
+    content: string;
+    // (undocumented)
+    readonly _context: Aris;
+    // (undocumented)
+    get conversation(): Conversation | Message['_conversation'];
+    // (undocumented)
+    readonly createdAt: Date;
+    // (undocumented)
+    flag: number;
+    // (undocumented)
+    readonly id: number & {
+        __type: 'message.id';
+    };
+    // (undocumented)
+    get platform(): Platform | Message['_platform'];
+    // (undocumented)
+    updatedAt: Date;
 }
 
 // @public (undocumented)
 export type Options = {
     fetcher: typeof ky;
 };
+
+// @public (undocumented)
+export class Platform extends Context {
+    constructor(context: Aris, params: PlatformReflection);
+    // (undocumented)
+    readonly createdAt: Date;
+    // (undocumented)
+    createUser(username: User['username'], password: string): Promise<User>;
+    // (undocumented)
+    delete(): Promise<void>;
+    // (undocumented)
+    displayImageUrl: string;
+    // (undocumented)
+    displayName: string;
+    // (undocumented)
+    flag: number;
+    // (undocumented)
+    static from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']): Promise<Platform>;
+    // (undocumented)
+    readonly id: number & {
+        __type: 'platform.id';
+    };
+    // (undocumented)
+    readonly inviteIdentifier: string;
+    // (undocumented)
+    isSelfMemberOfPlatform(): boolean;
+    // (undocumented)
+    isSelfPlatformManager(): boolean;
+    // (undocumented)
+    pullUsers(): Promise<this>;
+    // (undocumented)
+    pushDisplayParams(params: {
+        displayName?: Platform['displayName'];
+        displayImageUrl?: Platform['displayImageUrl'];
+    }): Promise<this>;
+    // (undocumented)
+    pushOpt(params: {
+        isSignUpDisabled: boolean;
+    }): Promise<this>;
+    // (undocumented)
+    requestElevationToPlatformManager(): void;
+    // (undocumented)
+    requestElevationToPlatformMember(): void;
+    // (undocumented)
+    signIn(username: string, password: string, isTrustedEnvironment: boolean): Promise<this>;
+    // (undocumented)
+    signUp(username: string, password: string): Promise<this>;
+    // (undocumented)
+    update(params: PlatformReflection): this;
+    // (undocumented)
+    updatedAt: Date;
+    // (undocumented)
+    users: Collection<User>;
+    // Warning: (ae-forgotten-export) The symbol "PlatformReflection" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    static validate(params: PlatformReflection): void;
+}
+
+// @public (undocumented)
+export class User extends Context {
+    constructor(context: Aris, params: UserReflection);
+    // (undocumented)
+    conversations: Collection<Conversation>;
+    // (undocumented)
+    readonly createdAt: Date;
+    // (undocumented)
+    displayAvatarUrl: string;
+    // (undocumented)
+    displayBio: string;
+    // (undocumented)
+    displayName: string;
+    // (undocumented)
+    flag: number;
+    // (undocumented)
+    readonly id: number & {
+        __type: 'user.id';
+    };
+    // (undocumented)
+    isSelfProfile(): boolean;
+    // (undocumented)
+    get platform(): Platform | number;
+    // (undocumented)
+    pullConversations(): Promise<this>;
+    // (undocumented)
+    pushDisplayParams(params: {
+        displayName?: User['displayName'];
+        displayBio?: User['displayBio'];
+        displayAvatarUrl?: User['displayAvatarUrl'];
+    }): Promise<this>;
+    // (undocumented)
+    pushPassword(currentPassword: string, newPassword: string): Promise<this>;
+    // (undocumented)
+    requestElevationToSelfProfile(): void;
+    // (undocumented)
+    resign(): Promise<void>;
+    // (undocumented)
+    static self(context: Aris): Promise<User>;
+    // (undocumented)
+    update(params: UserReflection): this;
+    // (undocumented)
+    updatedAt: Date;
+    // (undocumented)
+    readonly username: string;
+    // Warning: (ae-forgotten-export) The symbol "UserReflection" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    static validate(params: UserReflection): void;
+}
 
 // (No @packageDocumentation comment for this package)
 

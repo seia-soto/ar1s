@@ -4,11 +4,10 @@
 
 ## Aris class
 
-
 **Signature:**
 
 ```typescript
-export declare class Aris 
+declare class Aris 
 ```
 
 ## Constructors
@@ -21,10 +20,10 @@ export declare class Aris
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [conversationMembers](./client.aris.conversationmembers.md) |  | Collection&lt;ConversationMember&gt; |  |
-|  [conversations](./client.aris.conversations.md) |  | Collection&lt;Conversation&gt; |  |
+|  [conversationMembers](./client.aris.conversationmembers.md) |  | Collection&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
+|  [conversations](./client.aris.conversations.md) |  | Collection&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
 |  [fetcher](./client.aris.fetcher.md) | <code>readonly</code> | typeof ky |  |
-|  [platforms](./client.aris.platforms.md) |  | Collection&lt;Platform&gt; |  |
-|  [user?](./client.aris.user.md) |  | User | _(Optional)_ |
-|  [users](./client.aris.users.md) |  | Collection&lt;User&gt; |  |
+|  [platforms](./client.aris.platforms.md) |  | Collection&lt;[Platform](./client.platform.md)<!-- -->&gt; |  |
+|  [user?](./client.aris.user.md) |  | [User](./client.user.md) | _(Optional)_ |
+|  [users](./client.aris.users.md) |  | Collection&lt;[User](./client.user.md)<!-- -->&gt; |  |
 

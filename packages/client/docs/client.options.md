@@ -4,11 +4,10 @@
 
 ## Options type
 
-
 **Signature:**
 
 ```typescript
-export type Options = {
+type Options = {
     fetcher: typeof ky;
 };
 ```
