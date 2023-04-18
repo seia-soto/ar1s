@@ -102,6 +102,16 @@ export class Platform extends Context {
 	}
 
 	/**
+	 * Pull everything under this data type object
+	 * @returns this
+	 */
+	async pull() {
+		await this.pullUsers();
+
+		return this;
+	}
+
+	/**
 	 * Pull available users of platform from the server
 	 * @returns this
 	 */

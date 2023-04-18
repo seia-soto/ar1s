@@ -117,6 +117,16 @@ export class User extends Context {
 	}
 
 	/**
+	 * Pull everything under this data type object
+	 * @returns this
+	 */
+	async pull() {
+		await this.pullConversations();
+
+		return this;
+	}
+
+	/**
 	 * Pull available conversations of user from the server
 	 * @returns this
 	 */

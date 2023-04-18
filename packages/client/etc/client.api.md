@@ -74,6 +74,7 @@ export class Conversation extends Context {
     // (undocumented)
     readonly model: string;
     get platform(): Platform | number;
+    pull(): Promise<this>;
     pullMembers(): Promise<this>;
     pullMessages(): Promise<this>;
     requestElevationToConversationOwner(): void;
@@ -161,6 +162,7 @@ export class Platform extends Context {
     readonly inviteIdentifier: string;
     isSelfMemberOfPlatform(): boolean;
     isSelfPlatformManager(): boolean;
+    pull(): Promise<this>;
     pullUsers(): Promise<this>;
     pushDisplayParams(params: {
         displayName?: Platform['displayName'];
@@ -222,6 +224,7 @@ export class User extends Context {
     };
     isSelfProfile(): boolean;
     get platform(): Platform | number;
+    pull(): Promise<this>;
     pullConversations(): Promise<this>;
     pushDisplayParams(params: {
         displayName?: User['displayName'];

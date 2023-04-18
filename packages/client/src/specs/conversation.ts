@@ -68,6 +68,17 @@ export class Conversation extends Context {
 	}
 
 	/**
+	 * Pull everything under this data type object
+	 * @returns this
+	 */
+	async pull() {
+		await this.pullMembers();
+		await this.pullMessages();
+
+		return this;
+	}
+
+	/**
 	 * Pull available conversation members of conversation from the server
 	 * @returns this
 	 */

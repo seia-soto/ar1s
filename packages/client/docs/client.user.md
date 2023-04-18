@@ -39,6 +39,7 @@ export declare class User extends Context
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [isSelfProfile()](./client.user.isselfprofile.md) |  | Check if this user is current user |
+|  [pull()](./client.user.pull.md) |  | Pull everything under this data type object |
 |  [pullConversations()](./client.user.pullconversations.md) |  | Pull available conversations of user from the server |
 |  [pushDisplayParams(params)](./client.user.pushdisplayparams.md) |  | Update user display related parameters |
 |  [pushPassword(currentPassword, newPassword)](./client.user.pushpassword.md) |  | Update user password |

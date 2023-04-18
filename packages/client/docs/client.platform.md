@@ -41,6 +41,7 @@ export declare class Platform extends Context
 |  [from(context, inviteIdentifier)](./client.platform.from.md) | <code>static</code> | Initialize Platform object via <code>inviteIdentifier</code> |
 |  [isSelfMemberOfPlatform()](./client.platform.isselfmemberofplatform.md) |  | Check if current user is the member of the platform |
 |  [isSelfPlatformManager()](./client.platform.isselfplatformmanager.md) |  | Check if current user is the manager of the platform |
+|  [pull()](./client.platform.pull.md) |  | Pull everything under this data type object |
 |  [pullUsers()](./client.platform.pullusers.md) |  | Pull available users of platform from the server |
 |  [pushDisplayParams(params)](./client.platform.pushdisplayparams.md) |  | Update display related parameters of the Platform (requires <code>UserFlags.PlatformManager</code>) |
 |  [pushOpt(params)](./client.platform.pushopt.md) |  | Update opt-in features of the Platform (requires <code>UserFlags.PlatformManager</code>) |
