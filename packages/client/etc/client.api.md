@@ -27,7 +27,7 @@ export class Aris {
     readonly fetcher: typeof ky;
     isBootstrapRequired(): Promise<boolean>;
     // (undocumented)
-    platforms: Collection<Platform>;
+    platform?: Platform;
     // (undocumented)
     user?: User;
     // (undocumented)
@@ -77,7 +77,6 @@ export class Conversation extends Context {
     messages: Series<Message>;
     // (undocumented)
     readonly model: string;
-    get platform(): Platform | number;
     pull(): Promise<this>;
     pullMembers(): Promise<this>;
     pullMessages(size?: number, before?: Message['id']): Promise<this>;
@@ -112,7 +111,6 @@ export class ConversationMember extends Context {
     readonly id: number & {
         __type: 'conversationMember.id';
     };
-    get platform(): Platform | ConversationMember['_platform'];
     // (undocumented)
     updatedAt: Date;
     get user(): User | ConversationMember['_user'];
@@ -138,7 +136,6 @@ export class Message extends Context {
         __type: 'message.id';
     };
     isSelfMessageAuthor(strict?: boolean): boolean;
-    get platform(): Platform | Message['_platform'];
     requestElevationToAuthor(strict?: boolean): void;
     // (undocumented)
     updatedAt: Date;
@@ -156,6 +153,7 @@ export class Platform extends Context {
     readonly createdAt: Date;
     createUser(username: User['username'], password: string): Promise<User>;
     delete(): Promise<void>;
+    deleteUser(username: User['username']): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
     // (undocumented)
@@ -219,6 +217,7 @@ export class User extends Context {
     conversations: Collection<Conversation>;
     // (undocumented)
     readonly createdAt: Date;
+    delete(): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;
     // (undocumented)
@@ -232,7 +231,6 @@ export class User extends Context {
         __type: 'user.id';
     };
     isSelfProfile(): boolean;
-    get platform(): Platform | number;
     pull(): Promise<this>;
     pullConversations(): Promise<this>;
     pushDisplayParams(params: {
@@ -242,7 +240,6 @@ export class User extends Context {
     }): Promise<this>;
     pushPassword(currentPassword: string, newPassword: string): Promise<this>;
     requestElevationToSelfProfile(): void;
-    resign(): Promise<void>;
     static self(context: Aris): Promise<User>;
     update(params: UserReflection): this;
     // (undocumented)

@@ -30,7 +30,6 @@ export declare class User extends Context
 |  [displayName](./client.user.displayname.md) |  | string |  |
 |  [flag](./client.user.flag.md) |  | number |  |
 |  [id](./client.user.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'user.id'; } |  |
-|  [platform](./client.user.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number | Get platform DTO, platform identifier if not available |
 |  [updatedAt](./client.user.updatedat.md) |  | Date |  |
 |  [username](./client.user.username.md) | <code>readonly</code> | string |  |
 
@@ -38,13 +37,13 @@ export declare class User extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [delete()](./client.user.delete.md) |  | Delete user, this will have same effect deleting the platform if the user is the platform manager |
 |  [isSelfProfile()](./client.user.isselfprofile.md) |  | Check if this user is current user |
 |  [pull()](./client.user.pull.md) |  | Pull everything under this data type object |
 |  [pullConversations()](./client.user.pullconversations.md) |  | Pull available conversations of user from the server |
 |  [pushDisplayParams(params)](./client.user.pushdisplayparams.md) |  | Update user display related parameters |
 |  [pushPassword(currentPassword, newPassword)](./client.user.pushpassword.md) |  | Update user password |
 |  [requestElevationToSelfProfile()](./client.user.requestelevationtoselfprofile.md) |  | Throw error if this user is not current user |
-|  [resign()](./client.user.resign.md) |  | Delete user, this will have same effect deleting the platform if the user is the platform manager |
 |  [self(context)](./client.user.self.md) | <code>static</code> | Create self-reflected <code>User</code> instance |
 |  [update(params)](./client.user.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.user.validate.md) | <code>static</code> | Validate the parameters in User reflection object |

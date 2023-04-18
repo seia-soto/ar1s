@@ -25,7 +25,7 @@ declare class Aris
 |  [conversationMembers](./client.aris.conversationmembers.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
 |  [conversations](./client.aris.conversations.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
 |  [fetcher](./client.aris.fetcher.md) | <code>readonly</code> | typeof ky |  |
-|  [platforms](./client.aris.platforms.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Platform](./client.platform.md)<!-- -->&gt; |  |
+|  [platform?](./client.aris.platform.md) |  | [Platform](./client.platform.md) | _(Optional)_ |
 |  [user?](./client.aris.user.md) |  | [User](./client.user.md) | _(Optional)_ |
 |  [users](./client.aris.users.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; |  |
 

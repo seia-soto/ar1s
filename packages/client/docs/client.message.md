@@ -30,7 +30,6 @@ export declare class Message extends Context
 |  [createdAt](./client.message.createdat.md) | <code>readonly</code> | Date |  |
 |  [flag](./client.message.flag.md) |  | number |  |
 |  [id](./client.message.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'message.id'; } |  |
-|  [platform](./client.message.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| [Message](./client.message.md)<!-- -->\['\_platform'\] | Get platform DTO, platform identifier if not available |
 |  [updatedAt](./client.message.updatedat.md) |  | Date |  |
 
 ## Methods

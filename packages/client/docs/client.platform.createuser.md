@@ -4,7 +4,7 @@
 
 ## Platform.createUser() method
 
-Create an user belongs to the platform
+Create an user belongs to the platform (requires `UserFlags.PlatformManager`<!-- -->)
 
 **Signature:**
 

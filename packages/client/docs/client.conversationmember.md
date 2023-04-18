@@ -31,7 +31,6 @@ export declare class ConversationMember extends Context
 |  [displayName](./client.conversationmember.displayname.md) |  | string |  |
 |  [flag](./client.conversationmember.flag.md) |  | number |  |
 |  [id](./client.conversationmember.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'conversationMember.id'; } |  |
-|  [platform](./client.conversationmember.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| [ConversationMember](./client.conversationmember.md)<!-- -->\['\_platform'\] | Get platform DTO, platform identifier if not available |
 |  [updatedAt](./client.conversationmember.updatedat.md) |  | Date |  |
 |  [user](./client.conversationmember.user.md) | <code>readonly</code> | [User](./client.user.md) \| [ConversationMember](./client.conversationmember.md)<!-- -->\['\_user'\] | Get user DTO, user identifier if not available |
 

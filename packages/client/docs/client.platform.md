@@ -36,8 +36,9 @@ export declare class Platform extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [createUser(username, password)](./client.platform.createuser.md) |  | Create an user belongs to the platform |
+|  [createUser(username, password)](./client.platform.createuser.md) |  | Create an user belongs to the platform (requires <code>UserFlags.PlatformManager</code>) |
 |  [delete()](./client.platform.delete.md) |  | Delete the platform (requires <code>UserFlags.PlatformManager</code>) |
+|  [deleteUser(username)](./client.platform.deleteuser.md) |  | Delete the user via username (requires <code>UserFlags.PlatformManager</code>) |
 |  [from(context, inviteIdentifier)](./client.platform.from.md) | <code>static</code> | Initialize Platform object via <code>inviteIdentifier</code> |
 |  [isSelfMemberOfPlatform()](./client.platform.isselfmemberofplatform.md) |  | Check if current user is the member of the platform |
 |  [isSelfPlatformManager()](./client.platform.isselfplatformmanager.md) |  | Check if current user is the manager of the platform |

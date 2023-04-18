@@ -30,7 +30,6 @@ export declare class Conversation extends Context
 |  [members](./client.conversation.members.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
 |  [messages](./client.conversation.messages.md) |  | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; |  |
 |  [model](./client.conversation.model.md) | <code>readonly</code> | string |  |
-|  [platform](./client.conversation.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number | Get platform DTO, platform identifier if not available |
 |  [self](./client.conversation.self.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) \| undefined | Get self profile from the conversation members |
 |  [systemMessage](./client.conversation.systemmessage.md) | <code>readonly</code> | string |  |
 |  [updatedAt](./client.conversation.updatedat.md) |  | Date |  |
