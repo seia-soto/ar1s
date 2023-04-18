@@ -177,9 +177,9 @@ export class Conversation extends Context {
 	}
 
 	/**
-	 * Get self profile from the conversation members
+	 * Get the profile of current user from the conversation members
 	 */
-	get self() {
+	get profile() {
 		if (this._self) {
 			return this._self;
 		}
@@ -192,7 +192,7 @@ export class Conversation extends Context {
 	 * @returns True if the user is the owner of this conversation
 	 */
 	isSelfConversationOwner() {
-		const me = this.self;
+		const me = this.profile;
 
 		if (!me) {
 			return false;

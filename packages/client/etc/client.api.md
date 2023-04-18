@@ -77,11 +77,11 @@ export class Conversation extends Context {
     messages: Series<Message>;
     // (undocumented)
     readonly model: string;
+    get profile(): ConversationMember | undefined;
     pull(): Promise<this>;
     pullMembers(): Promise<this>;
     pullMessages(size?: number, before?: Message['id']): Promise<this>;
     requestElevationToConversationOwner(): void;
-    get self(): ConversationMember | undefined;
     // (undocumented)
     readonly systemMessage: string;
     update(params: ConversationReflection): this;
