@@ -17,5 +17,5 @@ constructor(_context: Aris, params: ConversationReflection);
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  \_context | [Aris](./client.aris.md) |  |
-|  params | ConversationReflection |  |
+|  params | [ConversationReflection](./client.conversationreflection.md) |  |
 

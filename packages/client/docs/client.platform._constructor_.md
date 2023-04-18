@@ -17,5 +17,5 @@ constructor(context: Aris, params: PlatformReflection);
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  context | [Aris](./client.aris.md) |  |
-|  params | PlatformReflection |  |
+|  params | [PlatformReflection](./client.platformreflection.md) |  |
 

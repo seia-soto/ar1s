@@ -16,7 +16,7 @@ update(params: ConversationReflection): this;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | ConversationReflection | Conversation reflection object |
+|  params | [ConversationReflection](./client.conversationreflection.md) | Conversation reflection object |
 
 **Returns:**
 

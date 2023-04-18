@@ -16,7 +16,7 @@ update(params: UserReflection): this;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | UserReflection | User reflection object |
+|  params | [UserReflection](./client.userreflection.md) | User reflection object |
 
 **Returns:**
 

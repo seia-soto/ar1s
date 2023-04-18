@@ -16,7 +16,7 @@ static validate(params: UserReflection): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | UserReflection | User reflection object. |
+|  params | [UserReflection](./client.userreflection.md) | User reflection object. |
 
 **Returns:**
 

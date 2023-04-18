@@ -17,5 +17,5 @@ constructor(context: Aris, params: UserReflection);
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  context | [Aris](./client.aris.md) |  |
-|  params | UserReflection |  |
+|  params | [UserReflection](./client.userreflection.md) |  |
 

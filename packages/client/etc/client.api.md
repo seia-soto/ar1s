@@ -54,7 +54,6 @@ export class Collection<T extends Context> {
 
 // @public
 export class Conversation extends Context {
-    // Warning: (ae-forgotten-export) The symbol "ConversationReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: ConversationReflection);
     // (undocumented)
     readonly _context: Aris;
@@ -91,7 +90,6 @@ export class Conversation extends Context {
 
 // @public
 export class ConversationMember extends Context {
-    // Warning: (ae-forgotten-export) The symbol "ConversationMemberReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: ConversationMemberReflection);
     // (undocumented)
     readonly _context: Aris;
@@ -116,9 +114,33 @@ export class ConversationMember extends Context {
     get user(): User | ConversationMember['_user'];
 }
 
+// @public (undocumented)
+export type ConversationMemberReflection = {
+    id: ConversationMember['id'];
+    flag: ConversationMember['flag'];
+    platform: Platform['id'];
+    conversation: Conversation['id'];
+    user: User['id'];
+    displayName: ConversationMember['displayName'];
+    displayAvatarUrl: ConversationMember['displayAvatarUrl'];
+    displayBio: ConversationMember['displayBio'];
+    createdAt: string | ConversationMember['createdAt'];
+    updatedAt: string | ConversationMember['updatedAt'];
+};
+
+// @public (undocumented)
+export type ConversationReflection = {
+    id: Conversation['id'];
+    flag: Conversation['flag'];
+    platform: Platform['id'];
+    model: Conversation['model'];
+    systemMessage: Conversation['systemMessage'];
+    createdAt: string | Conversation['createdAt'];
+    updatedAt: string | Conversation['updatedAt'];
+};
+
 // @public
 export class Message extends Context {
-    // Warning: (ae-forgotten-export) The symbol "MessageReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: MessageReflection);
     get author(): ConversationMember | Message['_author'];
     // (undocumented)
@@ -140,6 +162,18 @@ export class Message extends Context {
     // (undocumented)
     updatedAt: Date;
 }
+
+// @public (undocumented)
+export type MessageReflection = {
+    id: Message['id'];
+    flag: Message['flag'];
+    platform: Platform['id'];
+    author: ConversationMember['id'];
+    conversation: Conversation['id'];
+    content: Message['content'];
+    createdAt: string | Message['createdAt'];
+    updatedAt: string | Message['updatedAt'];
+};
 
 // @public (undocumented)
 export type Options = {
@@ -187,9 +221,19 @@ export class Platform extends Context {
     updatedAt: Date;
     // (undocumented)
     users: Collection<User>;
-    // Warning: (ae-forgotten-export) The symbol "PlatformReflection" needs to be exported by the entry point index.d.ts
     static validate(params: PlatformReflection): void;
 }
+
+// @public (undocumented)
+export type PlatformReflection = {
+    id: Platform['id'];
+    flag: Platform['flag'];
+    inviteIdentifier: Platform['inviteIdentifier'];
+    displayName: Platform['displayName'];
+    displayImageUrl: Platform['displayImageUrl'];
+    createdAt: string | Platform['createdAt'];
+    updatedAt: string | Platform['updatedAt'];
+};
 
 // @public (undocumented)
 export class Series<T extends Context> extends Collection<T> {
@@ -246,9 +290,21 @@ export class User extends Context {
     updatedAt: Date;
     // (undocumented)
     readonly username: string;
-    // Warning: (ae-forgotten-export) The symbol "UserReflection" needs to be exported by the entry point index.d.ts
     static validate(params: UserReflection): void;
 }
+
+// @public (undocumented)
+export type UserReflection = {
+    id: User['id'];
+    flag: User['flag'];
+    platform: Platform['id'];
+    username: User['username'];
+    displayName: User['displayName'];
+    displayAvatarUrl: User['displayAvatarUrl'];
+    displayBio: User['displayBio'];
+    createdAt: string | User['createdAt'];
+    updatedAt: string | User['updatedAt'];
+};
 
 // (No @packageDocumentation comment for this package)
 

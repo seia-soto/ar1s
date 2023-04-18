@@ -21,5 +21,10 @@
 
 |  Type Alias | Description |
 |  --- | --- |
+|  [ConversationMemberReflection](./client.conversationmemberreflection.md) |  |
+|  [ConversationReflection](./client.conversationreflection.md) |  |
+|  [MessageReflection](./client.messagereflection.md) |  |
 |  [Options](./client.options.md) |  |
+|  [PlatformReflection](./client.platformreflection.md) |  |
+|  [UserReflection](./client.userreflection.md) |  |
 

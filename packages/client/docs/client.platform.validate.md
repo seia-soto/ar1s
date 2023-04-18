@@ -16,7 +16,7 @@ static validate(params: PlatformReflection): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | PlatformReflection | Platform reflection object |
+|  params | [PlatformReflection](./client.platformreflection.md) | Platform reflection object |
 
 **Returns:**
 

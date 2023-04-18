@@ -16,7 +16,7 @@ update(params: PlatformReflection): this;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | PlatformReflection | The Platform reflection object |
+|  params | [PlatformReflection](./client.platformreflection.md) | The Platform reflection object |
 
 **Returns:**
 

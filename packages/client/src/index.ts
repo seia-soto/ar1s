@@ -1,10 +1,10 @@
 import ky from 'ky';
 import {Collection, Series} from './specs/_context.js';
-import {Conversation} from './specs/conversation.js';
-import {ConversationMember} from './specs/conversationMember.js';
-import {Message} from './specs/message.js';
+import {Conversation, type ConversationReflection} from './specs/conversation.js';
+import {ConversationMember, type ConversationMemberReflection} from './specs/conversationMember.js';
+import {Message, type MessageReflection} from './specs/message.js';
 import {Platform, type PlatformReflection} from './specs/platform.js';
-import {User} from './specs/user.js';
+import {User, type UserReflection} from './specs/user.js';
 
 type Options = {
 	fetcher: typeof ky;
@@ -91,10 +91,15 @@ export {
 	type Options,
 	Aris,
 	Conversation,
+	type ConversationReflection,
 	ConversationMember,
+	type ConversationMemberReflection,
 	Platform,
+	type PlatformReflection,
 	User,
+	type UserReflection,
 	Message,
+	type MessageReflection,
 	Collection,
 	Series,
 };
