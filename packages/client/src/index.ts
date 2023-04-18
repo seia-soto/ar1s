@@ -5,10 +5,16 @@ import {type ConversationMember} from './specs/conversationMember.js';
 import {type Platform} from './specs/platform.js';
 import {type User} from './specs/user.js';
 
+/**
+ * @public
+ */
 export type Options = {
 	fetcher: typeof ky;
 };
 
+/**
+ * @public
+ */
 export class Aris {
 	platforms = new Collection<Platform>();
 	users = new Collection<User>();

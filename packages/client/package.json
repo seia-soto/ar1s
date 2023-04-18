@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "The client library for ar1s.",
   "main": "out/index.js",
+  "typings": "out/index.d.ts",
   "type": "module",
   "scripts": {
     "ws:up": "pnpm up '@ar1s/*'",
+    "build": "tsc --project ./tsconfig.build.json",
+    "build:docs": "api-extractor run --local --verbose && api-documenter markdown --input-folder ./temp --output-folder ./docs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,6 +19,8 @@
     "ky": "^0.33.3"
   },
   "devDependencies": {
+    "@microsoft/api-documenter": "^7.21.7",
+    "@microsoft/api-extractor": "^7.34.4",
     "@typescript-eslint/eslint-plugin": ">=5.57.0",
     "@typescript-eslint/parser": ">=5.57.0",
     "eslint": ">=8.0.0",
