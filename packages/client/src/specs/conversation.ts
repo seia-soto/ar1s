@@ -122,11 +122,11 @@ export class Conversation extends Context {
 	}
 
 	/**
-	 * Adds a user to this conversation (requires `ConversationMemberFlags.IsOwner`)
+	 * Add a user to this conversation (requires `ConversationMemberFlags.IsOwner`)
 	 * @param userId The user identifier
 	 * @returns The conversation member
 	 */
-	async addUser(userId: User['id']) {
+	async createMember(userId: User['id']) {
 		this.requestElevationToConversationOwner();
 
 		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/member/' + userId.toString());
@@ -137,6 +137,24 @@ export class Conversation extends Context {
 		this.members.add(member);
 
 		return member;
+	}
+
+	/**
+	 * Delete the member from this conversation (requires `ConversationMemberFlags.IsOwner`)
+	 * @param memberId The conversation member identifier
+	 */
+	async deleteMember(memberId: ConversationMember['id']) {
+		this.requestElevationToConversationOwner();
+
+		await this._context.fetcher('private/conversation/' + this.id.toString() + '/member/' + memberId.toString(), {method: 'delete'});
+
+		for (const message of this.messages.values()) {
+			if (message.author === memberId) {
+				this.messages.del(message.id);
+			}
+		}
+
+		this.members.del(memberId);
 	}
 
 	/**

@@ -10,7 +10,7 @@ import type Conversation from '../../../modules/database/schema/conversation.js'
 import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
 import {publish} from '../../../modules/delivery/pubsub.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
-import {Formats, rangedQueryType, singleRangedQueryType, useRangedQueryParams, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
+import {Formats, rangedQueryType, singleRangedQueryType, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {conversationStandardDataTypeObjectParams, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
 import {createConversationMember, getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
 
@@ -308,6 +308,43 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 				const member = await createConversationMember(t, conversationId, user, 0);
 
 				return member;
+			});
+		},
+	});
+
+	// Remove the member from the conversation
+	fastify.route({
+		url: '/:conversation/member/:member',
+		method: 'POST',
+		schema: {
+			params: Type.Object({
+				conversation: Type.String({
+					format: Formats.NumericInt,
+				}),
+				member: Type.String({
+					format: Formats.NumericInt,
+				}),
+			}),
+		},
+		async handler(request, _reply) {
+			const conversationId = useSingleRangedQueryParam(request.params.conversation);
+			const memberId = useSingleRangedQueryParam(request.params.member);
+
+			return db.tx(async t => {
+				if (!await isUserOwnedConversation(t, request.session.user, conversationId)) {
+					throw useInexistingResourceError();
+				}
+
+				const isMemberExistsAsCommon = (await t.query(t.sql`select exists (select 1 from ${t.sql.ident(models.conversationMember(t).tableName)} where id = ${memberId} and conversation = ${conversationId} and flag = ${0})`))[0].exists as boolean;
+
+				if (!isMemberExistsAsCommon) {
+					throw useInexistingResourceError();
+				}
+
+				await models.message(t).delete({author: memberId});
+				await models.conversationMember(t).delete({id: memberId});
+
+				return '';
 			});
 		},
 	});

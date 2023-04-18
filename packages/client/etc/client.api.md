@@ -56,12 +56,13 @@ export class Collection<T extends Context> {
 export class Conversation extends Context {
     // Warning: (ae-forgotten-export) The symbol "ConversationReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: ConversationReflection);
-    addUser(userId: User['id']): Promise<ConversationMember>;
     // (undocumented)
     readonly _context: Aris;
     // (undocumented)
     readonly createdAt: Date;
+    createMember(userId: User['id']): Promise<ConversationMember>;
     createMessage(content: string): Promise<void>;
+    deleteMember(memberId: ConversationMember['id']): Promise<void>;
     // (undocumented)
     flag: number;
     // (undocumented)

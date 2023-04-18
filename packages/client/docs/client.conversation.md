@@ -39,8 +39,9 @@ export declare class Conversation extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [addUser(userId)](./client.conversation.adduser.md) |  | Adds a user to this conversation (requires <code>ConversationMemberFlags.IsOwner</code>) |
+|  [createMember(userId)](./client.conversation.createmember.md) |  | Add a user to this conversation (requires <code>ConversationMemberFlags.IsOwner</code>) |
 |  [createMessage(content)](./client.conversation.createmessage.md) |  | Send a message to the conversation |
+|  [deleteMember(memberId)](./client.conversation.deletemember.md) |  | Delete the member from this conversation (requires <code>ConversationMemberFlags.IsOwner</code>) |
 |  [isSelfConversationOwner()](./client.conversation.isselfconversationowner.md) |  | Check if the user is the owner of this conversation |
 |  [pull()](./client.conversation.pull.md) |  | Pull everything under this data type object |
 |  [pullMembers()](./client.conversation.pullmembers.md) |  | Pull available conversation members of conversation from the server |
