@@ -305,9 +305,9 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 						throw useInexistingResourceError();
 					});
 
-				await createConversationMember(t, conversationId, user, 0);
+				const member = await createConversationMember(t, conversationId, user, 0);
 
-				return '';
+				return member;
 			});
 		},
 	});
