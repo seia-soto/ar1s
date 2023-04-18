@@ -45,7 +45,7 @@ export class User extends Context {
 		}
 	}
 
-	readonly id: number;
+	readonly id: number & {__type: 'user.id'};
 	flag: number;
 	readonly username: string;
 	displayName: string;

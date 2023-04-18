@@ -1,5 +1,6 @@
 import {type Aris} from '../index.js';
-import {Context} from './_context.js';
+import {Collection, Context} from './_context.js';
+import {ConversationMember, type ConversationMemberReflection} from './conversationMember.js';
 import {type Platform} from './platform.js';
 
 export type ConversationReflection = {
@@ -13,12 +14,14 @@ export type ConversationReflection = {
 };
 
 export class Conversation extends Context {
-	readonly id: number;
+	readonly id: number & {__type: 'conversation.id'};
 	flag: number;
 	readonly model: string;
 	readonly systemMessage: string;
 	readonly createdAt: Date;
 	updatedAt: Date;
+
+	members = new Collection<ConversationMember>();
 
 	private readonly _platform: Platform['id'];
 
@@ -47,5 +50,19 @@ export class Conversation extends Context {
 
 	get platform(): Platform | number {
 		return this._context.platforms.get(this._platform) ?? this._platform;
+	}
+
+	async pullMembers() {
+		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/members', {method: 'get'});
+		const data: ConversationMemberReflection[] = await response.json();
+
+		for (const json of data) {
+			const member = new ConversationMember(this._context, json);
+
+			this.members.add(member);
+			this._context.conversationMembers.add(member);
+		}
+
+		return this;
 	}
 }

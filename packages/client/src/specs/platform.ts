@@ -43,7 +43,7 @@ export class Platform extends Context {
 		}
 	}
 
-	readonly id: number;
+	readonly id: number & {__type: 'platform.id'};
 	flag: number;
 	readonly inviteIdentifier: string;
 	displayName: string;
@@ -87,9 +87,14 @@ export class Platform extends Context {
 		this.requestElevationToPlatformMember();
 
 		const response = await this._context.fetcher('private/platform/users', {method: 'get'});
-		const json: UserReflection[] = await response.json();
+		const data: UserReflection[] = await response.json();
 
-		json.map(data => this.users.add(new User(this._context, data)));
+		for (const json of data) {
+			const user = new User(this._context, json);
+
+			this.users.add(user);
+			this._context.users.add(user);
+		}
 
 		this.users.add(this._context.user!); // The existence of user is checked on `requestElevationToPlatformMember`
 
