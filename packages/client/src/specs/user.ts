@@ -68,8 +68,6 @@ export class User extends Context {
 
 	conversations = new Collection<Conversation>();
 
-	private readonly _platform: number;
-
 	constructor(
 		context: Aris,
 		params: UserReflection,
@@ -77,8 +75,6 @@ export class User extends Context {
 		super(context, params.id);
 
 		User.validate(params);
-
-		this._platform = params.platform;
 
 		this.id = params.id;
 		this.flag = params.flag;
@@ -107,13 +103,6 @@ export class User extends Context {
 		this._copyUpdatedAt = new Date();
 
 		return this;
-	}
-
-	/**
-	 * Get platform DTO, platform identifier if not available
-	 */
-	get platform(): Platform | number {
-		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
 	/**
@@ -199,15 +188,14 @@ export class User extends Context {
 	/**
 	 * Delete user, this will have same effect deleting the platform if the user is the platform manager
 	 */
-	async resign() {
+	async delete() {
 		this.requestElevationToSelfProfile();
 
 		await this._context.fetcher('private/user', {method: 'delete'});
 
 		if (hasFlag(this.flag, compileBit(UserFlags.PlatformManager))) {
-			if (typeof this.platform !== 'number') {
-				this._context.platforms.del(this.platform._enumerable);
-			}
+			delete this._context.platform;
+			delete this._context.user;
 		}
 	}
 

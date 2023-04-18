@@ -20,11 +20,11 @@ class Aris {
 		});
 	}
 
-	platforms = new Collection<Platform>();
 	users = new Collection<User>();
 	conversations = new Collection<Conversation>();
 	conversationMembers = new Collection<ConversationMember>();
 
+	platform?: Platform;
 	user?: User;
 
 	/**
@@ -48,7 +48,7 @@ class Aris {
 
 		const data: PlatformReflection = await response.json();
 
-		this.platforms.add(new Platform(this, data));
+		this.platform = new Platform(this, data);
 
 		return false;
 	}

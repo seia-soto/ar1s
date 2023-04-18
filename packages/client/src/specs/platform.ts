@@ -244,11 +244,12 @@ export class Platform extends Context {
 
 		await this._context.fetcher('private/manager/platform', {method: 'delete'});
 
-		this._context.platforms.del(this._enumerable);
+		delete this._context.platform;
+		delete this._context.user;
 	}
 
 	/**
-	 * Create an user belongs to the platform
+	 * Create an user belongs to the platform (requires `UserFlags.PlatformManager`)
 	 * @param username Username
 	 * @param password Password
 	 * @returns User instance
@@ -277,11 +278,19 @@ export class Platform extends Context {
 	}
 
 	/**
+	 * Delete the user via username (requires `UserFlags.PlatformManager`)
+	 * @param username Username
+	 */
+	async deleteUser(username: User['username']) {
+		await this._context.fetcher('private/manager/user/' + username, {method: 'delete'});
+	}
+
+	/**
 	 * Check if current user is the member of the platform
 	 * @returns True if current user is the member of the platform
 	 */
 	isSelfMemberOfPlatform() {
-		return typeof this._context.user !== 'undefined' && this._context.user.platform === this.id;
+		return typeof this._context.user !== 'undefined' && this._context.platform === this;
 	}
 
 	/**

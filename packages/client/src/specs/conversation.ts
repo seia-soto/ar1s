@@ -1,16 +1,15 @@
 import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {stringify} from 'qs';
-import {type User, type Aris} from '../index.js';
+import {type Aris, type Platform, type User} from '../index.js';
 import {Collection, Context, Series} from './_context.js';
 import {ConversationMember, type ConversationMemberReflection} from './conversationMember.js';
 import {Message, type MessageReflection} from './message.js';
-import {type Platform} from './platform.js';
 
 export type ConversationReflection = {
 	id: Conversation['id'];
 	flag: Conversation['flag'];
-	platform: Conversation['_platform'];
+	platform: Platform['id'];
 	model: Conversation['model'];
 	systemMessage: Conversation['systemMessage'];
 	createdAt: string | Conversation['createdAt'];
@@ -31,8 +30,6 @@ export class Conversation extends Context {
 	members = new Collection<ConversationMember>();
 	messages = new Series<Message>();
 
-	private readonly _platform: Platform['id'];
-
 	/**
 	 * The reference to self profile in `conversation.members` to reduce computation resource use
 	 */
@@ -43,8 +40,6 @@ export class Conversation extends Context {
 		params: ConversationReflection,
 	) {
 		super(_context, params.id);
-
-		this._platform = params.platform;
 
 		this.id = params.id;
 		this.flag = params.flag;
@@ -64,13 +59,6 @@ export class Conversation extends Context {
 		this.updatedAt = new Date(params.updatedAt);
 
 		return this;
-	}
-
-	/**
-	 * Get platform DTO, platform identifier if not available
-	 */
-	get platform(): Platform | number {
-		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
 	/**

@@ -29,7 +29,6 @@ export class ConversationMember extends Context {
 	readonly createdAt: Date;
 	updatedAt: Date;
 
-	private readonly _platform: Platform['id'];
 	private readonly _conversation: Conversation['id'];
 	private readonly _user: User['id'];
 
@@ -47,16 +46,8 @@ export class ConversationMember extends Context {
 		this.createdAt = new Date(params.createdAt);
 		this.updatedAt = new Date(params.updatedAt);
 
-		this._platform = params.platform;
 		this._conversation = params.conversation;
 		this._user = params.user;
-	}
-
-	/**
-	 * Get platform DTO, platform identifier if not available
-	 */
-	get platform(): Platform | ConversationMember['_platform'] {
-		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
 	/**
