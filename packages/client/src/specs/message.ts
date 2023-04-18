@@ -4,7 +4,7 @@ import {type Conversation} from './conversation.js';
 import {type ConversationMember} from './conversationMember.js';
 import {type Platform} from './platform.js';
 
-type MessageReflection = {
+export type MessageReflection = {
 	id: Message['id'];
 	flag: Message['flag'];
 	platform: Platform['id'];

@@ -1,6 +1,7 @@
 import {type Aris} from '../index.js';
-import {Collection, Context} from './_context.js';
+import {Collection, Context, Series} from './_context.js';
 import {ConversationMember, type ConversationMemberReflection} from './conversationMember.js';
+import {type MessageReflection, Message} from './message.js';
 import {type Platform} from './platform.js';
 
 export type ConversationReflection = {
@@ -22,6 +23,7 @@ export class Conversation extends Context {
 	updatedAt: Date;
 
 	members = new Collection<ConversationMember>();
+	messages = new Series<Message>();
 
 	private readonly _platform: Platform['id'];
 
@@ -61,6 +63,19 @@ export class Conversation extends Context {
 
 			this.members.add(member);
 			this._context.conversationMembers.add(member);
+		}
+
+		return this;
+	}
+
+	async pullMessages() {
+		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/messages?from=1&size=400', {method: 'get'});
+		const data: MessageReflection[] = await response.json();
+
+		for (const json of data) {
+			const message = new Message(this._context, json);
+
+			this.messages.add(message);
 		}
 
 		return this;
