@@ -63,6 +63,7 @@ export class Conversation extends Context {
     createMember(userId: User['id']): Promise<ConversationMember>;
     createMessage(content: string): Promise<void>;
     deleteMember(memberId: ConversationMember['id']): Promise<void>;
+    deleteMessage(messageId: Message['id']): Promise<void>;
     // (undocumented)
     flag: number;
     // (undocumented)
@@ -98,6 +99,7 @@ export class ConversationMember extends Context {
     get conversation(): Conversation | ConversationMember['_conversation'];
     // (undocumented)
     readonly createdAt: Date;
+    delete(): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;
     // (undocumented)

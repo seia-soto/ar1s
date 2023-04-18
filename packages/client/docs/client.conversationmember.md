@@ -35,3 +35,9 @@ export declare class ConversationMember extends Context
 |  [updatedAt](./client.conversationmember.updatedat.md) |  | Date |  |
 |  [user](./client.conversationmember.user.md) | <code>readonly</code> | [User](./client.user.md) \| [ConversationMember](./client.conversationmember.md)<!-- -->\['\_user'\] | Get user DTO, user identifier if not available |
 
+## Methods
+
+|  Method | Modifiers | Description |
+|  --- | --- | --- |
+|  [delete()](./client.conversationmember.delete.md) |  | Delete the member |
+

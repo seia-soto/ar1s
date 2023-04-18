@@ -72,4 +72,15 @@ export class ConversationMember extends Context {
 	get user(): User | ConversationMember['_user'] {
 		return this._context.users.get(this._user) ?? this._user;
 	}
+
+	/**
+	 * Delete the member
+	 */
+	async delete() {
+		if (typeof this.conversation === 'number') {
+			throw new Error('NotFound: The conversation data object is not pulled!');
+		}
+
+		await this.conversation.deleteMember(this.id);
+	}
 }

@@ -171,6 +171,24 @@ export class Conversation extends Context {
 	}
 
 	/**
+	 * Delete the message
+	 * @param messageId The message identifier
+	 */
+	async deleteMessage(messageId: Message['id']) {
+		const message = this.messages.get(messageId);
+
+		if (!message) {
+			throw new Error('NotFound: The message is not exists!');
+		}
+
+		message.requestElevationToAuthor(false);
+
+		await this._context.fetcher('private/conversation/' + this.id.toString() + '/message/' + message.id.toString(), {method: 'delete'});
+
+		this.messages.del(messageId);
+	}
+
+	/**
 	 * Get self profile from the conversation members
 	 */
 	get self() {
