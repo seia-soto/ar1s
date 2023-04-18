@@ -315,7 +315,7 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 	// Remove the member from the conversation
 	fastify.route({
 		url: '/:conversation/member/:member',
-		method: 'POST',
+		method: 'DELETE',
 		schema: {
 			params: Type.Object({
 				conversation: Type.String({
