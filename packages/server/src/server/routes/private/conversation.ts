@@ -256,13 +256,13 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm.platform, cm.conversation, cm.user, cm."createdAt",
+				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm.platform, cm.conversation, cm.user, cm."createdAt", cm."updatedAt"
 coalesce(nullif(cm."displayName", ''), u."displayName") as "displayName",
 coalesce(nullif(cm."displayAvatarUrl", ''), u."displayAvatarUrl") as "displayAvatarUrl",
 coalesce(nullif(cm."displayBio", ''), u."displayBio") as "displayBio"
 from ${t.sql.ident(models.conversationMember(t).tableName)} cm
 left join ${t.sql.ident(models.user(t).tableName)} u ON cm."user" = u.id
-where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' | 'displayName' | 'displayAvatarUrl' | 'displayBio' | 'createdAt'>>;
+where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' | 'platform' | 'conversation' | 'user' | 'displayName' | 'displayAvatarUrl' | 'displayBio' | 'createdAt' | 'updatedAt'>>;
 
 				return conversationMembers;
 			});
