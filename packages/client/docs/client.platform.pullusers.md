@@ -4,6 +4,8 @@
 
 ## Platform.pullUsers() method
 
+Pull available users of platform from the server
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,6 @@ pullUsers(): Promise<this>;
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

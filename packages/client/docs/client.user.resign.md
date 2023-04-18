@@ -4,6 +4,8 @@
 
 ## User.resign() method
 
+Delete user
+
 **Signature:**
 
 ```typescript

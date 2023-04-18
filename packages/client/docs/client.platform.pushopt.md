@@ -4,6 +4,8 @@
 
 ## Platform.pushOpt() method
 
+Update opt-in features of the Platform (requires `UserFlags.PlatformManager`<!-- -->)
+
 **Signature:**
 
 ```typescript
@@ -16,9 +18,11 @@ pushOpt(params: {
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | { isSignUpDisabled: boolean; } |  |
+|  params | { isSignUpDisabled: boolean; } | Opt-in features of the platform |
 
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

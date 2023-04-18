@@ -4,6 +4,8 @@
 
 ## User.isSelfProfile() method
 
+Check if this user is current user
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,6 @@ isSelfProfile(): boolean;
 **Returns:**
 
 boolean
+
+True if this user is current user
 

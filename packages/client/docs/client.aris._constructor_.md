@@ -16,5 +16,5 @@ constructor(fetcher: typeof ky);
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  fetcher | typeof ky |  |
+|  fetcher | typeof ky | The <code>ky</code> instance. You should create an extended fetcher that matches backend url |
 

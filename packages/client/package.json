@@ -8,7 +8,7 @@
   "scripts": {
     "ws:up": "pnpm up '@ar1s/*'",
     "build": "tsc --project ./tsconfig.build.json",
-    "build:docs": "api-extractor run --local --verbose && api-documenter markdown --input-folder ./temp --output-folder ./docs",
+    "build:docs": "api-extractor run --local --verbose && api-documenter markdown --input-folder ./temp --output-folder ./docs && cp -f ./docs/index.md ./docs/readme.md",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

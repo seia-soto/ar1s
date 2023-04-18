@@ -4,6 +4,8 @@
 
 ## Conversation.pullMembers() method
 
+Pull available conversation members of conversation from the server
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,6 @@ pullMembers(): Promise<this>;
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

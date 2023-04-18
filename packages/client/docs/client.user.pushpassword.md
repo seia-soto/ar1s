@@ -4,6 +4,8 @@
 
 ## User.pushPassword() method
 
+Update user password
+
 **Signature:**
 
 ```typescript
@@ -14,10 +16,12 @@ pushPassword(currentPassword: string, newPassword: string): Promise<this>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  currentPassword | string |  |
-|  newPassword | string |  |
+|  currentPassword | string | Current password |
+|  newPassword | string | New password |
 
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

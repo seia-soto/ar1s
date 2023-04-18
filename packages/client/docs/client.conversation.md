@@ -4,6 +4,8 @@
 
 ## Conversation class
 
+Conversation instance
+
 **Signature:**
 
 ```typescript
@@ -25,10 +27,10 @@ export declare class Conversation extends Context
 |  [createdAt](./client.conversation.createdat.md) | <code>readonly</code> | Date |  |
 |  [flag](./client.conversation.flag.md) |  | number |  |
 |  [id](./client.conversation.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'conversation.id'; } |  |
-|  [members](./client.conversation.members.md) |  | Collection&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
-|  [messages](./client.conversation.messages.md) |  | Series&lt;[Message](./client.message.md)<!-- -->&gt; |  |
+|  [members](./client.conversation.members.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
+|  [messages](./client.conversation.messages.md) |  | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; |  |
 |  [model](./client.conversation.model.md) | <code>readonly</code> | string |  |
-|  [platform](./client.conversation.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number |  |
+|  [platform](./client.conversation.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number | Get platform DTO, platform identifier if not available |
 |  [systemMessage](./client.conversation.systemmessage.md) | <code>readonly</code> | string |  |
 |  [updatedAt](./client.conversation.updatedat.md) |  | Date |  |
 
@@ -36,7 +38,7 @@ export declare class Conversation extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [pullMembers()](./client.conversation.pullmembers.md) |  |  |
-|  [pullMessages()](./client.conversation.pullmessages.md) |  |  |
-|  [update(params)](./client.conversation.update.md) |  |  |
+|  [pullMembers()](./client.conversation.pullmembers.md) |  | Pull available conversation members of conversation from the server |
+|  [pullMessages()](./client.conversation.pullmessages.md) |  | Pull available messages of conversation from the server |
+|  [update(params)](./client.conversation.update.md) |  | Update data depends on reflection object |
 

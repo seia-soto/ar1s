@@ -8,12 +8,14 @@
 
 |  Class | Description |
 |  --- | --- |
-|  [Aris](./client.aris.md) |  |
-|  [Conversation](./client.conversation.md) |  |
-|  [ConversationMember](./client.conversationmember.md) |  |
-|  [Message](./client.message.md) |  |
-|  [Platform](./client.platform.md) |  |
-|  [User](./client.user.md) |  |
+|  [Aris](./client.aris.md) | The Ar1s client |
+|  [Collection](./client.collection.md) |  |
+|  [Conversation](./client.conversation.md) | Conversation instance |
+|  [ConversationMember](./client.conversationmember.md) | Conversation member instance |
+|  [Message](./client.message.md) | Message instance |
+|  [Platform](./client.platform.md) | Platform instance |
+|  [Series](./client.series.md) |  |
+|  [User](./client.user.md) | The user instance |
 
 ## Type Aliases
 

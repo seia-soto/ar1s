@@ -4,6 +4,8 @@
 
 ## User.self() method
 
+Create self-reflected `User` instance
+
 **Signature:**
 
 ```typescript
@@ -14,9 +16,11 @@ static self(context: Aris): Promise<User>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  context | [Aris](./client.aris.md) |  |
+|  context | [Aris](./client.aris.md) | The Aris context |
 
 **Returns:**
 
 Promise&lt;[User](./client.user.md)<!-- -->&gt;
+
+User reflecting self
 

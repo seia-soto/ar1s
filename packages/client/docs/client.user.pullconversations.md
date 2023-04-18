@@ -4,6 +4,8 @@
 
 ## User.pullConversations() method
 
+Pull available conversations of user from the server
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,6 @@ pullConversations(): Promise<this>;
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

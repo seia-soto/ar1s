@@ -4,6 +4,8 @@
 
 ## Platform.update() method
 
+Update data depends on reflection object
+
 **Signature:**
 
 ```typescript
@@ -14,9 +16,11 @@ update(params: PlatformReflection): this;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | PlatformReflection |  |
+|  params | PlatformReflection | The Platform reflection object |
 
 **Returns:**
+
+this
 
 this
 

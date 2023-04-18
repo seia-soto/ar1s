@@ -4,6 +4,8 @@
 
 ## Platform.from() method
 
+Initialize Platform object via `inviteIdentifier`
+
 **Signature:**
 
 ```typescript
@@ -14,10 +16,12 @@ static from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']): Pro
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  context | [Aris](./client.aris.md) |  |
-|  inviteIdentifier | [Platform](./client.platform.md)<!-- -->\['inviteIdentifier'\] | _(Optional)_ |
+|  context | [Aris](./client.aris.md) | The Aris context |
+|  inviteIdentifier | [Platform](./client.platform.md)<!-- -->\['inviteIdentifier'\] | _(Optional)_ The invite identifier of the platform |
 
 **Returns:**
 
 Promise&lt;[Platform](./client.platform.md)<!-- -->&gt;
+
+Platform
 

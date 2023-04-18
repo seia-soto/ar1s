@@ -4,6 +4,8 @@
 
 ## Platform.signIn() method
 
+Sign in to the platform
+
 **Signature:**
 
 ```typescript
@@ -14,11 +16,13 @@ signIn(username: string, password: string, isTrustedEnvironment: boolean): Promi
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  username | string |  |
-|  password | string |  |
-|  isTrustedEnvironment | boolean |  |
+|  username | string | Username |
+|  password | string | Password |
+|  isTrustedEnvironment | boolean | True if the server should trust the browser and set longer cookie |
 
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

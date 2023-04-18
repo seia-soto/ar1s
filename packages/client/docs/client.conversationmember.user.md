@@ -4,6 +4,8 @@
 
 ## ConversationMember.user property
 
+Get user DTO, user identifier if not available
+
 **Signature:**
 
 ```typescript

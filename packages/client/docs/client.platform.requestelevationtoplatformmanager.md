@@ -4,6 +4,8 @@
 
 ## Platform.requestElevationToPlatformManager() method
 
+Throw error if current user is not platform manager
+
 **Signature:**
 
 ```typescript

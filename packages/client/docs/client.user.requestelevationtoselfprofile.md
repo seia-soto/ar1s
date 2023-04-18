@@ -4,6 +4,8 @@
 
 ## User.requestElevationToSelfProfile() method
 
+Throw error if this user is not current user
+
 **Signature:**
 
 ```typescript

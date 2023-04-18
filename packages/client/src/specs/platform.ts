@@ -22,7 +22,16 @@ type PlatformReflection = {
 	updatedAt: string | Platform['updatedAt'];
 };
 
+/**
+ * Platform instance
+ */
 export class Platform extends Context {
+	/**
+	 * Initialize Platform object via `inviteIdentifier`
+	 * @param context The Aris context
+	 * @param inviteIdentifier The invite identifier of the platform
+	 * @returns Platform
+	 */
 	public static async from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']) {
 		const platformResponse = inviteIdentifier
 			? await context.fetcher('platform/invite/' + inviteIdentifier, {method: 'get'})
@@ -37,6 +46,10 @@ export class Platform extends Context {
 		return platform;
 	}
 
+	/**
+	 * Validate the reflection object
+	 * @param params Platform reflection object
+	 */
 	public static validate(params: PlatformReflection) {
 		if (!checkInvite.check(params.inviteIdentifier)) {
 			throw useFormatError(checkInvite.errors(params.inviteIdentifier));
@@ -70,6 +83,11 @@ export class Platform extends Context {
 		this.updatedAt = new Date(params.updatedAt);
 	}
 
+	/**
+	 * Update data depends on reflection object
+	 * @param params The Platform reflection object
+	 * @returns this
+	 */
 	update(params: PlatformReflection) {
 		Platform.validate(params);
 
@@ -83,6 +101,10 @@ export class Platform extends Context {
 		return this;
 	}
 
+	/**
+	 * Pull available users of platform from the server
+	 * @returns this
+	 */
 	async pullUsers() {
 		this.requestElevationToPlatformMember();
 
@@ -101,6 +123,13 @@ export class Platform extends Context {
 		return this;
 	}
 
+	/**
+	 * Sign in to the platform
+	 * @param username Username
+	 * @param password Password
+	 * @param isTrustedEnvironment True if the server should trust the browser and set longer cookie
+	 * @returns this
+	 */
 	async signIn(username: string, password: string, isTrustedEnvironment: boolean) {
 		if (!checkUsername.check(username)) {
 			throw useFormatError(checkUsername.errors(username));
@@ -128,6 +157,12 @@ export class Platform extends Context {
 		return this;
 	}
 
+	/**
+	 * Sign up to the platform
+	 * @param username Username
+	 * @param password Password
+	 * @returns this
+	 */
 	async signUp(username: string, password: string) {
 		if (!checkUsername.check(username)) {
 			throw useFormatError(checkUsername.errors(username));
@@ -152,6 +187,11 @@ export class Platform extends Context {
 		return this;
 	}
 
+	/**
+	 * Update display related parameters of the Platform (requires `UserFlags.PlatformManager`)
+	 * @param params Display related parameters in Platform reflection object
+	 * @returns this
+	 */
 	async pushDisplayParams(params: {displayName?: Platform['displayName']; displayImageUrl?: Platform['displayImageUrl']}) {
 		this.requestElevationToPlatformManager();
 
@@ -166,6 +206,11 @@ export class Platform extends Context {
 		return this;
 	}
 
+	/**
+	 * Update opt-in features of the Platform (requires `UserFlags.PlatformManager`)
+	 * @param params Opt-in features of the platform
+	 * @returns this
+	 */
 	async pushOpt(params: {isSignUpDisabled: boolean}) {
 		this.requestElevationToPlatformManager();
 
@@ -181,6 +226,9 @@ export class Platform extends Context {
 		return this;
 	}
 
+	/**
+	 * Delete the platform (requires `UserFlags.PlatformManager`)
+	 */
 	async delete() {
 		this.requestElevationToPlatformManager();
 
@@ -189,6 +237,12 @@ export class Platform extends Context {
 		this._context.platforms.del(this._enumerable);
 	}
 
+	/**
+	 * Create an user belongs to the platform
+	 * @param username Username
+	 * @param password Password
+	 * @returns User instance
+	 */
 	async createUser(username: User['username'], password: string) {
 		this.requestElevationToPlatformManager();
 
@@ -212,20 +266,34 @@ export class Platform extends Context {
 		return user;
 	}
 
+	/**
+	 * Check if current user is the member of the platform
+	 * @returns True if current user is the member of the platform
+	 */
 	isSelfMemberOfPlatform() {
 		return typeof this._context.user !== 'undefined' && this._context.user.platform === this.id;
 	}
 
+	/**
+	 * Check if current user is the manager of the platform
+	 * @returns True if current user is the manager of the platform
+	 */
 	isSelfPlatformManager() {
 		return typeof this._context.user !== 'undefined' && hasFlag(this._context.user.flag, compileBit(UserFlags.PlatformManager));
 	}
 
+	/**
+	 * Throw error if current user is not the platform member
+	 */
 	requestElevationToPlatformMember() {
 		if (!this.isSelfMemberOfPlatform()) {
 			throw new Error('Unauthorized: Current user is not a member of the platform!');
 		}
 	}
 
+	/**
+	 * Throw error if current user is not platform manager
+	 */
 	requestElevationToPlatformManager() {
 		if (!this.isSelfPlatformManager()) {
 			throw new Error('Unauthorized: Current user is not the platform manager!');

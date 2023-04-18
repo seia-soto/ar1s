@@ -4,6 +4,8 @@
 
 ## User.update() method
 
+Update data depends on reflection object
+
 **Signature:**
 
 ```typescript
@@ -14,9 +16,11 @@ update(params: UserReflection): this;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | UserReflection |  |
+|  params | UserReflection | User reflection object |
 
 **Returns:**
+
+this
 
 this
 

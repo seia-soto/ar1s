@@ -4,6 +4,8 @@
 
 ## Platform.requestElevationToPlatformMember() method
 
+Throw error if current user is not the platform member
+
 **Signature:**
 
 ```typescript

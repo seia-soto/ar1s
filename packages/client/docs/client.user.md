@@ -4,6 +4,8 @@
 
 ## User class
 
+The user instance
+
 **Signature:**
 
 ```typescript
@@ -21,14 +23,14 @@ export declare class User extends Context
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [conversations](./client.user.conversations.md) |  | Collection&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
+|  [conversations](./client.user.conversations.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
 |  [createdAt](./client.user.createdat.md) | <code>readonly</code> | Date |  |
 |  [displayAvatarUrl](./client.user.displayavatarurl.md) |  | string |  |
 |  [displayBio](./client.user.displaybio.md) |  | string |  |
 |  [displayName](./client.user.displayname.md) |  | string |  |
 |  [flag](./client.user.flag.md) |  | number |  |
 |  [id](./client.user.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'user.id'; } |  |
-|  [platform](./client.user.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number |  |
+|  [platform](./client.user.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number | Get platform DTO, platform identifier if not available |
 |  [updatedAt](./client.user.updatedat.md) |  | Date |  |
 |  [username](./client.user.username.md) | <code>readonly</code> | string |  |
 
@@ -36,13 +38,13 @@ export declare class User extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [isSelfProfile()](./client.user.isselfprofile.md) |  |  |
-|  [pullConversations()](./client.user.pullconversations.md) |  |  |
-|  [pushDisplayParams(params)](./client.user.pushdisplayparams.md) |  |  |
-|  [pushPassword(currentPassword, newPassword)](./client.user.pushpassword.md) |  |  |
-|  [requestElevationToSelfProfile()](./client.user.requestelevationtoselfprofile.md) |  |  |
-|  [resign()](./client.user.resign.md) |  |  |
-|  [self(context)](./client.user.self.md) | <code>static</code> |  |
-|  [update(params)](./client.user.update.md) |  |  |
-|  [validate(params)](./client.user.validate.md) | <code>static</code> |  |
+|  [isSelfProfile()](./client.user.isselfprofile.md) |  | Check if this user is current user |
+|  [pullConversations()](./client.user.pullconversations.md) |  | Pull available conversations of user from the server |
+|  [pushDisplayParams(params)](./client.user.pushdisplayparams.md) |  | Update user display related parameters |
+|  [pushPassword(currentPassword, newPassword)](./client.user.pushpassword.md) |  | Update user password |
+|  [requestElevationToSelfProfile()](./client.user.requestelevationtoselfprofile.md) |  | Throw error if this user is not current user |
+|  [resign()](./client.user.resign.md) |  | Delete user |
+|  [self(context)](./client.user.self.md) | <code>static</code> | Create self-reflected <code>User</code> instance |
+|  [update(params)](./client.user.update.md) |  | Update data depends on reflection object |
+|  [validate(params)](./client.user.validate.md) | <code>static</code> | Validate the parameters in User reflection object |
 

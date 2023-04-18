@@ -4,6 +4,8 @@
 
 ## User.validate() method
 
+Validate the parameters in User reflection object
+
 **Signature:**
 
 ```typescript
@@ -14,7 +16,7 @@ static validate(params: UserReflection): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | UserReflection |  |
+|  params | UserReflection | User reflection object. |
 
 **Returns:**
 

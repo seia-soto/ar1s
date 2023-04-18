@@ -14,6 +14,9 @@ export type ConversationReflection = {
 	updatedAt: string | Conversation['updatedAt'];
 };
 
+/**
+ * Conversation instance
+ */
 export class Conversation extends Context {
 	readonly id: number & {__type: 'conversation.id'};
 	flag: number;
@@ -43,6 +46,11 @@ export class Conversation extends Context {
 		this.updatedAt = new Date(params.updatedAt);
 	}
 
+	/**
+	 * Update data depends on reflection object
+	 * @param params Conversation reflection object
+	 * @returns this
+	 */
 	update(params: ConversationReflection) {
 		this.flag = params.flag;
 		this.updatedAt = new Date(params.updatedAt);
@@ -50,10 +58,17 @@ export class Conversation extends Context {
 		return this;
 	}
 
+	/**
+	 * Get platform DTO, platform identifier if not available
+	 */
 	get platform(): Platform | number {
 		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
+	/**
+	 * Pull available conversation members of conversation from the server
+	 * @returns this
+	 */
 	async pullMembers() {
 		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/members', {method: 'get'});
 		const data: ConversationMemberReflection[] = await response.json();
@@ -68,6 +83,10 @@ export class Conversation extends Context {
 		return this;
 	}
 
+	/**
+	 * Pull available messages of conversation from the server
+	 * @returns this
+	 */
 	async pullMessages() {
 		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/messages?from=1&size=400', {method: 'get'});
 		const data: MessageReflection[] = await response.json();

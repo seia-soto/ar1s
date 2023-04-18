@@ -4,6 +4,8 @@
 
 ## Platform class
 
+Platform instance
+
 **Signature:**
 
 ```typescript
@@ -28,24 +30,24 @@ export declare class Platform extends Context
 |  [id](./client.platform.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'platform.id'; } |  |
 |  [inviteIdentifier](./client.platform.inviteidentifier.md) | <code>readonly</code> | string |  |
 |  [updatedAt](./client.platform.updatedat.md) |  | Date |  |
-|  [users](./client.platform.users.md) |  | Collection&lt;[User](./client.user.md)<!-- -->&gt; |  |
+|  [users](./client.platform.users.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [createUser(username, password)](./client.platform.createuser.md) |  |  |
-|  [delete()](./client.platform.delete.md) |  |  |
-|  [from(context, inviteIdentifier)](./client.platform.from.md) | <code>static</code> |  |
-|  [isSelfMemberOfPlatform()](./client.platform.isselfmemberofplatform.md) |  |  |
-|  [isSelfPlatformManager()](./client.platform.isselfplatformmanager.md) |  |  |
-|  [pullUsers()](./client.platform.pullusers.md) |  |  |
-|  [pushDisplayParams(params)](./client.platform.pushdisplayparams.md) |  |  |
-|  [pushOpt(params)](./client.platform.pushopt.md) |  |  |
-|  [requestElevationToPlatformManager()](./client.platform.requestelevationtoplatformmanager.md) |  |  |
-|  [requestElevationToPlatformMember()](./client.platform.requestelevationtoplatformmember.md) |  |  |
-|  [signIn(username, password, isTrustedEnvironment)](./client.platform.signin.md) |  |  |
-|  [signUp(username, password)](./client.platform.signup.md) |  |  |
-|  [update(params)](./client.platform.update.md) |  |  |
-|  [validate(params)](./client.platform.validate.md) | <code>static</code> |  |
+|  [createUser(username, password)](./client.platform.createuser.md) |  | Create an user belongs to the platform |
+|  [delete()](./client.platform.delete.md) |  | Delete the platform (requires <code>UserFlags.PlatformManager</code>) |
+|  [from(context, inviteIdentifier)](./client.platform.from.md) | <code>static</code> | Initialize Platform object via <code>inviteIdentifier</code> |
+|  [isSelfMemberOfPlatform()](./client.platform.isselfmemberofplatform.md) |  | Check if current user is the member of the platform |
+|  [isSelfPlatformManager()](./client.platform.isselfplatformmanager.md) |  | Check if current user is the manager of the platform |
+|  [pullUsers()](./client.platform.pullusers.md) |  | Pull available users of platform from the server |
+|  [pushDisplayParams(params)](./client.platform.pushdisplayparams.md) |  | Update display related parameters of the Platform (requires <code>UserFlags.PlatformManager</code>) |
+|  [pushOpt(params)](./client.platform.pushopt.md) |  | Update opt-in features of the Platform (requires <code>UserFlags.PlatformManager</code>) |
+|  [requestElevationToPlatformManager()](./client.platform.requestelevationtoplatformmanager.md) |  | Throw error if current user is not platform manager |
+|  [requestElevationToPlatformMember()](./client.platform.requestelevationtoplatformmember.md) |  | Throw error if current user is not the platform member |
+|  [signIn(username, password, isTrustedEnvironment)](./client.platform.signin.md) |  | Sign in to the platform |
+|  [signUp(username, password)](./client.platform.signup.md) |  | Sign up to the platform |
+|  [update(params)](./client.platform.update.md) |  | Update data depends on reflection object |
+|  [validate(params)](./client.platform.validate.md) | <code>static</code> | Validate the reflection object |
 

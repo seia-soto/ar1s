@@ -17,6 +17,9 @@ export type ConversationMemberReflection = {
 	updatedAt: string | ConversationMember['updatedAt'];
 };
 
+/**
+ * Conversation member instance
+ */
 export class ConversationMember extends Context {
 	readonly id: number & {__type: 'conversationMember.id'};
 	flag: number;
@@ -49,14 +52,23 @@ export class ConversationMember extends Context {
 		this._user = params.user;
 	}
 
-	get conversation(): Conversation | ConversationMember['_conversation'] {
-		return this._context.conversations.get(this._conversation) ?? this._conversation;
-	}
-
+	/**
+	 * Get platform DTO, platform identifier if not available
+	 */
 	get platform(): Platform | ConversationMember['_platform'] {
 		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
+	/**
+	 * Get conversation DTO, conversation identifier if not available
+	 */
+	get conversation(): Conversation | ConversationMember['_conversation'] {
+		return this._context.conversations.get(this._conversation) ?? this._conversation;
+	}
+
+	/**
+	 * Get user DTO, user identifier if not available
+	 */
 	get user(): User | ConversationMember['_user'] {
 		return this._context.users.get(this._user) ?? this._user;
 	}

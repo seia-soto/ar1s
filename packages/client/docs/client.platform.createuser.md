@@ -4,6 +4,8 @@
 
 ## Platform.createUser() method
 
+Create an user belongs to the platform
+
 **Signature:**
 
 ```typescript
@@ -14,10 +16,12 @@ createUser(username: User['username'], password: string): Promise<User>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  username | [User](./client.user.md)<!-- -->\['username'\] |  |
-|  password | string |  |
+|  username | [User](./client.user.md)<!-- -->\['username'\] | Username |
+|  password | string | Password |
 
 **Returns:**
 
 Promise&lt;[User](./client.user.md)<!-- -->&gt;
+
+User instance
 

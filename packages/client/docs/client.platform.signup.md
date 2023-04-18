@@ -4,6 +4,8 @@
 
 ## Platform.signUp() method
 
+Sign up to the platform
+
 **Signature:**
 
 ```typescript
@@ -14,10 +16,12 @@ signUp(username: string, password: string): Promise<this>;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  username | string |  |
-|  password | string |  |
+|  username | string | Username |
+|  password | string | Password |
 
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

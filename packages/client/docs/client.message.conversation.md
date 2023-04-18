@@ -4,6 +4,8 @@
 
 ## Message.conversation property
 
+Get conversation DTO, conversation identifier if not available
+
 **Signature:**
 
 ```typescript

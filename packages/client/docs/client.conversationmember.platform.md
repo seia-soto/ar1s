@@ -4,6 +4,8 @@
 
 ## ConversationMember.platform property
 
+Get platform DTO, platform identifier if not available
+
 **Signature:**
 
 ```typescript

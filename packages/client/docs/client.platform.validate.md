@@ -4,6 +4,8 @@
 
 ## Platform.validate() method
 
+Validate the reflection object
+
 **Signature:**
 
 ```typescript
@@ -14,7 +16,7 @@ static validate(params: PlatformReflection): void;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | PlatformReflection |  |
+|  params | PlatformReflection | Platform reflection object |
 
 **Returns:**
 

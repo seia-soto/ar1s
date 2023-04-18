@@ -4,6 +4,8 @@
 
 ## Conversation.update() method
 
+Update data depends on reflection object
+
 **Signature:**
 
 ```typescript
@@ -14,9 +16,11 @@ update(params: ConversationReflection): this;
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | ConversationReflection |  |
+|  params | ConversationReflection | Conversation reflection object |
 
 **Returns:**
+
+this
 
 this
 

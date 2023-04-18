@@ -4,6 +4,8 @@
 
 ## Platform.isSelfMemberOfPlatform() method
 
+Check if current user is the member of the platform
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,6 @@ isSelfMemberOfPlatform(): boolean;
 **Returns:**
 
 boolean
+
+True if current user is the member of the platform
 

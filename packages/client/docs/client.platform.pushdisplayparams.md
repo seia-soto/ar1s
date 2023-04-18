@@ -4,6 +4,8 @@
 
 ## Platform.pushDisplayParams() method
 
+Update display related parameters of the Platform (requires `UserFlags.PlatformManager`<!-- -->)
+
 **Signature:**
 
 ```typescript
@@ -17,9 +19,11 @@ pushDisplayParams(params: {
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | { displayName?: [Platform](./client.platform.md)<!-- -->\['displayName'\]; displayImageUrl?: [Platform](./client.platform.md)<!-- -->\['displayImageUrl'\]; } |  |
+|  params | { displayName?: [Platform](./client.platform.md)<!-- -->\['displayName'\]; displayImageUrl?: [Platform](./client.platform.md)<!-- -->\['displayImageUrl'\]; } | Display related parameters in Platform reflection object |
 
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

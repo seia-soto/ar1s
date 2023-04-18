@@ -15,6 +15,9 @@ export type MessageReflection = {
 	updatedAt: string | Message['updatedAt'];
 };
 
+/**
+ * Message instance
+ */
 export class Message extends Context {
 	readonly id: number & {__type: 'message.id'};
 	flag: number;
@@ -43,14 +46,23 @@ export class Message extends Context {
 		this._author = params.author;
 	}
 
-	get conversation(): Conversation | Message['_conversation'] {
-		return this._context.conversations.get(this._conversation) ?? this._conversation;
-	}
-
+	/**
+	 * Get platform DTO, platform identifier if not available
+	 */
 	get platform(): Platform | Message['_platform'] {
 		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
+	/**
+	 * Get conversation DTO, conversation identifier if not available
+	 */
+	get conversation(): Conversation | Message['_conversation'] {
+		return this._context.conversations.get(this._conversation) ?? this._conversation;
+	}
+
+	/**
+	 * Get conversationMember DTO, conversationMember identifier if not available
+	 */
 	get author(): ConversationMember | Message['_author'] {
 		return this._context.conversationMembers.get(this._author) ?? this._author;
 	}

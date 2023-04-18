@@ -4,6 +4,8 @@
 
 ## User.pushDisplayParams() method
 
+Update user display related parameters
+
 **Signature:**
 
 ```typescript
@@ -18,9 +20,11 @@ pushDisplayParams(params: {
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | { displayName?: [User](./client.user.md)<!-- -->\['displayName'\]; displayBio?: [User](./client.user.md)<!-- -->\['displayBio'\]; displayAvatarUrl?: [User](./client.user.md)<!-- -->\['displayAvatarUrl'\]; } |  |
+|  params | { displayName?: [User](./client.user.md)<!-- -->\['displayName'\]; displayBio?: [User](./client.user.md)<!-- -->\['displayBio'\]; displayAvatarUrl?: [User](./client.user.md)<!-- -->\['displayAvatarUrl'\]; } | Display parameters in User reflection object |
 
 **Returns:**
 
 Promise&lt;this&gt;
+
+this
 

@@ -4,6 +4,8 @@
 
 ## Aris class
 
+The Ar1s client
+
 **Signature:**
 
 ```typescript
@@ -20,10 +22,10 @@ declare class Aris
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [conversationMembers](./client.aris.conversationmembers.md) |  | Collection&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
-|  [conversations](./client.aris.conversations.md) |  | Collection&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
+|  [conversationMembers](./client.aris.conversationmembers.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
+|  [conversations](./client.aris.conversations.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
 |  [fetcher](./client.aris.fetcher.md) | <code>readonly</code> | typeof ky |  |
-|  [platforms](./client.aris.platforms.md) |  | Collection&lt;[Platform](./client.platform.md)<!-- -->&gt; |  |
+|  [platforms](./client.aris.platforms.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Platform](./client.platform.md)<!-- -->&gt; |  |
 |  [user?](./client.aris.user.md) |  | [User](./client.user.md) | _(Optional)_ |
-|  [users](./client.aris.users.md) |  | Collection&lt;[User](./client.user.md)<!-- -->&gt; |  |
+|  [users](./client.aris.users.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; |  |
 

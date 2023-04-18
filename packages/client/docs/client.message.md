@@ -4,6 +4,8 @@
 
 ## Message class
 
+Message instance
+
 **Signature:**
 
 ```typescript
@@ -22,12 +24,12 @@ export declare class Message extends Context
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [\_context](./client.message._context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
-|  [author](./client.message.author.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) \| [Message](./client.message.md)<!-- -->\['\_author'\] |  |
+|  [author](./client.message.author.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) \| [Message](./client.message.md)<!-- -->\['\_author'\] | Get conversationMember DTO, conversationMember identifier if not available |
 |  [content](./client.message.content.md) |  | string |  |
-|  [conversation](./client.message.conversation.md) | <code>readonly</code> | [Conversation](./client.conversation.md) \| [Message](./client.message.md)<!-- -->\['\_conversation'\] |  |
+|  [conversation](./client.message.conversation.md) | <code>readonly</code> | [Conversation](./client.conversation.md) \| [Message](./client.message.md)<!-- -->\['\_conversation'\] | Get conversation DTO, conversation identifier if not available |
 |  [createdAt](./client.message.createdat.md) | <code>readonly</code> | Date |  |
 |  [flag](./client.message.flag.md) |  | number |  |
 |  [id](./client.message.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'message.id'; } |  |
-|  [platform](./client.message.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| [Message](./client.message.md)<!-- -->\['\_platform'\] |  |
+|  [platform](./client.message.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| [Message](./client.message.md)<!-- -->\['\_platform'\] | Get platform DTO, platform identifier if not available |
 |  [updatedAt](./client.message.updatedat.md) |  | Date |  |
 

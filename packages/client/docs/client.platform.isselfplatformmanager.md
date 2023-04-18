@@ -4,6 +4,8 @@
 
 ## Platform.isSelfPlatformManager() method
 
+Check if current user is the manager of the platform
+
 **Signature:**
 
 ```typescript
@@ -12,4 +14,6 @@ isSelfPlatformManager(): boolean;
 **Returns:**
 
 boolean
+
+True if current user is the manager of the platform
 

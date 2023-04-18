@@ -6,7 +6,7 @@
 
 import type ky from 'ky';
 
-// @public (undocumented)
+// @public
 export class Aris {
     constructor(fetcher: typeof ky);
     // (undocumented)
@@ -15,8 +15,6 @@ export class Aris {
     conversations: Collection<Conversation>;
     // (undocumented)
     readonly fetcher: typeof ky;
-    // Warning: (ae-forgotten-export) The symbol "Collection" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     platforms: Collection<Platform>;
     // (undocumented)
@@ -28,6 +26,22 @@ export class Aris {
 // Warning: (ae-forgotten-export) The symbol "Context" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
+export class Collection<T extends Context> {
+    // (undocumented)
+    add(entry: T): boolean;
+    // (undocumented)
+    del(index: EnumerableIndex): boolean;
+    // (undocumented)
+    get(index: EnumerableIndex): T;
+    // Warning: (ae-forgotten-export) The symbol "EnumerableIndex" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    map: Record<EnumerableIndex, T>;
+    // (undocumented)
+    values(): T[];
+}
+
+// @public
 export class Conversation extends Context {
     // Warning: (ae-forgotten-export) The symbol "ConversationReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: ConversationReflection);
@@ -43,33 +57,26 @@ export class Conversation extends Context {
     };
     // (undocumented)
     members: Collection<ConversationMember>;
-    // Warning: (ae-forgotten-export) The symbol "Series" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     messages: Series<Message>;
     // (undocumented)
     readonly model: string;
-    // (undocumented)
     get platform(): Platform | number;
-    // (undocumented)
     pullMembers(): Promise<this>;
-    // (undocumented)
     pullMessages(): Promise<this>;
     // (undocumented)
     readonly systemMessage: string;
-    // (undocumented)
     update(params: ConversationReflection): this;
     // (undocumented)
     updatedAt: Date;
 }
 
-// @public (undocumented)
+// @public
 export class ConversationMember extends Context {
     // Warning: (ae-forgotten-export) The symbol "ConversationMemberReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: ConversationMemberReflection);
     // (undocumented)
     readonly _context: Aris;
-    // (undocumented)
     get conversation(): Conversation | ConversationMember['_conversation'];
     // (undocumented)
     readonly createdAt: Date;
@@ -85,25 +92,21 @@ export class ConversationMember extends Context {
     readonly id: number & {
         __type: 'conversationMember.id';
     };
-    // (undocumented)
     get platform(): Platform | ConversationMember['_platform'];
     // (undocumented)
     updatedAt: Date;
-    // (undocumented)
     get user(): User | ConversationMember['_user'];
 }
 
-// @public (undocumented)
+// @public
 export class Message extends Context {
     // Warning: (ae-forgotten-export) The symbol "MessageReflection" needs to be exported by the entry point index.d.ts
     constructor(_context: Aris, params: MessageReflection);
-    // (undocumented)
     get author(): ConversationMember | Message['_author'];
     // (undocumented)
     content: string;
     // (undocumented)
     readonly _context: Aris;
-    // (undocumented)
     get conversation(): Conversation | Message['_conversation'];
     // (undocumented)
     readonly createdAt: Date;
@@ -113,7 +116,6 @@ export class Message extends Context {
     readonly id: number & {
         __type: 'message.id';
     };
-    // (undocumented)
     get platform(): Platform | Message['_platform'];
     // (undocumented)
     updatedAt: Date;
@@ -124,14 +126,12 @@ export type Options = {
     fetcher: typeof ky;
 };
 
-// @public (undocumented)
+// @public
 export class Platform extends Context {
     constructor(context: Aris, params: PlatformReflection);
     // (undocumented)
     readonly createdAt: Date;
-    // (undocumented)
     createUser(username: User['username'], password: string): Promise<User>;
-    // (undocumented)
     delete(): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
@@ -139,7 +139,6 @@ export class Platform extends Context {
     displayName: string;
     // (undocumented)
     flag: number;
-    // (undocumented)
     static from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']): Promise<Platform>;
     // (undocumented)
     readonly id: number & {
@@ -147,42 +146,49 @@ export class Platform extends Context {
     };
     // (undocumented)
     readonly inviteIdentifier: string;
-    // (undocumented)
     isSelfMemberOfPlatform(): boolean;
-    // (undocumented)
     isSelfPlatformManager(): boolean;
-    // (undocumented)
     pullUsers(): Promise<this>;
-    // (undocumented)
     pushDisplayParams(params: {
         displayName?: Platform['displayName'];
         displayImageUrl?: Platform['displayImageUrl'];
     }): Promise<this>;
-    // (undocumented)
     pushOpt(params: {
         isSignUpDisabled: boolean;
     }): Promise<this>;
-    // (undocumented)
     requestElevationToPlatformManager(): void;
-    // (undocumented)
     requestElevationToPlatformMember(): void;
-    // (undocumented)
     signIn(username: string, password: string, isTrustedEnvironment: boolean): Promise<this>;
-    // (undocumented)
     signUp(username: string, password: string): Promise<this>;
-    // (undocumented)
     update(params: PlatformReflection): this;
     // (undocumented)
     updatedAt: Date;
     // (undocumented)
     users: Collection<User>;
     // Warning: (ae-forgotten-export) The symbol "PlatformReflection" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
     static validate(params: PlatformReflection): void;
 }
 
 // @public (undocumented)
+export class Series<T extends Context> extends Collection<T> {
+    constructor(threshold?: number);
+    // (undocumented)
+    add(entry: T): boolean;
+    // (undocumented)
+    arr: T[];
+    // (undocumented)
+    del(index: EnumerableIndex): boolean;
+    // (undocumented)
+    pop(): void;
+    // (undocumented)
+    shift(): void;
+    // (undocumented)
+    readonly threshold: number;
+    // (undocumented)
+    values(): T[];
+}
+
+// @public
 export class User extends Context {
     constructor(context: Aris, params: UserReflection);
     // (undocumented)
@@ -201,35 +207,24 @@ export class User extends Context {
     readonly id: number & {
         __type: 'user.id';
     };
-    // (undocumented)
     isSelfProfile(): boolean;
-    // (undocumented)
     get platform(): Platform | number;
-    // (undocumented)
     pullConversations(): Promise<this>;
-    // (undocumented)
     pushDisplayParams(params: {
         displayName?: User['displayName'];
         displayBio?: User['displayBio'];
         displayAvatarUrl?: User['displayAvatarUrl'];
     }): Promise<this>;
-    // (undocumented)
     pushPassword(currentPassword: string, newPassword: string): Promise<this>;
-    // (undocumented)
     requestElevationToSelfProfile(): void;
-    // (undocumented)
     resign(): Promise<void>;
-    // (undocumented)
     static self(context: Aris): Promise<User>;
-    // (undocumented)
     update(params: UserReflection): this;
     // (undocumented)
     updatedAt: Date;
     // (undocumented)
     readonly username: string;
     // Warning: (ae-forgotten-export) The symbol "UserReflection" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
     static validate(params: UserReflection): void;
 }
 

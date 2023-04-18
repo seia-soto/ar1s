@@ -28,7 +28,15 @@ export type UserReflection = {
 	updatedAt: string | User['updatedAt'];
 };
 
+/**
+ * The user instance
+ */
 export class User extends Context {
+	/**
+	 * Create self-reflected `User` instance
+	 * @param context The Aris context
+	 * @returns User reflecting self
+	 */
 	public static async self(context: Aris) {
 		const response = await context.fetcher('private/user', {method: 'get'});
 		const json: UserReflection & {
@@ -39,6 +47,10 @@ export class User extends Context {
 		return new User(context, json);
 	}
 
+	/**
+	 * Validate the parameters in User reflection object
+	 * @param params User reflection object.
+	 */
 	public static validate(params: UserReflection) {
 		if (!checkUsername.check(params.username)) {
 			throw useFormatError(checkUsername.errors(params.username));
@@ -78,6 +90,11 @@ export class User extends Context {
 		this.updatedAt = new Date(params.updatedAt);
 	}
 
+	/**
+	 * Update data depends on reflection object
+	 * @param params User reflection object
+	 * @returns this
+	 */
 	update(params: UserReflection) {
 		User.validate(params);
 
@@ -92,10 +109,17 @@ export class User extends Context {
 		return this;
 	}
 
+	/**
+	 * Get platform DTO, platform identifier if not available
+	 */
 	get platform(): Platform | number {
 		return this._context.platforms.get(this._platform) ?? this._platform;
 	}
 
+	/**
+	 * Pull available conversations of user from the server
+	 * @returns this
+	 */
 	async pullConversations() {
 		this.requestElevationToSelfProfile();
 
@@ -114,6 +138,11 @@ export class User extends Context {
 		return this;
 	}
 
+	/**
+	 * Update user display related parameters
+	 * @param params Display parameters in User reflection object
+	 * @returns this
+	 */
 	async pushDisplayParams(params: {displayName?: User['displayName']; displayBio?: User['displayBio']; displayAvatarUrl?: User['displayAvatarUrl']}) {
 		this.requestElevationToSelfProfile();
 
@@ -129,6 +158,12 @@ export class User extends Context {
 		return this;
 	}
 
+	/**
+	 * Update user password
+	 * @param currentPassword Current password
+	 * @param newPassword New password
+	 * @returns this
+	 */
 	async pushPassword(currentPassword: string, newPassword: string) {
 		this.requestElevationToSelfProfile();
 
@@ -151,6 +186,9 @@ export class User extends Context {
 		return this;
 	}
 
+	/**
+	 * Delete user
+	 */
 	async resign() {
 		this.requestElevationToSelfProfile();
 
@@ -163,10 +201,17 @@ export class User extends Context {
 		}
 	}
 
+	/**
+	 * Check if this user is current user
+	 * @returns True if this user is current user
+	 */
 	isSelfProfile() {
 		return this._context.user === this;
 	}
 
+	/**
+	 * Throw error if this user is not current user
+	 */
 	requestElevationToSelfProfile() {
 		if (!this.isSelfProfile()) {
 			throw new Error('Unauthorized: Current user is not them!');

@@ -4,6 +4,8 @@
 
 ## Platform.delete() method
 
+Delete the platform (requires `UserFlags.PlatformManager`<!-- -->)
+
 **Signature:**
 
 ```typescript
