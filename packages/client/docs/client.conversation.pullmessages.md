@@ -9,8 +9,16 @@ Pull available messages of conversation from the server
 **Signature:**
 
 ```typescript
-pullMessages(): Promise<this>;
+pullMessages(size?: number, before?: Message['id']): Promise<this>;
 ```
+
+## Parameters
+
+|  Parameter | Type | Description |
+|  --- | --- | --- |
+|  size | number | _(Optional)_ The amount of messages to fetch |
+|  before | [Message](./client.message.md)<!-- -->\['id'\] | _(Optional)_ The message id to fetch past messages than the message |
+
 **Returns:**
 
 Promise&lt;this&gt;

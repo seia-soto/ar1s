@@ -13,6 +13,9 @@ importers:
       ky:
         specifier: ^0.33.3
         version: 0.33.3
+      qs:
+        specifier: ^6.11.1
+        version: 6.11.1
     devDependencies:
       '@microsoft/api-documenter':
         specifier: ^7.21.7
@@ -20,6 +23,9 @@ importers:
       '@microsoft/api-extractor':
         specifier: ^7.34.4
         version: 7.34.4
+      '@types/qs':
+        specifier: ^6.9.7
+        version: 6.9.7
       '@typescript-eslint/eslint-plugin':
         specifier: '>=5.57.0'
         version: 5.57.1(@typescript-eslint/parser@5.57.1)(eslint@8.37.0)(typescript@5.0.4)
@@ -699,6 +705,10 @@ packages:
   /@types/node@18.15.11:
     resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
 
+  /@types/qs@6.9.7:
+    resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
+    dev: true
+
   /@types/semver@7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
     dev: true
@@ -1171,7 +1181,6 @@ packages:
     dependencies:
       function-bind: 1.1.1
       get-intrinsic: 1.2.0
-    dev: true
 
   /callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -1966,7 +1975,6 @@ packages:
 
   /function-bind@1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
-    dev: true
 
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
@@ -2007,7 +2015,6 @@ packages:
       function-bind: 1.1.1
       has: 1.0.3
       has-symbols: 1.0.3
-    dev: true
 
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -2122,7 +2129,6 @@ packages:
   /has-symbols@1.0.3:
     resolution: {integrity: sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A==}
     engines: {node: '>= 0.4'}
-    dev: true
 
   /has-tostringtag@1.0.0:
     resolution: {integrity: sha512-kFjcSNhnlGV1kyoGk7OXKSawH5JOb/LzUc5w9B02hOTO0dfFRjbHQKvg1d6cf3HbeUmtU9VbbV3qzZ2Teh97WQ==}
@@ -2140,7 +2146,6 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
-    dev: true
 
   /help-me@4.2.0:
     resolution: {integrity: sha512-TAOnTB8Tz5Dw8penUuzHVrKNKlCIbwwbHnXraNJxPwf8LRtE2HlM84RYuezMFcwOJmoYOCWVDyJ8TQGxn9PgxA==}
@@ -2784,7 +2789,6 @@ packages:
 
   /object-inspect@1.12.3:
     resolution: {integrity: sha512-geUvdk7c+eizMNUDkRpW1wJwgfOiOeHbxBR/hLXK1aT6zmVSO0jsQcs7fj6MGw89jC/cjGfLcNOrtMYtGqm81g==}
-    dev: true
 
   /object-is@1.1.5:
     resolution: {integrity: sha512-3cyDsyHgtmi7I7DfSSI2LDp6SK2lwvtbg0p0R1e0RvTqF5ceGx+K2dfSjm1bKDMVCFEDAQvy+o8c6a7VujOddw==}
@@ -3173,6 +3177,13 @@ packages:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
 
+  /qs@6.11.1:
+    resolution: {integrity: sha512-0wsrzgTz/kAVIeuxSjnpGC56rzYtr6JT/2BwEvMaPhFIoYa1aGO8LbzuU1R0uUYQkLpWBTOj0l/CLAJB64J6nQ==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      side-channel: 1.0.4
+    dev: false
+
   /querystringify@2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
     dev: true
@@ -3391,7 +3402,6 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.2.0
       object-inspect: 1.12.3
-    dev: true
 
   /signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}

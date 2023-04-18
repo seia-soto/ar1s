@@ -69,6 +69,7 @@ export class Conversation extends Context {
     isSelfConversationOwner(): boolean;
     // (undocumented)
     members: Collection<ConversationMember>;
+    message(content: string): Promise<void>;
     // (undocumented)
     messages: Series<Message>;
     // (undocumented)
@@ -76,8 +77,9 @@ export class Conversation extends Context {
     get platform(): Platform | number;
     pull(): Promise<this>;
     pullMembers(): Promise<this>;
-    pullMessages(): Promise<this>;
+    pullMessages(size?: number, before?: Message['id']): Promise<this>;
     requestElevationToConversationOwner(): void;
+    get self(): ConversationMember | undefined;
     // (undocumented)
     readonly systemMessage: string;
     update(params: ConversationReflection): this;

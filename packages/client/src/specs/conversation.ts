@@ -1,10 +1,11 @@
+import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
+import {stringify} from 'qs';
 import {type Aris} from '../index.js';
 import {Collection, Context, Series} from './_context.js';
 import {ConversationMember, type ConversationMemberReflection} from './conversationMember.js';
-import {type MessageReflection, Message} from './message.js';
+import {Message, type MessageReflection} from './message.js';
 import {type Platform} from './platform.js';
-import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 
 export type ConversationReflection = {
 	id: Conversation['id'];
@@ -31,6 +32,11 @@ export class Conversation extends Context {
 	messages = new Series<Message>();
 
 	private readonly _platform: Platform['id'];
+
+	/**
+	 * The reference to self profile in `conversation.members` to reduce computation resource use
+	 */
+	private readonly _self?: ConversationMember;
 
 	constructor(
 		readonly _context: Aris,
@@ -98,10 +104,12 @@ export class Conversation extends Context {
 
 	/**
 	 * Pull available messages of conversation from the server
+	 * @param size The amount of messages to fetch
+	 * @param before The message id to fetch past messages than the message
 	 * @returns this
 	 */
-	async pullMessages() {
-		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/messages?from=1&size=400', {method: 'get'});
+	async pullMessages(size = 100, before?: Message['id']) {
+		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/messages' + stringify({from: before ?? 1, size}), {method: 'get'});
 		const data: MessageReflection[] = await response.json();
 
 		for (const json of data) {
@@ -114,15 +122,35 @@ export class Conversation extends Context {
 	}
 
 	/**
+	 * Send a message to the conversation
+	 * @param content The content
+	 */
+	async message(content: string) {
+		await this._context.fetcher('private/conversation/' + this.id.toString() + '/message', {
+			method: 'post',
+			json: {
+				content,
+			},
+		});
+	}
+
+	/**
+	 * Get self profile from the conversation members
+	 */
+	get self() {
+		if (this._self) {
+			return this._self;
+		}
+
+		return this.members.values().find(member => member.user === this._context.user);
+	}
+
+	/**
 	 * Check if the user is the owner of this conversation
 	 * @returns True if the user is the owner of this conversation
 	 */
 	isSelfConversationOwner() {
-		if (!this._context.user) {
-			return false;
-		}
-
-		const me = this.members.values().find(member => member.user === this._context.user);
+		const me = this.self;
 
 		if (!me) {
 			return false;

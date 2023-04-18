@@ -31,6 +31,7 @@ export declare class Conversation extends Context
 |  [messages](./client.conversation.messages.md) |  | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; |  |
 |  [model](./client.conversation.model.md) | <code>readonly</code> | string |  |
 |  [platform](./client.conversation.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| number | Get platform DTO, platform identifier if not available |
+|  [self](./client.conversation.self.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) \| undefined | Get self profile from the conversation members |
 |  [systemMessage](./client.conversation.systemmessage.md) | <code>readonly</code> | string |  |
 |  [updatedAt](./client.conversation.updatedat.md) |  | Date |  |
 
@@ -39,9 +40,10 @@ export declare class Conversation extends Context
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [isSelfConversationOwner()](./client.conversation.isselfconversationowner.md) |  | Check if the user is the owner of this conversation |
+|  [message(content)](./client.conversation.message.md) |  | Send a message to the conversation |
 |  [pull()](./client.conversation.pull.md) |  | Pull everything under this data type object |
 |  [pullMembers()](./client.conversation.pullmembers.md) |  | Pull available conversation members of conversation from the server |
-|  [pullMessages()](./client.conversation.pullmessages.md) |  | Pull available messages of conversation from the server |
+|  [pullMessages(size, before)](./client.conversation.pullmessages.md) |  | Pull available messages of conversation from the server |
 |  [requestElevationToConversationOwner()](./client.conversation.requestelevationtoconversationowner.md) |  | Throw an error if current user is not the owner of this conversation |
 |  [update(params)](./client.conversation.update.md) |  | Update data depends on reflection object |
 
