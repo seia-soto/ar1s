@@ -1,7 +1,7 @@
 import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {stringify} from 'qs';
-import {type Aris} from '../index.js';
+import {type User, type Aris} from '../index.js';
 import {Collection, Context, Series} from './_context.js';
 import {ConversationMember, type ConversationMemberReflection} from './conversationMember.js';
 import {Message, type MessageReflection} from './message.js';
@@ -122,10 +122,28 @@ export class Conversation extends Context {
 	}
 
 	/**
+	 * Adds a user to this conversation (requires `ConversationMemberFlags.IsOwner`)
+	 * @param userId The user identifier
+	 * @returns The conversation member
+	 */
+	async addUser(userId: User['id']) {
+		this.requestElevationToConversationOwner();
+
+		const response = await this._context.fetcher('private/conversation/' + this.id.toString() + '/member/' + userId.toString());
+		const data: ConversationMemberReflection = await response.json();
+
+		const member = new ConversationMember(this._context, data);
+
+		this.members.add(member);
+
+		return member;
+	}
+
+	/**
 	 * Send a message to the conversation
 	 * @param content The content
 	 */
-	async message(content: string) {
+	async createMessage(content: string) {
 		await this._context.fetcher('private/conversation/' + this.id.toString() + '/message', {
 			method: 'post',
 			json: {

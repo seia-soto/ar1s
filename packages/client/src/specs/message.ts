@@ -71,6 +71,8 @@ export class Message extends Context {
 	 * Delete the message
 	 */
 	async delete() {
+		this.requestElevationToAuthor(false);
+
 		await this._context.fetcher('private/conversation/' + this._conversation.toString() + '/message/' + this.id.toString(), {method: 'delete'});
 
 		if (typeof this.conversation !== 'number') {
