@@ -66,4 +66,12 @@ export class Message extends Context {
 	get author(): ConversationMember | Message['_author'] {
 		return this._context.conversationMembers.get(this._author) ?? this._author;
 	}
+
+	async delete() {
+		await this._context.fetcher('private/conversation/' + this._conversation.toString() + '/message/' + this.id.toString(), {method: 'delete'});
+
+		if (typeof this.conversation !== 'number') {
+			this.conversation.messages.del(this.id);
+		}
+	}
 }

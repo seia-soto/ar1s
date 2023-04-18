@@ -33,3 +33,9 @@ export declare class Message extends Context
 |  [platform](./client.message.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) \| [Message](./client.message.md)<!-- -->\['\_platform'\] | Get platform DTO, platform identifier if not available |
 |  [updatedAt](./client.message.updatedat.md) |  | Date |  |
 
+## Methods
+
+|  Method | Modifiers | Description |
+|  --- | --- | --- |
+|  [delete()](./client.message.delete.md) |  |  |
+

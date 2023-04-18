@@ -127,6 +127,8 @@ export class Message extends Context {
     // (undocumented)
     readonly createdAt: Date;
     // (undocumented)
+    delete(): Promise<void>;
+    // (undocumented)
     flag: number;
     // (undocumented)
     readonly id: number & {
