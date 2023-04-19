@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ws:up": "pnpm up '@ar1s/*'"
   },
   "dependencies": {
     "@ar1s/client": "link:../client",

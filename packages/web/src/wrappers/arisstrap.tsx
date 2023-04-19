@@ -6,11 +6,17 @@ function ArisStrap(props: PropsWithChildren) {
 	const [isBootstrapRequired, setBootstrapRequired] = useState<boolean | undefined>();
 
 	useEffect(() => {
-		const useSetBootstrapRequired = async () => {
+		const effect = async () => {
+			if (await aris.pull()) {
+				setBootstrapRequired(false);
+
+				return;
+			}
+
 			setBootstrapRequired(await aris.isBootstrapRequired());
 		};
 
-		void useSetBootstrapRequired();
+		void effect();
 	}, []);
 
 	if (typeof isBootstrapRequired === 'undefined') {
