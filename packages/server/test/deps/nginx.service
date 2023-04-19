@@ -1,0 +1,33 @@
+#!/bin/zsh
+set -e;
+
+# Load functions
+. "$__AA_BASEDIR/aafns";
+
+CONTAINER_NAME="test-nginx";
+PORT="8000";
+
+function down() {
+  shutdown_and_remove_the_container "$CONTAINER_NAME";
+  wait_the_port_to_be_release "$PORT";
+}
+
+function up() {
+  down;
+
+  docker run --name "$CONTAINER_NAME" --publish "127.0.0.1:$PORT:$PORT" \
+    -v "$__AA_BASEDIR/nginx.conf:/etc/nginx/nginx.conf:ro" \
+    -v "$__AA_BASEDIR/localhost.cer:/etc/nginx/localhost.cer:ro" -v "$__AA_BASEDIR/localhost.key:/etc/nginx/localhost.key:ro" \
+    --detach "nginx:latest";
+}
+
+ACTION="$1";
+shift;
+
+if [[ "$ACTION" =~ ^(up|down)$ ]]; then
+  echo "Accept ACTION="$ACTION"";
+
+  "$ACTION";
+else 
+  echo "Deny ACTION="$ACTION" REASON="Unknown action"";
+fi;

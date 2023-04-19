@@ -1,0 +1,30 @@
+#!/bin/zsh
+set -e;
+
+# Load functions
+. "$__AA_BASEDIR/aafns";
+
+CONTAINER_NAME="test-keydb";
+PORT="6379";
+
+function down() {
+  shutdown_and_remove_the_container "$CONTAINER_NAME";
+  wait_the_port_to_be_release "$PORT";
+}
+
+function up() {
+  down;
+
+  docker run --name "$CONTAINER_NAME" --publish "127.0.0.1:$PORT:$PORT" --detach "eqalpha/keydb:latest";
+}
+
+ACTION="$1";
+shift;
+
+if [[ "$ACTION" =~ ^(up|down)$ ]]; then
+  echo "Accept ACTION="$ACTION"";
+
+  "$ACTION";
+else 
+  echo "Deny ACTION="$ACTION" REASON="Unknown action"";
+fi;

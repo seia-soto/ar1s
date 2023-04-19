@@ -1,0 +1,30 @@
+function shutdown_and_remove_the_container() {
+  local CONTAINER_ID="$1";
+
+  CONTAINER_ID="$(docker ps -aqf "name=$CONTAINER_NAME")";
+
+  echo "Removing the container $CONTAINER_NAME ($CONTAINER_ID)";
+
+  if [[ ! -z "$CONTAINER_ID" ]]; then
+    docker stop "$CONTAINER_ID";
+    docker rm "$CONTAINER_ID";
+  fi;
+
+  echo "Removed the container!";
+}
+
+function wait_the_port_to_be_release() {
+  local PORT="$1";
+
+  while true; do
+    echo "Waiting the port $PORT to be released";
+
+    if [[ -z "$(lsof -i -n -P | grep 'LISTEN' | grep ":$PORT")" ]]; then
+      echo "The port $PORT has been released!";
+
+      break;
+    fi;
+
+    sleep 1;
+  done;
+}

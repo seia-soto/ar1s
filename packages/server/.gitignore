@@ -1,6 +1,9 @@
 /out
 /out.test
 
+/test/deps/localhost.cer
+/test/deps/localhost.key
+
 # Logs
 logs
 *.log

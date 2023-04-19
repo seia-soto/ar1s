@@ -1,3 +1,4 @@
+import useCors from '@fastify/cors';
 import {createServer} from './server/index.js';
 
 void (async () => {
@@ -12,6 +13,8 @@ void (async () => {
 			},
 		},
 	});
+
+	await server.register(useCors);
 
 	const address = await server.listen({
 		host: '127.0.0.1',

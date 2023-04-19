@@ -1,0 +1,33 @@
+# define preboot vars
+set -e;
+
+export __AA_BASEDIR="$(dirname "$(readlink -f "$0")")";
+
+echo "Set __AA_BASEDIR to $__AA_BASEDIR.";
+
+MODULE="$1";
+ACTION="$2";
+
+if [[ -z "$MODULE" ]]; then
+  echo "MODULE is not found!";
+
+  exit 1;
+fi;
+
+if [[ -z "$ACTION" ]]; then
+  echo "ACTION is not found!";
+
+  exit 1;
+fi;
+
+MODULE="$__AA_BASEDIR/$MODULE";
+
+if [[ ! -f "$MODULE" ]]; then
+  echo "The module at "$MODULE" is not found!";
+
+  exit 1;
+fi;
+
+echo "Run SHELL="$SHELL" MODULE="$MODULE" ACTION="$ACTION"";
+
+"$SHELL" "$MODULE" "$ACTION";
