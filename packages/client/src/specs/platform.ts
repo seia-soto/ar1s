@@ -27,6 +27,20 @@ export type PlatformReflection = {
  */
 export class Platform extends Context {
 	/**
+	 * Create self-reflected `Platform` instance
+	 * @param context The Aris context
+	 * @returns Platform reflecting self
+	 */
+	public static async self(context: Aris) {
+		const response = await context.fetcher('private/platform', {method: 'get'});
+		const data: PlatformReflection = await response.json();
+
+		const platform = new Platform(context, data);
+
+		return platform;
+	}
+
+	/**
 	 * Initialize Platform object via `inviteIdentifier`
 	 * @param context The Aris context
 	 * @param inviteIdentifier The invite identifier of the platform

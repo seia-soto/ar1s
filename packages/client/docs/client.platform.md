@@ -48,6 +48,7 @@ export declare class Platform extends Context
 |  [pushOpt(params)](./client.platform.pushopt.md) |  | Update opt-in features of the Platform (requires <code>UserFlags.PlatformManager</code>) |
 |  [requestElevationToPlatformManager()](./client.platform.requestelevationtoplatformmanager.md) |  | Throw error if current user is not platform manager |
 |  [requestElevationToPlatformMember()](./client.platform.requestelevationtoplatformmember.md) |  | Throw error if current user is not the platform member |
+|  [self(context)](./client.platform.self.md) | <code>static</code> | Create self-reflected <code>Platform</code> instance |
 |  [signIn(username, password, isTrustedEnvironment)](./client.platform.signin.md) |  | Sign in to the platform |
 |  [signUp(username, password)](./client.platform.signup.md) |  | Sign up to the platform |
 |  [update(params)](./client.platform.update.md) |  | Update data depends on reflection object |

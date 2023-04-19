@@ -28,6 +28,7 @@ export class Aris {
     isBootstrapRequired(): Promise<boolean>;
     // (undocumented)
     platform?: Platform;
+    pull(): Promise<false | this>;
     // (undocumented)
     user?: User;
     // (undocumented)
@@ -214,6 +215,7 @@ export class Platform extends Context {
     }): Promise<this>;
     requestElevationToPlatformManager(): void;
     requestElevationToPlatformMember(): void;
+    static self(context: Aris): Promise<Platform>;
     signIn(username: string, password: string, isTrustedEnvironment: boolean): Promise<this>;
     signUp(username: string, password: string): Promise<this>;
     update(params: PlatformReflection): this;

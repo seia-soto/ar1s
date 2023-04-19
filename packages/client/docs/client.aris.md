@@ -36,4 +36,5 @@ declare class Aris
 |  [bootstrap(params)](./client.aris.bootstrap.md) |  | Bootstrap the instance |
 |  [createFetcher(baseUrl)](./client.aris.createfetcher.md) | <code>static</code> |  |
 |  [isBootstrapRequired()](./client.aris.isbootstraprequired.md) |  | Check if an instance requires bootstrap |
+|  [pull()](./client.aris.pull.md) |  | Pull the user data and platform data to intialize |
 

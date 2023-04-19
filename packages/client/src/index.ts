@@ -35,20 +35,35 @@ class Aris {
 	) {}
 
 	/**
+	 * Pull the user data and platform data to intialize
+	 * @returns False if not signed in, otherwise this (truthy value)
+	 */
+	async pull() {
+		try {
+			this.user = await User.self(this);
+			this.platform = await Platform.self(this);
+
+			return this;
+		} catch (error) {
+			console.error(error);
+
+			return false;
+		}
+	}
+
+	/**
 	 * Check if an instance requires bootstrap
 	 * @returns True if an instance has not been bootstrapped
 	 */
 	async isBootstrapRequired() {
-		const response = await this.fetcher('platform', {method: 'get'})
+		const platform = await Platform.from(this)
 			.catch(_error => false as const);
 
-		if (!response) {
+		if (!platform) {
 			return true;
 		}
 
-		const data: PlatformReflection = await response.json();
-
-		this.platform = new Platform(this, data);
+		this.platform = platform;
 
 		return false;
 	}
