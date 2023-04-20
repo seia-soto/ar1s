@@ -37,14 +37,18 @@ export const privateRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 			throw usePermissionError();
 		}
 
-		if (isTokenRequiresRenewal(payload.iat, payload.exp)) {
+		if (isTokenRequiresRenewal(payload.iat)) {
 			const newToken = await encodeToken({
 				platform: payload.platform,
 				user: payload.user,
 				flag: payload.flag,
 			});
 
-			void reply.clearCookie(SessionCookieNames.Session);
+			void reply.clearCookie(SessionCookieNames.Session, {
+				path: '/',
+				secure: true,
+				httpOnly: true,
+			});
 			void reply.setCookie(SessionCookieNames.Session, newToken, {
 				path: '/',
 				maxAge: 1000 * 60 * 60 * 24 * 2,

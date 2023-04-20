@@ -29,13 +29,11 @@ export const decodeToken = async (token: string) => paseto.verify(token, process
 TokenPayload &
 {
 	iat: string;
-	exp: string;
 }
 >;
 
-export const isTokenRequiresRenewal = (iat: string, exp: string) => {
+export const isTokenRequiresRenewal = (iat: string) => {
 	const iatTime = new Date(iat).getTime();
-	const expTime = new Date(exp).getTime();
 
-	return iatTime + loginRenewalPeriod > expTime;
+	return iatTime + loginRenewalPeriod < Date.now();
 };
