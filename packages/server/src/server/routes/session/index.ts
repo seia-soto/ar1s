@@ -66,7 +66,11 @@ export const sessionRoute: FastifyPluginAsyncTypebox = async (fastify, _opts) =>
 		url: '/',
 		method: 'DELETE',
 		async handler(_request, reply) {
-			void reply.clearCookie(SessionCookieNames.Session);
+			void reply.clearCookie(SessionCookieNames.Session, {
+				path: '/',
+				secure: true,
+				httpOnly: true,
+			});
 
 			return '';
 		},
