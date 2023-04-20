@@ -217,6 +217,7 @@ export class Platform extends Context {
     requestElevationToPlatformMember(): void;
     static self(context: Aris): Promise<Platform>;
     signIn(username: string, password: string, isTrustedEnvironment: boolean): Promise<this>;
+    signOut(): Promise<this>;
     signUp(username: string, password: string): Promise<this>;
     update(params: PlatformReflection): this;
     // (undocumented)

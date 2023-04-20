@@ -148,6 +148,16 @@ export class Platform extends Context {
 	}
 
 	/**
+	 * Sign out from the platform (This does not delete the existing resources in the context, be sure to unset the Aris context if you're building security critical applications)
+	 * @returns this
+	 */
+	async signOut() {
+		await this._context.fetcher('session', {method: 'delete'});
+
+		return this;
+	}
+
+	/**
 	 * Sign in to the platform
 	 * @param username Username
 	 * @param password Password

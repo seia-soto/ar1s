@@ -2,9 +2,10 @@ import {aris} from '../modules/aris';
 
 function App() {
 	const user = aris.user!;
+	const platform = aris.platform!;
 
 	const handleSignOut = async () => {
-		await aris.fetcher('session', {method: 'delete'});
+		await platform.signOut();
 
 		window.location.reload();
 	};

@@ -50,6 +50,7 @@ export declare class Platform extends Context
 |  [requestElevationToPlatformMember()](./client.platform.requestelevationtoplatformmember.md) |  | Throw error if current user is not the platform member |
 |  [self(context)](./client.platform.self.md) | <code>static</code> | Create self-reflected <code>Platform</code> instance |
 |  [signIn(username, password, isTrustedEnvironment)](./client.platform.signin.md) |  | Sign in to the platform |
+|  [signOut()](./client.platform.signout.md) |  | Sign out from the platform (This does not delete the existing resources in the context, be sure to unset the Aris context if you're building security critical applications) |
 |  [signUp(username, password)](./client.platform.signup.md) |  | Sign up to the platform |
 |  [update(params)](./client.platform.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.platform.validate.md) | <code>static</code> | Validate the reflection object |
