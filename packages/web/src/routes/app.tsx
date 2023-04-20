@@ -1,3 +1,4 @@
+import Conversations from '../components/conversations';
 import {aris} from '../modules/aris';
 
 function App() {
@@ -13,13 +14,15 @@ function App() {
 	return (
 		<>
 			<h1>Welcome back!</h1>
+			<button onClick={handleSignOut}>Sign out!</button>
+
 			<ul>
 				<li>Account: {user.username}</li>
 				<li>Username: {user.displayName}</li>
 				<li>Joined at: {user.createdAt.toLocaleDateString()}</li>
 			</ul>
 
-			<button onClick={handleSignOut}>Sign out!</button>
+			<Conversations />
 		</>
 	);
 }
