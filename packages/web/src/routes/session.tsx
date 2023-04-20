@@ -1,8 +1,8 @@
 import {Platform} from '@ar1s/client';
-import {aris} from '../modules/aris';
-import {useLocation} from 'wouter';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {useLocation} from 'wouter';
+import {aris} from '../modules/aris';
 
 type FieldValues = {
 	username: string;
@@ -24,15 +24,18 @@ function Session() {
 		setSigningIn(true);
 
 		const platform = await Platform.from(aris);
-		await platform.signIn(fields.username, fields.password, fields.isTrustedEnvironment)
+		const isSucceed = await platform.signIn(fields.username, fields.password, fields.isTrustedEnvironment)
 			.catch(error => {
 				console.error(error);
 
-				setSigningIn(false);
+				return false as const;
 			});
 
+		if (isSucceed) {
+			setLocation('/app');
+		}
+
 		setSigningIn(false);
-		setLocation('/');
 	});
 
 	return (

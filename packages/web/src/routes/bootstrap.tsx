@@ -1,7 +1,7 @@
-import {useLocation} from 'wouter';
-import {useForm} from 'react-hook-form';
-import {aris} from '../modules/aris';
 import {useState} from 'react';
+import {useForm} from 'react-hook-form';
+import {useLocation} from 'wouter';
+import {aris} from '../modules/aris';
 
 type FieldValues = Parameters<typeof aris['bootstrap']>[0];
 
@@ -25,7 +25,7 @@ function Bootstrap() {
 				setBootstrapping(false);
 			});
 
-		setLocation('/');
+		setLocation('/a/authenticate');
 	});
 
 	return (

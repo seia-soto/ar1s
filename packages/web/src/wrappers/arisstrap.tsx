@@ -1,49 +1,110 @@
-import {type PropsWithChildren, useEffect, useState} from 'react';
-import {Redirect} from 'wouter';
+import {useEffect, useState, type PropsWithChildren} from 'react';
 import {aris} from '../modules/aris';
+import {Redirect} from 'wouter';
+import useLocation from 'wouter/use-location';
 
-function ArisStrap(props: PropsWithChildren) {
-	const [isBootstrapRequired, setBootstrapRequired] = useState<boolean | undefined>();
+function Loading() {
+	return (
+		<>
+			<p>Loading app...</p>
+		</>
+	);
+}
+
+export function Arisstrap(props: PropsWithChildren) {
+	const [isInitiated, setInitiated] = useState(false);
 
 	useEffect(() => {
 		const effect = async () => {
-			if (await aris.pull()) {
-				setBootstrapRequired(false);
+			await aris.pull();
 
-				return;
-			}
-
-			setBootstrapRequired(await aris.isBootstrapRequired());
+			setInitiated(true);
 		};
 
 		void effect();
 	}, []);
 
-	if (typeof isBootstrapRequired === 'undefined') {
-		return (
-			<div>
-        Loading app
-			</div>
-		);
-	}
-
-	if (isBootstrapRequired) {
-		return (
-			<Redirect to='/bootstrap' />
-		);
-	}
-
-	if (!aris.user) {
-		return (
-			<Redirect to='/session' />
-		);
+	if (!isInitiated) {
+		return <Loading />;
 	}
 
 	return (
-		<div>
+		<>
 			{props.children}
-		</div>
+		</>
 	);
 }
 
-export default ArisStrap;
+type GatekeeperProps = PropsWithChildren<{
+	route: string;
+	fallback: string;
+}>;
+
+export function RequireAuthenticated(props: GatekeeperProps) {
+	const [location] = useLocation();
+
+	if (!location.startsWith(props.route)) {
+		return null;
+	}
+
+	if (typeof aris.user === 'undefined') {
+		return <Redirect to={props.fallback} />;
+	}
+
+	return (
+		<>
+			{props.children}
+		</>
+	);
+}
+
+export function RequireNotAuthenticated(props: GatekeeperProps) {
+	const [location] = useLocation();
+
+	if (!location.startsWith(props.route)) {
+		return null;
+	}
+
+	if (typeof aris.user !== 'undefined') {
+		return <Redirect to={props.fallback} />;
+	}
+
+	return (
+		<>
+			{props.children}
+		</>
+	);
+}
+
+export function RequireNotBootstrapped(props: GatekeeperProps) {
+	const [location] = useLocation();
+	const [isBootstrapped, setBootstrapped] = useState<boolean | undefined>();
+
+	useEffect(() => {
+		if (!location.startsWith(props.route)) {
+			return;
+		}
+
+		void (async () => {
+			setBootstrapped(!await aris.isBootstrapRequired());
+		})();
+	}, [location]);
+
+	if (!location.startsWith(props.route)) {
+		return null;
+	}
+
+	if (typeof setBootstrapped === 'undefined') {
+		return <Loading />;
+	}
+
+	if (isBootstrapped) {
+		return <Redirect to={props.fallback} />;
+	}
+
+	return (
+		<>
+			{props.children}
+		</>
+	);
+}
