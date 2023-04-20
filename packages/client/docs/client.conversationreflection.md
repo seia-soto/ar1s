@@ -11,6 +11,8 @@ export type ConversationReflection = {
     id: Conversation['id'];
     flag: Conversation['flag'];
     platform: Platform['id'];
+    displayName: Conversation['displayName'];
+    displayImageUrl: Conversation['displayImageUrl'];
     model: Conversation['model'];
     systemMessage: Conversation['systemMessage'];
     createdAt: string | Conversation['createdAt'];

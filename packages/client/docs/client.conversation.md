@@ -25,6 +25,8 @@ export declare class Conversation extends Context
 |  --- | --- | --- | --- |
 |  [\_context](./client.conversation._context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
 |  [createdAt](./client.conversation.createdat.md) | <code>readonly</code> | Date |  |
+|  [displayImageUrl](./client.conversation.displayimageurl.md) |  | string |  |
+|  [displayName](./client.conversation.displayname.md) |  | string |  |
 |  [flag](./client.conversation.flag.md) |  | number |  |
 |  [id](./client.conversation.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'conversation.id'; } |  |
 |  [members](./client.conversation.members.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |

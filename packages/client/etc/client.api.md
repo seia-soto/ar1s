@@ -65,6 +65,10 @@ export class Conversation extends Context {
     deleteMember(memberId: ConversationMember['id']): Promise<void>;
     deleteMessage(messageId: Message['id']): Promise<void>;
     // (undocumented)
+    displayImageUrl: string;
+    // (undocumented)
+    displayName: string;
+    // (undocumented)
     flag: number;
     // (undocumented)
     readonly id: number & {
@@ -134,6 +138,8 @@ export type ConversationReflection = {
     id: Conversation['id'];
     flag: Conversation['flag'];
     platform: Platform['id'];
+    displayName: Conversation['displayName'];
+    displayImageUrl: Conversation['displayImageUrl'];
     model: Conversation['model'];
     systemMessage: Conversation['systemMessage'];
     createdAt: string | Conversation['createdAt'];
@@ -262,6 +268,11 @@ export class User extends Context {
     constructor(context: Aris, params: UserReflection);
     // (undocumented)
     conversations: Collection<Conversation>;
+    createConversation(params: {
+        model: Conversation['model'];
+        systemMessage: Conversation['systemMessage'];
+        displayName: Conversation['displayName'];
+    }): Promise<Conversation>;
     // (undocumented)
     readonly createdAt: Date;
     delete(): Promise<void>;

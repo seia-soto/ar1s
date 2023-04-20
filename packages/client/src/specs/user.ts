@@ -200,6 +200,25 @@ export class User extends Context {
 	}
 
 	/**
+	 * Create a conversation owned by this user
+	 * @param params Conversation metadata
+	 * @returns Conversation object
+	 */
+	async createConversation(params: {model: Conversation['model']; systemMessage: Conversation['systemMessage']; displayName: Conversation['displayName']}) {
+		const response = await this._context.fetcher('private/conversation', {
+			method: 'post',
+			json: params,
+		});
+		const data: ConversationReflection = await response.json();
+
+		const conversation = new Conversation(this._context, data);
+
+		this.conversations.add(conversation);
+
+		return conversation;
+	}
+
+	/**
 	 * Check if this user is current user
 	 * @returns True if this user is current user
 	 */

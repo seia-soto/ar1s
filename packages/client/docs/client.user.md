@@ -37,6 +37,7 @@ export declare class User extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [createConversation(params)](./client.user.createconversation.md) |  | Create a conversation owned by this user |
 |  [delete()](./client.user.delete.md) |  | Delete user, this will have same effect deleting the platform if the user is the platform manager |
 |  [isSelfProfile()](./client.user.isselfprofile.md) |  | Check if this user is current user |
 |  [pull()](./client.user.pull.md) |  | Pull everything under this data type object |

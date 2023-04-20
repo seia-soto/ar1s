@@ -10,6 +10,8 @@ export type ConversationReflection = {
 	id: Conversation['id'];
 	flag: Conversation['flag'];
 	platform: Platform['id'];
+	displayName: Conversation['displayName'];
+	displayImageUrl: Conversation['displayImageUrl'];
 	model: Conversation['model'];
 	systemMessage: Conversation['systemMessage'];
 	createdAt: string | Conversation['createdAt'];
@@ -22,6 +24,8 @@ export type ConversationReflection = {
 export class Conversation extends Context {
 	readonly id: number & {__type: 'conversation.id'};
 	flag: number;
+	displayName: string;
+	displayImageUrl: string;
 	readonly model: string;
 	readonly systemMessage: string;
 	readonly createdAt: Date;
@@ -43,6 +47,8 @@ export class Conversation extends Context {
 
 		this.id = params.id;
 		this.flag = params.flag;
+		this.displayName = params.displayName;
+		this.displayImageUrl = params.displayImageUrl;
 		this.model = params.model;
 		this.systemMessage = params.systemMessage;
 		this.createdAt = new Date(params.createdAt);
@@ -56,6 +62,8 @@ export class Conversation extends Context {
 	 */
 	update(params: ConversationReflection) {
 		this.flag = params.flag;
+		this.displayName = params.displayName;
+		this.displayImageUrl = params.displayImageUrl;
 		this.updatedAt = new Date(params.updatedAt);
 
 		return this;
