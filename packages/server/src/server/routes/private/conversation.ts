@@ -256,7 +256,7 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 			const id = useSingleRangedQueryParam(request.params.id);
 
 			return db.tx(async t => {
-				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm.platform, cm.conversation, cm.user, cm."createdAt", cm."updatedAt"
+				const conversationMembers = await t.query(t.sql`select cm.id, cm.flag, cm.platform, cm.conversation, cm.user, cm."createdAt", cm."updatedAt",
 coalesce(nullif(cm."displayName", ''), u."displayName") as "displayName",
 coalesce(nullif(cm."displayAvatarUrl", ''), u."displayAvatarUrl") as "displayAvatarUrl",
 coalesce(nullif(cm."displayBio", ''), u."displayBio") as "displayBio"
