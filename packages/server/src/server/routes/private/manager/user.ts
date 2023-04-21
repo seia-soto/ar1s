@@ -5,6 +5,7 @@ import {Type} from '@sinclair/typebox';
 import {db, models} from '../../../../modules/database/index.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../../modules/error.js';
 import {createUser, userStandardDataTypeObjectParams} from '../../../../specs/user.js';
+import {singleRangedQueryType, useSingleRangedQueryParam} from '../../../../modules/formats.js';
 
 export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get a user
@@ -70,25 +71,23 @@ export const userRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 
 	// Delete a user
 	fastify.route({
-		url: '/:username',
+		url: '/:id',
 		method: 'DELETE',
 		schema: {
-			params: Type.Object({
-				username: Type.String({
-					format: UserFormats.Username,
-				}),
-			}),
+			params: singleRangedQueryType,
 		},
 		async handler(request, _reply) {
+			const id = useSingleRangedQueryParam(request.params.id);
+
 			return db.tx(async t => {
 				const flag = addFlag(0, compileBit(UserFlags.PlatformManager));
-				const isUserPlatformManager = (await t.query(t.sql`select exists (select 1 from ${models.user(t).tableName} where name = ${request.params.username} and flag & ${flag} = ${flag})`))[0].exists as boolean;
+				const isUserPlatformManager = (await t.query(t.sql`select exists (select 1 from ${models.user(t).tableName} where id = ${id} and flag & ${flag} = ${flag})`))[0].exists as boolean;
 
 				if (isUserPlatformManager) {
 					throw useValidationError(ValidationErrorCodes.UserIsPlatformManager);
 				}
 
-				await models.user(t).delete({id: request.session.user});
+				await models.user(t).delete({id});
 
 				return '';
 			});
