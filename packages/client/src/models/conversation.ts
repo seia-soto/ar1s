@@ -1,9 +1,9 @@
 import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
-import {getConversation} from '../apis/conversation.js';
+import {deleteConversation, getConversation} from '../apis/conversation.js';
 import {getConversationMembers} from '../apis/conversationMember.js';
 import {getMessages} from '../apis/message.js';
-import {NoEntityErrorCodes, useNoEntityError} from '../error.js';
+import {NoEntityErrorCodes, PermissionErrorCodes, useNoEntityError, usePermissionError} from '../error.js';
 import {type Aris, type Platform} from '../index.js';
 import {Collection, Context, Series} from './aacontext.js';
 import {ConversationMember} from './conversationMember.js';
@@ -67,7 +67,7 @@ export class Conversation extends Context {
 
 	get membersRequired() {
 		if (!this.members) {
-			throw useNoEntityError(NoEntityErrorCodes.ConversationMember);
+			throw useNoEntityError(NoEntityErrorCodes.ConversationMembers);
 		}
 
 		return this.members;
@@ -75,7 +75,7 @@ export class Conversation extends Context {
 
 	get profileRequired() {
 		if (!this.profile) {
-			throw useNoEntityError(NoEntityErrorCodes.ConversationMemberProfile);
+			throw useNoEntityError(NoEntityErrorCodes.ConversationProfile);
 		}
 
 		return this.profile;
@@ -123,7 +123,7 @@ export class Conversation extends Context {
 		}
 
 		if (!profile) {
-			throw useNoEntityError(NoEntityErrorCodes.ConversationMemberProfile);
+			throw useNoEntityError(NoEntityErrorCodes.ConversationProfile);
 		}
 
 		this.profile = profile;
@@ -142,5 +142,16 @@ export class Conversation extends Context {
 
 			this.messages.add(message);
 		}
+	}
+
+	/**
+	 * Delete current conversation
+	 */
+	async delete() {
+		if (!this.isOwnedByCurrentUser) {
+			throw usePermissionError(PermissionErrorCodes.ConversationOwner);
+		}
+
+		await deleteConversation(this.context.fetcher, this.id);
 	}
 }

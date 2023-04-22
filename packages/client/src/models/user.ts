@@ -1,6 +1,6 @@
 import {UserFormats} from '@ar1s/spec/out/user.js';
 import {Type} from '@sinclair/typebox';
-import {createConversation, getConversations} from '../apis/conversation.js';
+import {createConversation, deleteConversation, getConversations} from '../apis/conversation.js';
 import {NoEntityErrorCodes, useFormatError, useNoEntityError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
@@ -90,7 +90,7 @@ export class User extends Context {
 
 	get conversationsRequired() {
 		if (!this.conversations) {
-			throw useNoEntityError(NoEntityErrorCodes.Conversation);
+			throw useNoEntityError(NoEntityErrorCodes.UserConversations);
 		}
 
 		return this.conversations;
@@ -108,6 +108,13 @@ export class User extends Context {
 		}
 	}
 
+	/**
+	 * Create a conversation
+	 * @param model The model to use
+	 * @param systemMessage The system message to be emitted before conversation starts
+	 * @param displayName The display name of the conversation
+	 * @returns Conversation instance
+	 */
 	async createConversation(model: string, systemMessage: string, displayName: string) {
 		const conversationRef = await createConversation(this.context.fetcher, model, systemMessage, displayName);
 		const conversation = new Conversation(this.context, conversationRef);
@@ -117,5 +124,19 @@ export class User extends Context {
 		this.conversations.set(conversation);
 
 		return conversation;
+	}
+
+	/**
+	 * Delete the conversation
+	 * @param conversationId The conversation id to delete
+	 */
+	async deleteConversation(conversationId: Conversation['id']) {
+		const conversation = this.conversationsRequired.get(conversationId);
+
+		if (!conversation) {
+			throw useNoEntityError(NoEntityErrorCodes.Conversation);
+		}
+
+		await conversation.delete();
 	}
 }

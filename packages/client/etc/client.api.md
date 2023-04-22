@@ -56,6 +56,7 @@ export class Conversation extends Context {
     readonly context: Aris;
     // (undocumented)
     readonly createdAt: Date;
+    delete(): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
     // (undocumented)
@@ -249,10 +250,10 @@ export class User extends Context {
     conversations?: Collection<Conversation>;
     // (undocumented)
     get conversationsRequired(): Collection<Conversation>;
-    // (undocumented)
     createConversation(model: string, systemMessage: string, displayName: string): Promise<Conversation>;
     // (undocumented)
     readonly createdAt: Date;
+    deleteConversation(conversationId: Conversation['id']): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;
     // (undocumented)

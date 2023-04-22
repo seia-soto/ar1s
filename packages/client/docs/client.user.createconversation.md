@@ -4,6 +4,8 @@
 
 ## User.createConversation() method
 
+Create a conversation
+
 **Signature:**
 
 ```typescript
@@ -14,11 +16,13 @@ createConversation(model: string, systemMessage: string, displayName: string): P
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  model | string |  |
-|  systemMessage | string |  |
-|  displayName | string |  |
+|  model | string | The model to use |
+|  systemMessage | string | The system message to be emitted before conversation starts |
+|  displayName | string | The display name of the conversation |
 
 **Returns:**
 
 Promise&lt;[Conversation](./client.conversation.md)<!-- -->&gt;
+
+Conversation instance
 

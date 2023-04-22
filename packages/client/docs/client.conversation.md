@@ -44,6 +44,7 @@ export declare class Conversation extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [delete()](./client.conversation.delete.md) |  | Delete current conversation |
 |  [sync()](./client.conversation.sync.md) |  | Sync current conversation |
 |  [syncMembers()](./client.conversation.syncmembers.md) |  | Sync members of current conversation |
 |  [syncMessages()](./client.conversation.syncmessages.md) |  | Sync messages of current conversation |

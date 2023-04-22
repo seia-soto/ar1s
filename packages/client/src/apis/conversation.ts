@@ -28,3 +28,7 @@ export const createConversation = async (fetcher: Fetcher, model: string, system
 
 	return conversationRef;
 };
+
+export const deleteConversation = async (fetcher: Fetcher, conversationId: number) => {
+	await fetcher('private/conversation/' + conversationId.toString(), {method: 'delete'});
+};
