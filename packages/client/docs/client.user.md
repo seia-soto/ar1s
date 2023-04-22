@@ -39,6 +39,7 @@ export declare class User extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [createConversation(model, systemMessage, displayName)](./client.user.createconversation.md) |  |  |
 |  [syncConversations()](./client.user.syncconversations.md) |  |  |
 |  [update(params)](./client.user.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.user.validate.md) | <code>static</code> | Validate the parameters in User reflection object |

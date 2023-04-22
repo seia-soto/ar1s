@@ -1,6 +1,6 @@
 import {UserFormats} from '@ar1s/spec/out/user.js';
 import {Type} from '@sinclair/typebox';
-import {getConversations} from '../apis/conversation.js';
+import {createConversation, getConversations} from '../apis/conversation.js';
 import {NoEntityErrorCodes, useFormatError, useNoEntityError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
@@ -100,5 +100,14 @@ export class User extends Context {
 		const conversationRefs = await getConversations(this.context.fetcher);
 
 		this.conversations = conversationRefs.map(conversationRef => new Conversation(this.context, conversationRef));
+	}
+
+	async createConversation(model: string, systemMessage: string, displayName: string) {
+		const conversationRef = await createConversation(this.context.fetcher, model, systemMessage, displayName);
+		const conversation = new Conversation(this.context, conversationRef);
+
+		this.conversations ??= [conversation];
+
+		return conversation;
 	}
 }

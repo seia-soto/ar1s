@@ -14,3 +14,17 @@ export const getConversation = async (fetcher: Fetcher, conversationId: number) 
 
 	return conversationRef;
 };
+
+export const createConversation = async (fetcher: Fetcher, model: string, systemMessage: string, displayName: string) => {
+	const response = await fetcher('private/conversation', {
+		method: 'post',
+		json: {
+			model,
+			systemMessage,
+			displayName,
+		},
+	});
+	const conversationRef: ConversationReflection = await response.json();
+
+	return conversationRef;
+};

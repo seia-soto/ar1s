@@ -236,6 +236,8 @@ export class User extends Context {
     // (undocumented)
     get conversationsRequired(): Conversation[];
     // (undocumented)
+    createConversation(model: string, systemMessage: string, displayName: string): Promise<Conversation>;
+    // (undocumented)
     readonly createdAt: Date;
     // (undocumented)
     displayAvatarUrl: string;
