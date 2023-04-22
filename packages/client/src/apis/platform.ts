@@ -22,7 +22,18 @@ export const getInvitedPlatform = async (fetcher: Fetcher, invite: string) => {
 	return reflection;
 };
 
-export const signUpOnPlatform = async (fetcher: Fetcher, invite: string, user: {username: string; password: string}) => fetcher('platform/invite/' + invite, {
-	method: 'post',
-	json: user,
-});
+export const signUpOnPlatform = async (fetcher: Fetcher, invite: string, user: {username: string; password: string}) => {
+	const response = await fetcher('platform/invite/' + invite, {
+		method: 'post',
+		json: user,
+		throwHttpErrors: false,
+	});
+
+	return response.status === 200;
+};
+
+export const deletePlatform = async (fetcher: Fetcher) => {
+	const response = await fetcher('platform', {method: 'delete', throwHttpErrors: false});
+
+	return response.status === 200;
+};

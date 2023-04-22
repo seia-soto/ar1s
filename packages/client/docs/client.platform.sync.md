@@ -4,7 +4,7 @@
 
 ## Platform.sync() method
 
-Sync the current platform
+Sync current platform
 
 **Signature:**
 

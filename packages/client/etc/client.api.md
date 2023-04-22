@@ -192,6 +192,7 @@ export class Platform extends Context {
     constructor(context: Aris, params: PlatformReflection);
     // (undocumented)
     readonly createdAt: Date;
+    delete(): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
     // (undocumented)
@@ -204,6 +205,8 @@ export class Platform extends Context {
     };
     // (undocumented)
     readonly inviteIdentifier: string;
+    // (undocumented)
+    get isManagedByCurrentUser(): boolean;
     sync(): Promise<void>;
     update(params: PlatformReflection): void;
     // (undocumented)

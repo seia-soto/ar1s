@@ -2,8 +2,8 @@ import {PlatformFormats} from '@ar1s/spec/out/platform.js';
 import {UserFlags} from '@ar1s/spec/out/user.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
-import {getCurrentPlatform} from '../apis/platform.js';
-import {useFormatError} from '../error.js';
+import {deletePlatform, getCurrentPlatform} from '../apis/platform.js';
+import {PermissionErrorCodes, useFormatError, usePermissionError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {Context} from './aacontext.js';
@@ -76,8 +76,12 @@ export class Platform extends Context {
 		this.copyUpdatedAt = new Date();
 	}
 
+	get isManagedByCurrentUser() {
+		return hasFlag(this.context.userRequired.flag, compileBit(UserFlags.PlatformManager));
+	}
+
 	/**
-	 * Sync the current platform
+	 * Sync current platform
 	 */
 	async sync() {
 		const platformRef = await getCurrentPlatform(this.context.fetcher);
@@ -85,7 +89,14 @@ export class Platform extends Context {
 		this.update(platformRef);
 	}
 
-	get isManagedByCurrentUser() {
-		return hasFlag(this.context.userRequired.flag, compileBit(UserFlags.PlatformManager));
+	/**
+	 * Delete current platform
+	 */
+	async delete() {
+		if (!this.isManagedByCurrentUser) {
+			throw usePermissionError(PermissionErrorCodes.PlatformManager);
+		}
+
+		await deletePlatform(this.context.fetcher);
 	}
 }

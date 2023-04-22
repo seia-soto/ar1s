@@ -29,13 +29,15 @@ export declare class Platform extends Context
 |  [flag](./client.platform.flag.md) |  | number |  |
 |  [id](./client.platform.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'platform.id'; } |  |
 |  [inviteIdentifier](./client.platform.inviteidentifier.md) | <code>readonly</code> | string |  |
+|  [isManagedByCurrentUser](./client.platform.ismanagedbycurrentuser.md) | <code>readonly</code> | boolean |  |
 |  [updatedAt](./client.platform.updatedat.md) |  | Date |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [sync()](./client.platform.sync.md) |  | Sync the current platform |
+|  [delete()](./client.platform.delete.md) |  | Delete current platform |
+|  [sync()](./client.platform.sync.md) |  | Sync current platform |
 |  [update(params)](./client.platform.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.platform.validate.md) | <code>static</code> | Validate the reflection object |
 
