@@ -32,6 +32,7 @@ declare class Aris
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [bootstrap(platform, user)](./client.aris.bootstrap.md) |  | Bootstrap the instance |
+|  [getPlatform(invite)](./client.aris.getplatform.md) |  | Get platform |
 |  [isBootstrapRequired()](./client.aris.isbootstraprequired.md) |  | Check if an instance requires bootstrap |
 |  [signIn(username, password, isTrustedEnvironment)](./client.aris.signin.md) |  | Sign in |
 |  [signOut()](./client.aris.signout.md) |  | Sign out |
