@@ -118,7 +118,7 @@ where cm.user = ${request.session.user}`) as Array<Pick<ConversationMember, 'id'
 				void reply.clearCookie(SessionCookieNames.Session, {
 					path: '/',
 					httpOnly: true,
-					secure: true
+					secure: true,
 				});
 
 				return '';
