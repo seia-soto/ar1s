@@ -253,6 +253,7 @@ export class User extends Context {
     createConversation(model: string, systemMessage: string, displayName: string): Promise<Conversation>;
     // (undocumented)
     readonly createdAt: Date;
+    delete(): Promise<void>;
     deleteConversation(conversationId: Conversation['id']): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;

@@ -40,6 +40,7 @@ export declare class User extends Context
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [createConversation(model, systemMessage, displayName)](./client.user.createconversation.md) |  | Create a conversation |
+|  [delete()](./client.user.delete.md) |  | Delete current user |
 |  [deleteConversation(conversationId)](./client.user.deleteconversation.md) |  | Delete the conversation |
 |  [syncConversations()](./client.user.syncconversations.md) |  |  |
 |  [update(params)](./client.user.update.md) |  | Update data depends on reflection object |

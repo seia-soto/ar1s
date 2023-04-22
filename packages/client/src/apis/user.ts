@@ -25,3 +25,7 @@ export const signIn = async (fetcher: Fetcher, username: string, password: strin
 export const signOut = async (fetcher: Fetcher) => {
 	await fetcher('session', {method: 'delete'});
 };
+
+export const deleteUser = async (fetcher: Fetcher) => {
+	await fetcher('user', {method: 'delete'});
+};

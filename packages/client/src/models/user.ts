@@ -7,6 +7,7 @@ import {createCompiledType} from '../utils.js';
 import {Collection, Context} from './aacontext.js';
 import {Conversation} from './conversation.js';
 import {type Platform, type PlatformReflection} from './platform.js';
+import {deleteUser} from '../apis/user.js';
 
 export const checkUsername = createCompiledType(Type.String({
 	format: UserFormats.Username,
@@ -138,5 +139,14 @@ export class User extends Context {
 		}
 
 		await conversation.delete();
+	}
+
+	/**
+	 * Delete current user
+	 */
+	async delete() {
+		await deleteUser(this.context.fetcher);
+
+		delete this.context.user;
 	}
 }
