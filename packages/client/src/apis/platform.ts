@@ -1,4 +1,5 @@
 import {type PlatformReflection} from '../models/platform.js';
+import {type UserReflection} from '../models/user.js';
 import {type Fetcher} from './aatypes.js';
 
 export const getCurrentPlatform = async (fetcher: Fetcher) => {
@@ -36,4 +37,11 @@ export const deletePlatform = async (fetcher: Fetcher) => {
 	const response = await fetcher('platform', {method: 'delete', throwHttpErrors: false});
 
 	return response.status === 200;
+};
+
+export const getUsers = async (fetcher: Fetcher) => {
+	const response = await fetcher('platform/users', {method: 'get'});
+	const userRefs: UserReflection[] = await response.json();
+
+	return userRefs;
 };

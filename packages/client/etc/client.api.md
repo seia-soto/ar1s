@@ -208,9 +208,14 @@ export class Platform extends Context {
     // (undocumented)
     get isManagedByCurrentUser(): boolean;
     sync(): Promise<void>;
+    syncUsers(): Promise<void>;
     update(params: PlatformReflection): void;
     // (undocumented)
     updatedAt: Date;
+    // (undocumented)
+    users?: Collection<User>;
+    // (undocumented)
+    get usersRequired(): Collection<User>;
     static validate(params: PlatformReflection): void;
 }
 

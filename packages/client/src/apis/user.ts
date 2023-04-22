@@ -8,6 +8,10 @@ export const getCurrentUser = async (fetcher: Fetcher) => {
 	return reflection;
 };
 
+export const deleteUser = async (fetcher: Fetcher) => {
+	await fetcher('private/user', {method: 'delete'});
+};
+
 export const signIn = async (fetcher: Fetcher, username: string, password: string, isTrustedEnvironment: boolean) => {
 	const response = await fetcher('session', {
 		method: 'post',
@@ -24,8 +28,4 @@ export const signIn = async (fetcher: Fetcher, username: string, password: strin
 
 export const signOut = async (fetcher: Fetcher) => {
 	await fetcher('session', {method: 'delete'});
-};
-
-export const deleteUser = async (fetcher: Fetcher) => {
-	await fetcher('user', {method: 'delete'});
 };

@@ -31,6 +31,8 @@ export declare class Platform extends Context
 |  [inviteIdentifier](./client.platform.inviteidentifier.md) | <code>readonly</code> | string |  |
 |  [isManagedByCurrentUser](./client.platform.ismanagedbycurrentuser.md) | <code>readonly</code> | boolean |  |
 |  [updatedAt](./client.platform.updatedat.md) |  | Date |  |
+|  [users?](./client.platform.users.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; | _(Optional)_ |
+|  [usersRequired](./client.platform.usersrequired.md) | <code>readonly</code> | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; |  |
 
 ## Methods
 
@@ -38,6 +40,7 @@ export declare class Platform extends Context
 |  --- | --- | --- |
 |  [delete()](./client.platform.delete.md) |  | Delete current platform |
 |  [sync()](./client.platform.sync.md) |  | Sync current platform |
+|  [syncUsers()](./client.platform.syncusers.md) |  | Sync users of current platform |
 |  [update(params)](./client.platform.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.platform.validate.md) | <code>static</code> | Validate the reflection object |
 

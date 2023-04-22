@@ -2,11 +2,11 @@ import {PlatformFormats} from '@ar1s/spec/out/platform.js';
 import {UserFlags} from '@ar1s/spec/out/user.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
-import {deletePlatform, getCurrentPlatform} from '../apis/platform.js';
-import {PermissionErrorCodes, useFormatError, usePermissionError} from '../error.js';
-import {type Aris} from '../index.js';
+import {deletePlatform, getCurrentPlatform, getUsers} from '../apis/platform.js';
+import {NoEntityErrorCodes, PermissionErrorCodes, useFormatError, useNoEntityError, usePermissionError} from '../error.js';
+import {User, type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
-import {Context} from './aacontext.js';
+import {Collection, Context} from './aacontext.js';
 
 export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
@@ -44,6 +44,8 @@ export class Platform extends Context {
 	readonly createdAt: Date;
 	updatedAt: Date;
 
+	users?: Collection<User>;
+
 	constructor(
 		context: Aris,
 		params: PlatformReflection,
@@ -76,6 +78,14 @@ export class Platform extends Context {
 		this.copyUpdatedAt = new Date();
 	}
 
+	get usersRequired() {
+		if (!this.users) {
+			throw useNoEntityError(NoEntityErrorCodes.PlatformUsers);
+		}
+
+		return this.users;
+	}
+
 	get isManagedByCurrentUser() {
 		return hasFlag(this.context.userRequired.flag, compileBit(UserFlags.PlatformManager));
 	}
@@ -87,6 +97,19 @@ export class Platform extends Context {
 		const platformRef = await getCurrentPlatform(this.context.fetcher);
 
 		this.update(platformRef);
+	}
+
+	/**
+	 * Sync users of current platform
+	 */
+	async syncUsers() {
+		const userRefs = await getUsers(this.context.fetcher);
+
+		this.users ??= new Collection();
+
+		for (const userRef of userRefs) {
+			this.users.set(new User(this.context, userRef, this));
+		}
 	}
 
 	/**

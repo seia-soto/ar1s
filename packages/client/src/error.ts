@@ -37,6 +37,7 @@ export const enum NoEntityErrorCodes {
 	ConversationMembers = '`conversation.members` is not available; The members of current conversation are not synced!',
 	ConversationProfile = '`conversation.profile` is not available; The current user is not joined in the conversation!',
 	ConversationMessages = '`conversation.messages` is not available; The messages of current conversation are not synced!',
+	PlatformUsers = '`platform.users` is not available; The users of current platform are not synced!',
 }
 
 export const useNoEntityError = (message: NoEntityErrorCodes) => new NoEntityError(message);
