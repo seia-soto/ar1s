@@ -153,5 +153,7 @@ export class Conversation extends Context {
 		}
 
 		await deleteConversation(this.context.fetcher, this.id);
+
+		this.context.userRequired.conversationsRequired.delete(this.id);
 	}
 }
