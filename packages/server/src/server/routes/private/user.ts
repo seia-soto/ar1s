@@ -115,7 +115,11 @@ where cm.user = ${request.session.user}`) as Array<Pick<ConversationMember, 'id'
 					await deleteUser(t, request.session.user);
 				}
 
-				void reply.clearCookie(SessionCookieNames.Session);
+				void reply.clearCookie(SessionCookieNames.Session, {
+					path: '/',
+					httpOnly: true,
+					secure: true
+				});
 
 				return '';
 			});
