@@ -30,6 +30,7 @@ export declare class Series<T extends Context>
 |  --- | --- | --- |
 |  [add(entry)](./client.series.add.md) |  |  |
 |  [del(index)](./client.series.del.md) |  |  |
+|  [get(index)](./client.series.get.md) |  |  |
 |  [pop()](./client.series.pop.md) |  |  |
 |  [shift()](./client.series.shift.md) |  |  |
 |  [values()](./client.series.values.md) |  |  |

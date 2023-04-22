@@ -51,6 +51,16 @@ export class ConversationMember extends Context {
 		this.conversationId = params.conversation;
 	}
 
+	update(params: ConversationMemberReflection) {
+		this.flag = params.flag;
+		this.displayName = params.displayName;
+		this.displayAvatarUrl = params.displayAvatarUrl;
+		this.displayBio = params.displayBio;
+		this.updatedAt = new Date(params.updatedAt);
+
+		this.copyUpdatedAt = new Date();
+	}
+
 	get isThisMemberCurrentUser() {
 		return this.context.userRequired.id === this.userId;
 	}

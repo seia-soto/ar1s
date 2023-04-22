@@ -39,4 +39,12 @@ export class Message extends Context {
 		this.createdAt = new Date(params.createdAt);
 		this.updatedAt = new Date(params.updatedAt);
 	}
+
+	update(params: MessageReflection) {
+		this.flag = params.flag;
+		this.content = params.content;
+		this.updatedAt = new Date(params.updatedAt);
+
+		this.copyUpdatedAt = new Date();
+	}
 }

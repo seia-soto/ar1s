@@ -32,3 +32,9 @@ export declare class Message extends Context
 |  [id](./client.message.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'message.id'; } |  |
 |  [updatedAt](./client.message.updatedat.md) |  | Date |  |
 
+## Methods
+
+|  Method | Modifiers | Description |
+|  --- | --- | --- |
+|  [update(params)](./client.message.update.md) |  |  |
+

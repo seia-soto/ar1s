@@ -63,6 +63,10 @@ export class Series<T extends Context> {
 		}
 	}
 
+	get(index: EnumerableIndex) {
+		return this.map[index];
+	}
+
 	add(entry: T) {
 		while (this.arr.length < this.threshold) {
 			this.shift();

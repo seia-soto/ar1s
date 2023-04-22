@@ -113,13 +113,19 @@ export class Conversation extends Context {
 		this.members ??= new Collection();
 
 		for (const memberRef of memberRefs) {
-			const member = new ConversationMember(this.context, this, memberRef);
+			const member = this.members.get(memberRef.id);
 
-			if (member.isThisMemberCurrentUser) {
-				profile = member;
+			if (typeof member === 'undefined') {
+				const newMember = new ConversationMember(this.context, this, memberRef);
+
+				if (newMember.isThisMemberCurrentUser) {
+					profile = newMember;
+				}
+
+				this.members.set(newMember);
+			} else {
+				member.update(memberRef);
 			}
-
-			this.members.set(member);
 		}
 
 		if (!profile) {
@@ -135,12 +141,16 @@ export class Conversation extends Context {
 	async syncMessages() {
 		const messageRefs = await getMessages(this.context.fetcher, this.id);
 
-		this.messages = new Series<Message>();
+		this.messages ??= new Series<Message>();
 
 		for (const messageRef of messageRefs) {
-			const message = new Message(this.context, this, this.profileRequired, messageRef);
+			const message = this.messages.get(messageRef.id);
 
-			this.messages.add(message);
+			if (typeof message === 'undefined') {
+				this.messages.add(new Message(this.context, this, this.profileRequired, messageRef));
+			} else {
+				message.update(messageRef);
+			}
 		}
 	}
 

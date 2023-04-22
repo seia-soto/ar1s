@@ -34,3 +34,9 @@ export declare class ConversationMember extends Context
 |  [isThisMemberCurrentUser](./client.conversationmember.isthismembercurrentuser.md) | <code>readonly</code> | boolean |  |
 |  [updatedAt](./client.conversationmember.updatedat.md) |  | Date |  |
 
+## Methods
+
+|  Method | Modifiers | Description |
+|  --- | --- | --- |
+|  [update(params)](./client.conversationmember.update.md) |  |  |
+

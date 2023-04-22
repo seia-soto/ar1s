@@ -7,7 +7,7 @@ import {createCompiledType} from '../utils.js';
 import {Collection, Context} from './aacontext.js';
 import {Conversation} from './conversation.js';
 import {type Platform, type PlatformReflection} from './platform.js';
-import {deleteUser} from '../apis/user.js';
+import {deleteUser, getCurrentUser} from '../apis/user.js';
 
 export const checkUsername = createCompiledType(Type.String({
 	format: UserFormats.Username,
@@ -97,15 +97,25 @@ export class User extends Context {
 		return this.conversations;
 	}
 
+	async sync() {
+		const userRef = await getCurrentUser(this.context.fetcher);
+
+		this.update(userRef);
+	}
+
 	async syncConversations() {
 		const conversationRefs = await getConversations(this.context.fetcher);
 
 		this.conversations ??= new Collection();
 
 		for (const conversationRef of conversationRefs) {
-			const conversation = new Conversation(this.context, conversationRef);
+			const conversation = this.conversations.get(conversationRef.id);
 
-			this.conversations.set(conversation);
+			if (typeof conversation === 'undefined') {
+				this.conversations.set(new Conversation(this.context, conversationRef));
+			} else {
+				conversation.update(conversationRef);
+			}
 		}
 	}
 

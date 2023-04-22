@@ -108,7 +108,13 @@ export class Platform extends Context {
 		this.users ??= new Collection();
 
 		for (const userRef of userRefs) {
-			this.users.set(new User(this.context, userRef, this));
+			const user = this.users.get(userRef.id);
+
+			if (typeof user === 'undefined') {
+				this.users.set(new User(this.context, userRef, this));
+			} else {
+				user.update(userRef);
+			}
 		}
 	}
 

@@ -118,6 +118,8 @@ export class ConversationMember extends Context {
     // (undocumented)
     get isThisMemberCurrentUser(): boolean;
     // (undocumented)
+    update(params: ConversationMemberReflection): void;
+    // (undocumented)
     updatedAt: Date;
 }
 
@@ -167,6 +169,8 @@ export class Message extends Context {
     readonly id: number & {
         __type: 'message.id';
     };
+    // (undocumented)
+    update(params: MessageReflection): void;
     // (undocumented)
     updatedAt: Date;
 }
@@ -241,6 +245,8 @@ export class Series<T extends Context> {
     // (undocumented)
     del(index: EnumerableIndex): boolean;
     // (undocumented)
+    get(index: EnumerableIndex): T;
+    // (undocumented)
     map: Record<EnumerableIndex, T>;
     // (undocumented)
     pop(): void;
@@ -278,6 +284,8 @@ export class User extends Context {
     };
     // (undocumented)
     readonly platform: Platform;
+    // (undocumented)
+    sync(): Promise<void>;
     // (undocumented)
     syncConversations(): Promise<void>;
     update(params: UserReflection): void;
