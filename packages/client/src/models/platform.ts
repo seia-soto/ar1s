@@ -121,5 +121,7 @@ export class Platform extends Context {
 		}
 
 		await deletePlatform(this.context.fetcher);
+
+		delete this.context.user;
 	}
 }
