@@ -9,13 +9,14 @@ Constructs a new instance of the `ConversationMember` class
 **Signature:**
 
 ```typescript
-constructor(_context: Aris, params: ConversationMemberReflection);
+constructor(context: Aris, conversation: Conversation, params: ConversationMemberReflection);
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  \_context | [Aris](./client.aris.md) |  |
+|  context | [Aris](./client.aris.md) |  |
+|  conversation | [Conversation](./client.conversation.md) |  |
 |  params | [ConversationMemberReflection](./client.conversationmemberreflection.md) |  |
 

@@ -16,25 +16,24 @@ declare class Aris
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(fetcher)](./client.aris._constructor_.md) |  | Constructs a new instance of the <code>Aris</code> class |
+|  [(constructor)(prefixUrl)](./client.aris._constructor_.md) |  | Constructs a new instance of the <code>Aris</code> class |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [conversationMembers](./client.aris.conversationmembers.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
-|  [conversations](./client.aris.conversations.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
 |  [fetcher](./client.aris.fetcher.md) | <code>readonly</code> | typeof ky |  |
-|  [platform?](./client.aris.platform.md) |  | [Platform](./client.platform.md) | _(Optional)_ |
+|  [prefixUrl](./client.aris.prefixurl.md) | <code>readonly</code> | string |  |
 |  [user?](./client.aris.user.md) |  | [User](./client.user.md) | _(Optional)_ |
-|  [users](./client.aris.users.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[User](./client.user.md)<!-- -->&gt; |  |
+|  [userRequired](./client.aris.userrequired.md) | <code>readonly</code> | [User](./client.user.md) |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [bootstrap(params)](./client.aris.bootstrap.md) |  | Bootstrap the instance |
-|  [createFetcher(baseUrl)](./client.aris.createfetcher.md) | <code>static</code> |  |
+|  [bootstrap(platform, user)](./client.aris.bootstrap.md) |  | Bootstrap the instance |
 |  [isBootstrapRequired()](./client.aris.isbootstraprequired.md) |  | Check if an instance requires bootstrap |
-|  [pull()](./client.aris.pull.md) |  | Pull the user data and platform data to intialize |
+|  [signIn(username, password, isTrustedEnvironment)](./client.aris.signin.md) |  | Sign in |
+|  [signOut()](./client.aris.signout.md) |  | Sign out |
+|  [sync()](./client.aris.sync.md) |  | Sync current session |
 

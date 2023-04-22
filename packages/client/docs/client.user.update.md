@@ -9,7 +9,7 @@ Update data depends on reflection object
 **Signature:**
 
 ```typescript
-update(params: UserReflection): this;
+update(params: UserReflection): void;
 ```
 
 ## Parameters
@@ -20,7 +20,5 @@ update(params: UserReflection): this;
 
 **Returns:**
 
-this
-
-this
+void
 

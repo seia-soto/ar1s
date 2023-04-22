@@ -9,7 +9,7 @@ Constructs a new instance of the `User` class
 **Signature:**
 
 ```typescript
-constructor(context: Aris, params: UserReflection);
+constructor(context: Aris, userRef: UserReflection, platform: Platform);
 ```
 
 ## Parameters
@@ -17,5 +17,6 @@ constructor(context: Aris, params: UserReflection);
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  context | [Aris](./client.aris.md) |  |
-|  params | [UserReflection](./client.userreflection.md) |  |
+|  userRef | [UserReflection](./client.userreflection.md) |  |
+|  platform | [Platform](./client.platform.md) |  |
 

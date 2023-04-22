@@ -9,24 +9,26 @@ Bootstrap the instance
 **Signature:**
 
 ```typescript
-bootstrap(params: {
-        platformInviteIdentifier: Platform['inviteIdentifier'];
-        platformDisplayName: Platform['displayName'];
-        platformToken: string;
-        userUsername: User['username'];
-        userPassword: string;
-    }): Promise<this>;
+bootstrap(platform: {
+        inviteIdentifier: Platform['inviteIdentifier'];
+        displayName: Platform['displayName'];
+        token: string;
+    }, user: {
+        username: User['username'];
+        password: string;
+    }): Promise<void>;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  params | { platformInviteIdentifier: [Platform](./client.platform.md)<!-- -->\['inviteIdentifier'\]; platformDisplayName: [Platform](./client.platform.md)<!-- -->\['displayName'\]; platformToken: string; userUsername: [User](./client.user.md)<!-- -->\['username'\]; userPassword: string; } | Bootstrap params |
+|  platform | { inviteIdentifier: [Platform](./client.platform.md)<!-- -->\['inviteIdentifier'\]; displayName: [Platform](./client.platform.md)<!-- -->\['displayName'\]; token: string; } |  |
+|  user | { username: [User](./client.user.md)<!-- -->\['username'\]; password: string; } |  |
 
 **Returns:**
 
-Promise&lt;this&gt;
+Promise&lt;void&gt;
 
 this
 

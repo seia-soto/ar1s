@@ -17,19 +17,21 @@ export declare class User extends Context
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(context, params)](./client.user._constructor_.md) |  | Constructs a new instance of the <code>User</code> class |
+|  [(constructor)(context, userRef, platform)](./client.user._constructor_.md) |  | Constructs a new instance of the <code>User</code> class |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [conversations](./client.user.conversations.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
+|  [conversations?](./client.user.conversations.md) |  | [Conversation](./client.conversation.md)<!-- -->\[\] | _(Optional)_ |
+|  [conversationsRequired](./client.user.conversationsrequired.md) | <code>readonly</code> | [Conversation](./client.conversation.md)<!-- -->\[\] |  |
 |  [createdAt](./client.user.createdat.md) | <code>readonly</code> | Date |  |
 |  [displayAvatarUrl](./client.user.displayavatarurl.md) |  | string |  |
 |  [displayBio](./client.user.displaybio.md) |  | string |  |
 |  [displayName](./client.user.displayname.md) |  | string |  |
 |  [flag](./client.user.flag.md) |  | number |  |
 |  [id](./client.user.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'user.id'; } |  |
+|  [platform](./client.user.platform.md) | <code>readonly</code> | [Platform](./client.platform.md) |  |
 |  [updatedAt](./client.user.updatedat.md) |  | Date |  |
 |  [username](./client.user.username.md) | <code>readonly</code> | string |  |
 
@@ -37,15 +39,7 @@ export declare class User extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [createConversation(params)](./client.user.createconversation.md) |  | Create a conversation owned by this user |
-|  [delete()](./client.user.delete.md) |  | Delete user, this will have same effect deleting the platform if the user is the platform manager |
-|  [isSelfProfile()](./client.user.isselfprofile.md) |  | Check if this user is current user |
-|  [pull()](./client.user.pull.md) |  | Pull everything under this data type object |
-|  [pullConversations()](./client.user.pullconversations.md) |  | Pull available conversations of user from the server |
-|  [pushDisplayParams(params)](./client.user.pushdisplayparams.md) |  | Update user display related parameters |
-|  [pushPassword(currentPassword, newPassword)](./client.user.pushpassword.md) |  | Update user password |
-|  [requestElevationToSelfProfile()](./client.user.requestelevationtoselfprofile.md) |  | Throw error if this user is not current user |
-|  [self(context)](./client.user.self.md) | <code>static</code> | Create self-reflected <code>User</code> instance |
+|  [syncConversations()](./client.user.syncconversations.md) |  |  |
 |  [update(params)](./client.user.update.md) |  | Update data depends on reflection object |
 |  [validate(params)](./client.user.validate.md) | <code>static</code> | Validate the parameters in User reflection object |
 

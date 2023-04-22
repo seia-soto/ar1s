@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-messages: Series<Message>;
+messages?: Series<Message>;
 ```

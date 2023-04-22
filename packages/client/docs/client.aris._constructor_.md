@@ -9,12 +9,12 @@ Constructs a new instance of the `Aris` class
 **Signature:**
 
 ```typescript
-constructor(fetcher: typeof ky);
+constructor(prefixUrl: string);
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  fetcher | typeof ky | The <code>ky</code> instance. You should create an extended fetcher that matches backend url |
+|  prefixUrl | string |  |
 

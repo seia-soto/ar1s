@@ -4,10 +4,8 @@
 
 ## Conversation.profile property
 
-Get the profile of current user from the conversation members
-
 **Signature:**
 
 ```typescript
-get profile(): ConversationMember | undefined;
+profile?: ConversationMember;
 ```

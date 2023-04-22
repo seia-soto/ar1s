@@ -4,10 +4,8 @@
 
 ## Message.author property
 
-Get conversationMember DTO, conversationMember identifier if not available
-
 **Signature:**
 
 ```typescript
-get author(): ConversationMember | Message['_author'];
+readonly author: ConversationMember;
 ```

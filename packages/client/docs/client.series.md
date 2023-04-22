@@ -7,9 +7,8 @@
 **Signature:**
 
 ```typescript
-export declare class Series<T extends Context> extends Collection<T> 
+export declare class Series<T extends Context> 
 ```
-**Extends:** [Collection](./client.collection.md)<!-- -->&lt;T&gt;
 
 ## Constructors
 
@@ -22,6 +21,7 @@ export declare class Series<T extends Context> extends Collection<T>
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
 |  [arr](./client.series.arr.md) |  | T\[\] |  |
+|  [map](./client.series.map.md) |  | Record&lt;EnumerableIndex, T&gt; |  |
 |  [threshold](./client.series.threshold.md) | <code>readonly</code> | number |  |
 
 ## Methods

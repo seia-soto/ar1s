@@ -17,26 +17,20 @@ export declare class ConversationMember extends Context
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(\_context, params)](./client.conversationmember._constructor_.md) |  | Constructs a new instance of the <code>ConversationMember</code> class |
+|  [(constructor)(context, conversation, params)](./client.conversationmember._constructor_.md) |  | Constructs a new instance of the <code>ConversationMember</code> class |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_context](./client.conversationmember._context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
-|  [conversation](./client.conversationmember.conversation.md) | <code>readonly</code> | [Conversation](./client.conversation.md) \| [ConversationMember](./client.conversationmember.md)<!-- -->\['\_conversation'\] | Get conversation DTO, conversation identifier if not available |
+|  [context](./client.conversationmember.context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
+|  [conversation](./client.conversationmember.conversation.md) | <code>readonly</code> | [Conversation](./client.conversation.md) |  |
 |  [createdAt](./client.conversationmember.createdat.md) | <code>readonly</code> | Date |  |
 |  [displayAvatarUrl](./client.conversationmember.displayavatarurl.md) |  | string |  |
 |  [displayBio](./client.conversationmember.displaybio.md) |  | string |  |
 |  [displayName](./client.conversationmember.displayname.md) |  | string |  |
 |  [flag](./client.conversationmember.flag.md) |  | number |  |
 |  [id](./client.conversationmember.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'conversationMember.id'; } |  |
+|  [isThisMemberCurrentUser](./client.conversationmember.isthismembercurrentuser.md) | <code>readonly</code> | boolean |  |
 |  [updatedAt](./client.conversationmember.updatedat.md) |  | Date |  |
-|  [user](./client.conversationmember.user.md) | <code>readonly</code> | [User](./client.user.md) \| [ConversationMember](./client.conversationmember.md)<!-- -->\['\_user'\] | Get user DTO, user identifier if not available |
-
-## Methods
-
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [delete()](./client.conversationmember.delete.md) |  | Delete the member |
 

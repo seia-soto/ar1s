@@ -17,26 +17,18 @@ export declare class Message extends Context
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(\_context, params)](./client.message._constructor_.md) |  | Constructs a new instance of the <code>Message</code> class |
+|  [(constructor)(context, conversation, author, params)](./client.message._constructor_.md) |  | Constructs a new instance of the <code>Message</code> class |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_context](./client.message._context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
-|  [author](./client.message.author.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) \| [Message](./client.message.md)<!-- -->\['\_author'\] | Get conversationMember DTO, conversationMember identifier if not available |
+|  [author](./client.message.author.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) |  |
 |  [content](./client.message.content.md) |  | string |  |
-|  [conversation](./client.message.conversation.md) | <code>readonly</code> | [Conversation](./client.conversation.md) \| [Message](./client.message.md)<!-- -->\['\_conversation'\] | Get conversation DTO, conversation identifier if not available |
+|  [context](./client.message.context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
+|  [conversation](./client.message.conversation.md) | <code>readonly</code> | [Conversation](./client.conversation.md) |  |
 |  [createdAt](./client.message.createdat.md) | <code>readonly</code> | Date |  |
 |  [flag](./client.message.flag.md) |  | number |  |
 |  [id](./client.message.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'message.id'; } |  |
 |  [updatedAt](./client.message.updatedat.md) |  | Date |  |
-
-## Methods
-
-|  Method | Modifiers | Description |
-|  --- | --- | --- |
-|  [delete()](./client.message.delete.md) |  | Delete the message |
-|  [isSelfMessageAuthor(strict)](./client.message.isselfmessageauthor.md) |  | Check if current user is the message author |
-|  [requestElevationToAuthor(strict)](./client.message.requestelevationtoauthor.md) |  | Throw an error if current user is not the message author |
 

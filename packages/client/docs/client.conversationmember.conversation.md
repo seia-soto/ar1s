@@ -4,10 +4,8 @@
 
 ## ConversationMember.conversation property
 
-Get conversation DTO, conversation identifier if not available
-
 **Signature:**
 
 ```typescript
-get conversation(): Conversation | ConversationMember['_conversation'];
+readonly conversation: Conversation;
 ```

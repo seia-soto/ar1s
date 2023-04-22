@@ -4,10 +4,8 @@
 
 ## Message.conversation property
 
-Get conversation DTO, conversation identifier if not available
-
 **Signature:**
 
 ```typescript
-get conversation(): Conversation | Message['_conversation'];
+readonly conversation: Conversation;
 ```

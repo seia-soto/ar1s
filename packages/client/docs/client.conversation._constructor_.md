@@ -9,13 +9,13 @@ Constructs a new instance of the `Conversation` class
 **Signature:**
 
 ```typescript
-constructor(_context: Aris, params: ConversationReflection);
+constructor(context: Aris, conversationRef: ConversationReflection);
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  \_context | [Aris](./client.aris.md) |  |
-|  params | [ConversationReflection](./client.conversationreflection.md) |  |
+|  context | [Aris](./client.aris.md) |  |
+|  conversationRef | [ConversationReflection](./client.conversationreflection.md) |  |
 

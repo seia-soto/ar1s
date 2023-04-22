@@ -5,65 +5,41 @@
 ```ts
 
 import ky from 'ky';
-import { KyInstance } from 'ky/distribution/types/ky.js';
 
 // @public
 export class Aris {
-    constructor(fetcher: typeof ky);
-    bootstrap(params: {
-        platformInviteIdentifier: Platform['inviteIdentifier'];
-        platformDisplayName: Platform['displayName'];
-        platformToken: string;
-        userUsername: User['username'];
-        userPassword: string;
-    }): Promise<this>;
-    // (undocumented)
-    conversationMembers: Collection<ConversationMember>;
-    // (undocumented)
-    conversations: Collection<Conversation>;
-    // (undocumented)
-    static createFetcher(baseUrl: string): KyInstance;
+    constructor(prefixUrl: string);
+    bootstrap(platform: {
+        inviteIdentifier: Platform['inviteIdentifier'];
+        displayName: Platform['displayName'];
+        token: string;
+    }, user: {
+        username: User['username'];
+        password: string;
+    }): Promise<void>;
     // (undocumented)
     readonly fetcher: typeof ky;
     isBootstrapRequired(): Promise<boolean>;
     // (undocumented)
-    platform?: Platform;
-    pull(): Promise<false | this>;
+    readonly prefixUrl: string;
+    signIn(username: User['username'], password: string, isTrustedEnvironment: boolean): Promise<boolean>;
+    signOut(): Promise<void>;
+    sync(): Promise<void>;
     // (undocumented)
     user?: User;
     // (undocumented)
-    users: Collection<User>;
+    get userRequired(): User;
 }
 
 // Warning: (ae-forgotten-export) The symbol "Context" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
-export class Collection<T extends Context> {
-    // (undocumented)
-    add(entry: T): boolean;
-    // (undocumented)
-    del(index: EnumerableIndex): boolean;
-    // (undocumented)
-    get(index: EnumerableIndex): T;
-    // Warning: (ae-forgotten-export) The symbol "EnumerableIndex" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
-    map: Record<EnumerableIndex, T>;
-    // (undocumented)
-    values(): T[];
-}
-
 // @public
 export class Conversation extends Context {
-    constructor(_context: Aris, params: ConversationReflection);
+    constructor(context: Aris, conversationRef: ConversationReflection);
     // (undocumented)
-    readonly _context: Aris;
+    readonly context: Aris;
     // (undocumented)
     readonly createdAt: Date;
-    createMember(userId: User['id']): Promise<ConversationMember>;
-    createMessage(content: string): Promise<void>;
-    deleteMember(memberId: ConversationMember['id']): Promise<void>;
-    deleteMessage(messageId: Message['id']): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
     // (undocumented)
@@ -74,34 +50,41 @@ export class Conversation extends Context {
     readonly id: number & {
         __type: 'conversation.id';
     };
-    isSelfConversationOwner(): boolean;
     // (undocumented)
-    members: Collection<ConversationMember>;
+    get isOwnedByCurrentUser(): boolean;
     // (undocumented)
-    messages: Series<Message>;
+    members?: ConversationMember[];
+    // (undocumented)
+    get membersRequired(): ConversationMember[];
+    // (undocumented)
+    messages?: Series<Message>;
+    // (undocumented)
+    get messagesRequired(): Series<Message>;
     // (undocumented)
     readonly model: string;
-    get profile(): ConversationMember | undefined;
-    pull(): Promise<this>;
-    pullMembers(): Promise<this>;
-    pullMessages(size?: number, before?: Message['id']): Promise<this>;
-    requestElevationToConversationOwner(): void;
+    // (undocumented)
+    profile?: ConversationMember;
+    // (undocumented)
+    get profileRequired(): ConversationMember;
+    sync(): Promise<void>;
+    syncMembers(): Promise<void>;
+    syncMessages(): Promise<void>;
     // (undocumented)
     readonly systemMessage: string;
-    update(params: ConversationReflection): this;
+    update(params: ConversationReflection): void;
     // (undocumented)
     updatedAt: Date;
 }
 
 // @public
 export class ConversationMember extends Context {
-    constructor(_context: Aris, params: ConversationMemberReflection);
+    constructor(context: Aris, conversation: Conversation, params: ConversationMemberReflection);
     // (undocumented)
-    readonly _context: Aris;
-    get conversation(): Conversation | ConversationMember['_conversation'];
+    readonly context: Aris;
+    // (undocumented)
+    readonly conversation: Conversation;
     // (undocumented)
     readonly createdAt: Date;
-    delete(): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;
     // (undocumented)
@@ -115,8 +98,9 @@ export class ConversationMember extends Context {
         __type: 'conversationMember.id';
     };
     // (undocumented)
+    get isThisMemberCurrentUser(): boolean;
+    // (undocumented)
     updatedAt: Date;
-    get user(): User | ConversationMember['_user'];
 }
 
 // @public (undocumented)
@@ -148,24 +132,23 @@ export type ConversationReflection = {
 
 // @public
 export class Message extends Context {
-    constructor(_context: Aris, params: MessageReflection);
-    get author(): ConversationMember | Message['_author'];
+    constructor(context: Aris, conversation: Conversation, author: ConversationMember, params: MessageReflection);
+    // (undocumented)
+    readonly author: ConversationMember;
     // (undocumented)
     content: string;
     // (undocumented)
-    readonly _context: Aris;
-    get conversation(): Conversation | Message['_conversation'];
+    readonly context: Aris;
+    // (undocumented)
+    readonly conversation: Conversation;
     // (undocumented)
     readonly createdAt: Date;
-    delete(): Promise<void>;
     // (undocumented)
     flag: number;
     // (undocumented)
     readonly id: number & {
         __type: 'message.id';
     };
-    isSelfMessageAuthor(strict?: boolean): boolean;
-    requestElevationToAuthor(strict?: boolean): void;
     // (undocumented)
     updatedAt: Date;
 }
@@ -192,44 +175,22 @@ export class Platform extends Context {
     constructor(context: Aris, params: PlatformReflection);
     // (undocumented)
     readonly createdAt: Date;
-    createUser(username: User['username'], password: string): Promise<User>;
-    delete(): Promise<void>;
-    deleteUser(username: User['username']): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
     // (undocumented)
     displayName: string;
     // (undocumented)
     flag: number;
-    static from(context: Aris, inviteIdentifier?: Platform['inviteIdentifier']): Promise<Platform>;
     // (undocumented)
     readonly id: number & {
         __type: 'platform.id';
     };
     // (undocumented)
     readonly inviteIdentifier: string;
-    isSelfMemberOfPlatform(): boolean;
-    isSelfPlatformManager(): boolean;
-    pull(): Promise<this>;
-    pullUsers(): Promise<this>;
-    pushDisplayParams(params: {
-        displayName?: Platform['displayName'];
-        displayImageUrl?: Platform['displayImageUrl'];
-    }): Promise<this>;
-    pushOpt(params: {
-        isSignUpDisabled: boolean;
-    }): Promise<this>;
-    requestElevationToPlatformManager(): void;
-    requestElevationToPlatformMember(): void;
-    static self(context: Aris): Promise<Platform>;
-    signIn(username: string, password: string, isTrustedEnvironment: boolean): Promise<this>;
-    signOut(): Promise<this>;
-    signUp(username: string, password: string): Promise<this>;
-    update(params: PlatformReflection): this;
+    sync(): Promise<void>;
+    update(params: PlatformReflection): void;
     // (undocumented)
     updatedAt: Date;
-    // (undocumented)
-    users: Collection<User>;
     static validate(params: PlatformReflection): void;
 }
 
@@ -245,7 +206,7 @@ export type PlatformReflection = {
 };
 
 // @public (undocumented)
-export class Series<T extends Context> extends Collection<T> {
+export class Series<T extends Context> {
     constructor(threshold?: number);
     // (undocumented)
     add(entry: T): boolean;
@@ -253,6 +214,10 @@ export class Series<T extends Context> extends Collection<T> {
     arr: T[];
     // (undocumented)
     del(index: EnumerableIndex): boolean;
+    // Warning: (ae-forgotten-export) The symbol "EnumerableIndex" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    map: Record<EnumerableIndex, T>;
     // (undocumented)
     pop(): void;
     // (undocumented)
@@ -265,17 +230,13 @@ export class Series<T extends Context> extends Collection<T> {
 
 // @public
 export class User extends Context {
-    constructor(context: Aris, params: UserReflection);
+    constructor(context: Aris, userRef: UserReflection, platform: Platform);
     // (undocumented)
-    conversations: Collection<Conversation>;
-    createConversation(params: {
-        model: Conversation['model'];
-        systemMessage: Conversation['systemMessage'];
-        displayName: Conversation['displayName'];
-    }): Promise<Conversation>;
+    conversations?: Conversation[];
+    // (undocumented)
+    get conversationsRequired(): Conversation[];
     // (undocumented)
     readonly createdAt: Date;
-    delete(): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;
     // (undocumented)
@@ -288,18 +249,11 @@ export class User extends Context {
     readonly id: number & {
         __type: 'user.id';
     };
-    isSelfProfile(): boolean;
-    pull(): Promise<this>;
-    pullConversations(): Promise<this>;
-    pushDisplayParams(params: {
-        displayName?: User['displayName'];
-        displayBio?: User['displayBio'];
-        displayAvatarUrl?: User['displayAvatarUrl'];
-    }): Promise<this>;
-    pushPassword(currentPassword: string, newPassword: string): Promise<this>;
-    requestElevationToSelfProfile(): void;
-    static self(context: Aris): Promise<User>;
-    update(params: UserReflection): this;
+    // (undocumented)
+    readonly platform: Platform;
+    // (undocumented)
+    syncConversations(): Promise<void>;
+    update(params: UserReflection): void;
     // (undocumented)
     updatedAt: Date;
     // (undocumented)

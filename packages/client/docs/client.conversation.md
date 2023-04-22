@@ -17,22 +17,26 @@ export declare class Conversation extends Context
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(\_context, params)](./client.conversation._constructor_.md) |  | Constructs a new instance of the <code>Conversation</code> class |
+|  [(constructor)(context, conversationRef)](./client.conversation._constructor_.md) |  | Constructs a new instance of the <code>Conversation</code> class |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_context](./client.conversation._context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
+|  [context](./client.conversation.context.md) | <code>readonly</code> | [Aris](./client.aris.md) |  |
 |  [createdAt](./client.conversation.createdat.md) | <code>readonly</code> | Date |  |
 |  [displayImageUrl](./client.conversation.displayimageurl.md) |  | string |  |
 |  [displayName](./client.conversation.displayname.md) |  | string |  |
 |  [flag](./client.conversation.flag.md) |  | number |  |
 |  [id](./client.conversation.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'conversation.id'; } |  |
-|  [members](./client.conversation.members.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
-|  [messages](./client.conversation.messages.md) |  | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; |  |
+|  [isOwnedByCurrentUser](./client.conversation.isownedbycurrentuser.md) | <code>readonly</code> | boolean |  |
+|  [members?](./client.conversation.members.md) |  | [ConversationMember](./client.conversationmember.md)<!-- -->\[\] | _(Optional)_ |
+|  [membersRequired](./client.conversation.membersrequired.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md)<!-- -->\[\] |  |
+|  [messages?](./client.conversation.messages.md) |  | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; | _(Optional)_ |
+|  [messagesRequired](./client.conversation.messagesrequired.md) | <code>readonly</code> | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; |  |
 |  [model](./client.conversation.model.md) | <code>readonly</code> | string |  |
-|  [profile](./client.conversation.profile.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) \| undefined | Get the profile of current user from the conversation members |
+|  [profile?](./client.conversation.profile.md) |  | [ConversationMember](./client.conversationmember.md) | _(Optional)_ |
+|  [profileRequired](./client.conversation.profilerequired.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md) |  |
 |  [systemMessage](./client.conversation.systemmessage.md) | <code>readonly</code> | string |  |
 |  [updatedAt](./client.conversation.updatedat.md) |  | Date |  |
 
@@ -40,14 +44,8 @@ export declare class Conversation extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
-|  [createMember(userId)](./client.conversation.createmember.md) |  | Add a user to this conversation (requires <code>ConversationMemberFlags.IsOwner</code>) |
-|  [createMessage(content)](./client.conversation.createmessage.md) |  | Send a message to the conversation |
-|  [deleteMember(memberId)](./client.conversation.deletemember.md) |  | Delete the member from this conversation (requires <code>ConversationMemberFlags.IsOwner</code>) |
-|  [deleteMessage(messageId)](./client.conversation.deletemessage.md) |  | Delete the message |
-|  [isSelfConversationOwner()](./client.conversation.isselfconversationowner.md) |  | Check if the user is the owner of this conversation |
-|  [pull()](./client.conversation.pull.md) |  | Pull everything under this data type object |
-|  [pullMembers()](./client.conversation.pullmembers.md) |  | Pull available conversation members of conversation from the server |
-|  [pullMessages(size, before)](./client.conversation.pullmessages.md) |  | Pull available messages of conversation from the server |
-|  [requestElevationToConversationOwner()](./client.conversation.requestelevationtoconversationowner.md) |  | Throw an error if current user is not the owner of this conversation |
+|  [sync()](./client.conversation.sync.md) |  | Sync current conversation |
+|  [syncMembers()](./client.conversation.syncmembers.md) |  | Sync members of current conversation |
+|  [syncMessages()](./client.conversation.syncmessages.md) |  | Sync messages of current conversation |
 |  [update(params)](./client.conversation.update.md) |  | Update data depends on reflection object |
 

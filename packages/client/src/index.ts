@@ -1,10 +1,14 @@
 import ky from 'ky';
-import {Collection, Series} from './specs/_context.js';
-import {Conversation, type ConversationReflection} from './specs/conversation.js';
-import {ConversationMember, type ConversationMemberReflection} from './specs/conversationMember.js';
-import {Message, type MessageReflection} from './specs/message.js';
-import {Platform, type PlatformReflection} from './specs/platform.js';
-import {User, type UserReflection} from './specs/user.js';
+import {bootstrap, isBootstrapRequired} from './apis/bootstrap.js';
+import {getCurrentPlatform} from './apis/platform.js';
+import {getCurrentUser, signIn, signOut} from './apis/user.js';
+import {NoEntityErrorCodes, useNoEntityError} from './error.js';
+import {Series} from './models/aacontext.js';
+import {Conversation, type ConversationReflection} from './models/conversation.js';
+import {ConversationMember, type ConversationMemberReflection} from './models/conversationMember.js';
+import {Message, type MessageReflection} from './models/message.js';
+import {Platform, type PlatformReflection} from './models/platform.js';
+import {User, type UserReflection} from './models/user.js';
 
 type Options = {
 	fetcher: typeof ky;
@@ -14,41 +18,51 @@ type Options = {
  * The Ar1s client
  */
 class Aris {
-	public static createFetcher(baseUrl: string) {
-		return ky.extend({
-			prefixUrl: baseUrl,
-		});
-	}
-
-	users = new Collection<User>();
-	conversations = new Collection<Conversation>();
-	conversationMembers = new Collection<ConversationMember>();
-
-	platform?: Platform;
+	readonly fetcher: typeof ky;
 	user?: User;
 
-	/**
-	 * @param fetcher The `ky` instance. You should create an extended fetcher that matches backend url
-	 */
 	constructor(
-		readonly fetcher: typeof ky,
-	) {}
+		readonly prefixUrl: string,
+	) {
+		this.fetcher = ky.extend({prefixUrl});
+	}
+
+	get userRequired() {
+		if (!this.user) {
+			throw useNoEntityError(NoEntityErrorCodes.User);
+		}
+
+		return this.user;
+	}
 
 	/**
-	 * Pull the user data and platform data to intialize
-	 * @returns False if not signed in, otherwise this (truthy value)
+	 * Sync current session
 	 */
-	async pull() {
-		try {
-			this.user = await User.self(this);
-			this.platform = await Platform.self(this);
+	async sync() {
+		const user = await getCurrentUser(this.fetcher);
+		const platform = new Platform(this, await getCurrentPlatform(this.fetcher));
 
-			return this;
-		} catch (error) {
-			console.error(error);
+		this.user = new User(this, user, platform);
+	}
 
-			return false;
-		}
+	/**
+	 * Sign in
+	 * @param username The username
+	 * @param password The password
+	 * @param isTrustedEnvironment True if you want to be signed in longer
+	 * @returns True if signed in
+	 */
+	async signIn(username: User['username'], password: string, isTrustedEnvironment: boolean) {
+		return signIn(this.fetcher, username, password, isTrustedEnvironment);
+	}
+
+	/**
+	 * Sign out
+	 */
+	async signOut() {
+		await signOut(this.fetcher);
+
+		delete this.user;
 	}
 
 	/**
@@ -56,16 +70,7 @@ class Aris {
 	 * @returns True if an instance has not been bootstrapped
 	 */
 	async isBootstrapRequired() {
-		const platform = await Platform.from(this)
-			.catch(_error => false as const);
-
-		if (!platform) {
-			return true;
-		}
-
-		this.platform = platform;
-
-		return false;
+		return isBootstrapRequired(this.fetcher);
 	}
 
 	/**
@@ -73,29 +78,18 @@ class Aris {
 	 * @param params Bootstrap params
 	 * @returns this
 	 */
-	async bootstrap(params: {
-		platformInviteIdentifier: Platform['inviteIdentifier'];
-		platformDisplayName: Platform['displayName'];
-		platformToken: string;
-		userUsername: User['username'];
-		userPassword: string;
-	}) {
-		await this.fetcher('bootstrap', {
-			method: 'post',
-			json: {
-				platform: {
-					inviteIdentifier: params.platformInviteIdentifier,
-					displayName: params.platformDisplayName,
-					token: params.platformToken,
-				},
-				user: {
-					username: params.userUsername,
-					password: params.userPassword,
-				},
-			},
-		});
-
-		return this;
+	async bootstrap(
+		platform: {
+			inviteIdentifier: Platform['inviteIdentifier'];
+			displayName: Platform['displayName'];
+			token: string;
+		},
+		user: {
+			username: User['username'];
+			password: string;
+		},
+	) {
+		await bootstrap(this.fetcher, platform, user);
 	}
 }
 
@@ -115,6 +109,5 @@ export {
 	type UserReflection,
 	Message,
 	type MessageReflection,
-	Collection,
 	Series,
 };
