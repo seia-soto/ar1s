@@ -30,8 +30,8 @@ export declare class Conversation extends Context
 |  [flag](./client.conversation.flag.md) |  | number |  |
 |  [id](./client.conversation.id.md) | <code>readonly</code> | number &amp; { \_\_type: 'conversation.id'; } |  |
 |  [isOwnedByCurrentUser](./client.conversation.isownedbycurrentuser.md) | <code>readonly</code> | boolean |  |
-|  [members?](./client.conversation.members.md) |  | [ConversationMember](./client.conversationmember.md)<!-- -->\[\] | _(Optional)_ |
-|  [membersRequired](./client.conversation.membersrequired.md) | <code>readonly</code> | [ConversationMember](./client.conversationmember.md)<!-- -->\[\] |  |
+|  [members?](./client.conversation.members.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; | _(Optional)_ |
+|  [membersRequired](./client.conversation.membersrequired.md) | <code>readonly</code> | [Collection](./client.collection.md)<!-- -->&lt;[ConversationMember](./client.conversationmember.md)<!-- -->&gt; |  |
 |  [messages?](./client.conversation.messages.md) |  | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; | _(Optional)_ |
 |  [messagesRequired](./client.conversation.messagesrequired.md) | <code>readonly</code> | [Series](./client.series.md)<!-- -->&lt;[Message](./client.message.md)<!-- -->&gt; |  |
 |  [model](./client.conversation.model.md) | <code>readonly</code> | string |  |

@@ -3,7 +3,7 @@ import {bootstrap, isBootstrapRequired} from './apis/bootstrap.js';
 import {getCurrentPlatform} from './apis/platform.js';
 import {getCurrentUser, signIn, signOut} from './apis/user.js';
 import {NoEntityErrorCodes, useNoEntityError} from './error.js';
-import {Series} from './models/aacontext.js';
+import {Collection, Series} from './models/aacontext.js';
 import {Conversation, type ConversationReflection} from './models/conversation.js';
 import {ConversationMember, type ConversationMemberReflection} from './models/conversationMember.js';
 import {Message, type MessageReflection} from './models/message.js';
@@ -110,4 +110,5 @@ export {
 	Message,
 	type MessageReflection,
 	Series,
+	Collection,
 };

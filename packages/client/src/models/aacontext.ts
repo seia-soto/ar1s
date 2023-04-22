@@ -12,6 +12,31 @@ export class Context {
 	) {}
 }
 
+export class Collection<T extends Context> {
+	private readonly map: Record<EnumerableIndex, T> = {};
+
+	get(index: EnumerableIndex) {
+		return this.map[index];
+	}
+
+	set(entity: T) {
+		this.map[entity.enumerable] = entity;
+	}
+
+	delete(index: EnumerableIndex) {
+		// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+		delete this.map[index];
+	}
+
+	keys() {
+		return Object.values(this.map);
+	}
+
+	values() {
+		return Object.values(this.map);
+	}
+}
+
 export class Series<T extends Context> {
 	map: Record<EnumerableIndex, T> = {};
 	arr: T[] = [];

@@ -7,5 +7,5 @@
 **Signature:**
 
 ```typescript
-get conversationsRequired(): Conversation[];
+get conversationsRequired(): Collection<Conversation>;
 ```

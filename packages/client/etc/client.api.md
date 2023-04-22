@@ -33,6 +33,22 @@ export class Aris {
 
 // Warning: (ae-forgotten-export) The symbol "Context" needs to be exported by the entry point index.d.ts
 //
+// @public (undocumented)
+export class Collection<T extends Context> {
+    // (undocumented)
+    delete(index: EnumerableIndex): void;
+    // Warning: (ae-forgotten-export) The symbol "EnumerableIndex" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    get(index: EnumerableIndex): T;
+    // (undocumented)
+    keys(): T[];
+    // (undocumented)
+    set(entity: T): void;
+    // (undocumented)
+    values(): T[];
+}
+
 // @public
 export class Conversation extends Context {
     constructor(context: Aris, conversationRef: ConversationReflection);
@@ -53,9 +69,9 @@ export class Conversation extends Context {
     // (undocumented)
     get isOwnedByCurrentUser(): boolean;
     // (undocumented)
-    members?: ConversationMember[];
+    members?: Collection<ConversationMember>;
     // (undocumented)
-    get membersRequired(): ConversationMember[];
+    get membersRequired(): Collection<ConversationMember>;
     // (undocumented)
     messages?: Series<Message>;
     // (undocumented)
@@ -214,8 +230,6 @@ export class Series<T extends Context> {
     arr: T[];
     // (undocumented)
     del(index: EnumerableIndex): boolean;
-    // Warning: (ae-forgotten-export) The symbol "EnumerableIndex" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
     map: Record<EnumerableIndex, T>;
     // (undocumented)
@@ -232,9 +246,9 @@ export class Series<T extends Context> {
 export class User extends Context {
     constructor(context: Aris, userRef: UserReflection, platform: Platform);
     // (undocumented)
-    conversations?: Conversation[];
+    conversations?: Collection<Conversation>;
     // (undocumented)
-    get conversationsRequired(): Conversation[];
+    get conversationsRequired(): Collection<Conversation>;
     // (undocumented)
     createConversation(model: string, systemMessage: string, displayName: string): Promise<Conversation>;
     // (undocumented)

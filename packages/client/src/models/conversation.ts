@@ -5,7 +5,7 @@ import {getConversationMembers} from '../apis/conversationMember.js';
 import {getMessages} from '../apis/message.js';
 import {NoEntityErrorCodes, useNoEntityError} from '../error.js';
 import {type Aris, type Platform} from '../index.js';
-import {Context, Series} from './aacontext.js';
+import {Collection, Context, Series} from './aacontext.js';
 import {ConversationMember} from './conversationMember.js';
 import {Message} from './message.js';
 
@@ -34,7 +34,7 @@ export class Conversation extends Context {
 	readonly createdAt: Date;
 	updatedAt: Date;
 
-	members?: ConversationMember[];
+	members?: Collection<ConversationMember>;
 	profile?: ConversationMember;
 	messages?: Series<Message>;
 
@@ -108,9 +108,19 @@ export class Conversation extends Context {
 	async syncMembers() {
 		const memberRefs = await getConversationMembers(this.context.fetcher, this.id);
 
-		this.members = memberRefs.map(memberRef => new ConversationMember(this.context, this, memberRef));
+		let profile: ConversationMember | undefined;
 
-		const profile = this.members.find(member => member.isThisMemberCurrentUser);
+		this.members ??= new Collection();
+
+		for (const memberRef of memberRefs) {
+			const member = new ConversationMember(this.context, this, memberRef);
+
+			if (member.isThisMemberCurrentUser) {
+				profile = member;
+			}
+
+			this.members.set(member);
+		}
 
 		if (!profile) {
 			throw useNoEntityError(NoEntityErrorCodes.ConversationMemberProfile);

@@ -4,7 +4,7 @@ import {createConversation, getConversations} from '../apis/conversation.js';
 import {NoEntityErrorCodes, useFormatError, useNoEntityError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
-import {Context} from './aacontext.js';
+import {Collection, Context} from './aacontext.js';
 import {Conversation} from './conversation.js';
 import {type Platform, type PlatformReflection} from './platform.js';
 
@@ -51,7 +51,7 @@ export class User extends Context {
 	readonly createdAt: Date;
 	updatedAt: Date;
 
-	conversations?: Conversation[];
+	conversations?: Collection<Conversation>;
 
 	constructor(
 		context: Aris,
@@ -99,14 +99,22 @@ export class User extends Context {
 	async syncConversations() {
 		const conversationRefs = await getConversations(this.context.fetcher);
 
-		this.conversations = conversationRefs.map(conversationRef => new Conversation(this.context, conversationRef));
+		this.conversations ??= new Collection();
+
+		for (const conversationRef of conversationRefs) {
+			const conversation = new Conversation(this.context, conversationRef);
+
+			this.conversations.set(conversation);
+		}
 	}
 
 	async createConversation(model: string, systemMessage: string, displayName: string) {
 		const conversationRef = await createConversation(this.context.fetcher, model, systemMessage, displayName);
 		const conversation = new Conversation(this.context, conversationRef);
 
-		this.conversations ??= [conversation];
+		this.conversations ??= new Collection();
+
+		this.conversations.set(conversation);
 
 		return conversation;
 	}

@@ -9,6 +9,7 @@
 |  Class | Description |
 |  --- | --- |
 |  [Aris](./client.aris.md) | The Ar1s client |
+|  [Collection](./client.collection.md) |  |
 |  [Conversation](./client.conversation.md) | Conversation instance |
 |  [ConversationMember](./client.conversationmember.md) | Conversation member instance |
 |  [Message](./client.message.md) | Message instance |

@@ -23,8 +23,8 @@ export declare class User extends Context
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [conversations?](./client.user.conversations.md) |  | [Conversation](./client.conversation.md)<!-- -->\[\] | _(Optional)_ |
-|  [conversationsRequired](./client.user.conversationsrequired.md) | <code>readonly</code> | [Conversation](./client.conversation.md)<!-- -->\[\] |  |
+|  [conversations?](./client.user.conversations.md) |  | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; | _(Optional)_ |
+|  [conversationsRequired](./client.user.conversationsrequired.md) | <code>readonly</code> | [Collection](./client.collection.md)<!-- -->&lt;[Conversation](./client.conversation.md)<!-- -->&gt; |  |
 |  [createdAt](./client.user.createdat.md) | <code>readonly</code> | Date |  |
 |  [displayAvatarUrl](./client.user.displayavatarurl.md) |  | string |  |
 |  [displayBio](./client.user.displaybio.md) |  | string |  |
