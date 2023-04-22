@@ -1,6 +1,6 @@
 import ky from 'ky';
 import {bootstrap, isBootstrapRequired} from './apis/bootstrap.js';
-import {getCurrentPlatform} from './apis/platform.js';
+import {getCurrentPlatform, getDefaultPlatform, getInvitedPlatform} from './apis/platform.js';
 import {getCurrentUser, signIn, signOut} from './apis/user.js';
 import {NoEntityErrorCodes, useNoEntityError} from './error.js';
 import {Collection, Series} from './models/aacontext.js';
@@ -90,6 +90,19 @@ class Aris {
 		},
 	) {
 		await bootstrap(this.fetcher, platform, user);
+	}
+
+	/**
+	 * Get platform
+	 * @param invite The platform invite identifier
+	 * @returns Platform object
+	 */
+	async getPlatform(invite?: Platform['inviteIdentifier']) {
+		const platformRef = invite ? getInvitedPlatform(this.fetcher, invite) : getDefaultPlatform(this.fetcher);
+
+		const platform = new Platform(this, await platformRef);
+
+		return platform;
 	}
 }
 

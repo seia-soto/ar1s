@@ -19,6 +19,7 @@ export class Aris {
     }): Promise<void>;
     // (undocumented)
     readonly fetcher: typeof ky;
+    getPlatform(invite?: Platform['inviteIdentifier']): Promise<Platform>;
     isBootstrapRequired(): Promise<boolean>;
     // (undocumented)
     readonly prefixUrl: string;
