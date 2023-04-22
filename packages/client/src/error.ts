@@ -48,6 +48,7 @@ class PermissionError extends Error {
 }
 
 export const enum PermissionErrorCodes {
+	PlatformManager = '`platform` is not controllable; The platform is not managed by current user!',
 	ConversationOwner = '`conversation` is not controllable; The conversation is not owned by current user!',
 }
 

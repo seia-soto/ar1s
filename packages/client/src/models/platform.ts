@@ -1,10 +1,12 @@
 import {PlatformFormats} from '@ar1s/spec/out/platform.js';
+import {UserFlags} from '@ar1s/spec/out/user.js';
+import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {Type} from '@sinclair/typebox';
+import {getCurrentPlatform} from '../apis/platform.js';
 import {useFormatError} from '../error.js';
 import {type Aris} from '../index.js';
 import {createCompiledType} from '../utils.js';
 import {Context} from './aacontext.js';
-import {getCurrentPlatform} from '../apis/platform.js';
 
 export const checkInvite = createCompiledType(Type.String({
 	format: PlatformFormats.InviteIdentifier,
@@ -81,5 +83,9 @@ export class Platform extends Context {
 		const platformRef = await getCurrentPlatform(this.context.fetcher);
 
 		this.update(platformRef);
+	}
+
+	get isManagedByCurrentUser() {
+		return hasFlag(this.context.userRequired.flag, compileBit(UserFlags.PlatformManager));
 	}
 }
