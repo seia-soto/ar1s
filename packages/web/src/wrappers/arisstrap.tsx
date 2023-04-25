@@ -16,7 +16,11 @@ export function Arisstrap(props: PropsWithChildren) {
 
 	useEffect(() => {
 		const effect = async () => {
-			await aris.pull();
+			await (async () => {
+				await aris.sync();
+				await aris.userRequired.sync();
+			})()
+				.catch(_error => false as const);
 
 			setInitiated(true);
 		};

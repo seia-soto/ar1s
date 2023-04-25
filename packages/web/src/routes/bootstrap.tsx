@@ -3,7 +3,10 @@ import {useForm} from 'react-hook-form';
 import {useLocation} from 'wouter';
 import {aris} from '../modules/aris';
 
-type FieldValues = Parameters<typeof aris['bootstrap']>[0];
+type FieldValues = {
+	platform: Parameters<typeof aris['bootstrap']>[0];
+	user: Parameters<typeof aris['bootstrap']>[1];
+};
 
 function Bootstrap() {
 	const {handleSubmit, register} = useForm<FieldValues>();
@@ -18,7 +21,7 @@ function Bootstrap() {
 
 		setBootstrapping(true);
 
-		await aris.bootstrap(fields)
+		await aris.bootstrap(fields.platform, fields.user)
 			.catch(error => {
 				console.error(error);
 
@@ -34,27 +37,27 @@ function Bootstrap() {
 
 			<form onSubmit={onSubmit}>
 				<label>
-					Platform invite identifier: <input type='text' {...register('platformInviteIdentifier')} />
+					Platform invite identifier: <input type='text' {...register('platform.inviteIdentifier')} />
 				</label>
 				<br />
 
 				<label>
-					Platform display name: <input type='text' {...register('platformDisplayName')} />
+					Platform display name: <input type='text' {...register('platform.displayName')} />
 				</label>
 				<br />
 
 				<label>
-					Platform token: <input type='password' {...register('platformToken')} />
+					Platform token: <input type='password' {...register('platform.token')} />
 				</label>
 				<br />
 
 				<label>
-					Username: <input type='text' {...register('userUsername')} />
+					Username: <input type='text' {...register('user.username')} />
 				</label>
 				<br />
 
 				<label>
-					Password: <input type='password' {...register('userPassword')} />
+					Password: <input type='password' {...register('user.password')} />
 				</label>
 				<br />
 

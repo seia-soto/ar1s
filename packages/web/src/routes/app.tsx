@@ -2,11 +2,8 @@ import Conversations from '../components/conversations';
 import {aris} from '../modules/aris';
 
 function App() {
-	const user = aris.user!;
-	const platform = aris.platform!;
-
 	const handleSignOut = async () => {
-		await platform.signOut();
+		await aris.signOut();
 
 		window.location.reload();
 	};
@@ -17,9 +14,9 @@ function App() {
 			<button onClick={handleSignOut}>Sign out!</button>
 
 			<ul>
-				<li>Account: {user.username}</li>
-				<li>Username: {user.displayName}</li>
-				<li>Joined at: {user.createdAt.toLocaleDateString()}</li>
+				<li>Account: {aris.userRequired.username}</li>
+				<li>Username: {aris.userRequired.displayName}</li>
+				<li>Joined at: {aris.userRequired.createdAt.toLocaleDateString()}</li>
 			</ul>
 
 			<Conversations />

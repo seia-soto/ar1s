@@ -1,6 +1,7 @@
+import {type Conversation} from '@ar1s/client';
 import {useEffect} from 'react';
 import {useForm} from 'react-hook-form';
-import {useSyncedCollection} from '../hooks/collection';
+import {useRender} from '../hooks/render';
 import {aris} from '../modules/aris';
 
 type FieldValues = {
@@ -10,22 +11,40 @@ type FieldValues = {
 };
 
 function Conversations() {
-	const user = aris.user!;
-	const conversations = useSyncedCollection(user.conversations);
-
+	const render = useRender();
 	const {handleSubmit, register} = useForm<FieldValues>();
 
 	useEffect(() => {
 		(async () => {
-			if (!user.conversations.values().length) {
-				await user.pull();
+			if (!aris.userRequired.conversations) {
+				await aris.userRequired.syncConversations();
 			}
+
+			render();
 		})();
-	}, [user.conversations.map]);
+	}, []);
 
 	const handleCreateConversation = handleSubmit(async values => {
-		await user.createConversation(values);
+		await aris.userRequired.createConversation(values.model, values.systemMessage, values.displayName);
+
+		render();
 	});
+
+	const handleDeleteConversation = (conversation: Conversation) => async () => {
+		await conversation.syncMembers();
+		await conversation.delete();
+
+		render();
+	};
+
+	if (typeof aris.userRequired.conversations === 'undefined') {
+		return (
+			<>
+				<h2>Conversations</h2>
+				<p>Loading...</p>
+			</>
+		);
+	}
 
 	return (
 		<>
@@ -54,8 +73,11 @@ function Conversations() {
 			<h3>Listings</h3>
 			<ol>
 				{
-					conversations.values().map(conversation => (
-						<li key={conversation.id}>{conversation.displayName}</li>
+					aris.userRequired.conversationsRequired.values().map(conversation => (
+						<li key={conversation.id}>
+							<p>{conversation.displayName}</p>
+							<button onClick={handleDeleteConversation(conversation)}>Delete this</button>
+						</li>
 					))
 				}
 			</ol>

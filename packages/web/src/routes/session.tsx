@@ -1,4 +1,3 @@
-import {Platform} from '@ar1s/client';
 import {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {useLocation} from 'wouter';
@@ -23,15 +22,11 @@ function Session() {
 
 		setSigningIn(true);
 
-		const platform = await Platform.from(aris);
-		const isSucceed = await platform.signIn(fields.username, fields.password, fields.isTrustedEnvironment)
-			.catch(error => {
-				console.error(error);
-
-				return false as const;
-			});
+		const isSucceed = await aris.signIn(fields.username, fields.password, fields.isTrustedEnvironment);
 
 		if (isSucceed) {
+			await aris.sync();
+
 			setLocation('/app');
 		}
 
