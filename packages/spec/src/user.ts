@@ -13,7 +13,7 @@ export enum UserFormats {
 }
 
 export const formatUsername = (value: string) => (
-	!/[^a-z\d]/.test(value)
+	!/[^a-zA-Z0-9]/.test(value)
   && value.length >= 1
   && value.length <= 16
 );
@@ -22,7 +22,7 @@ export const formatUsername = (value: string) => (
 TypeSystem.Format(UserFormats.Username, formatUsername);
 
 export const formatPassword = (value: string) => (
-	value.length > 16
+	value.length > 12
   && value.length < 512
 );
 
