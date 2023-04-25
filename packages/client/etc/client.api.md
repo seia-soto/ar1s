@@ -53,6 +53,7 @@ export class Collection<T extends Context> {
 // @public
 export class Conversation extends Context {
     constructor(context: Aris, conversationRef: ConversationReflection);
+    addMember(userId: User['id']): Promise<ConversationMember>;
     // (undocumented)
     readonly context: Aris;
     // (undocumented)
@@ -84,6 +85,7 @@ export class Conversation extends Context {
     profile?: ConversationMember;
     // (undocumented)
     get profileRequired(): ConversationMember;
+    removeMember(memberId: ConversationMember['id']): Promise<void>;
     sync(): Promise<void>;
     syncMembers(): Promise<void>;
     syncMessages(): Promise<void>;
@@ -103,6 +105,7 @@ export class ConversationMember extends Context {
     readonly conversation: Conversation;
     // (undocumented)
     readonly createdAt: Date;
+    delete(): Promise<void>;
     // (undocumented)
     displayAvatarUrl: string;
     // (undocumented)

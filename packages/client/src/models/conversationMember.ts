@@ -1,3 +1,5 @@
+import {removeConversationMember} from '../apis/conversationMember.js';
+import {PermissionErrorCodes, usePermissionError} from '../error.js';
 import {type Aris} from '../index.js';
 import {Context} from './aacontext.js';
 import {type Conversation} from './conversation.js';
@@ -63,5 +65,18 @@ export class ConversationMember extends Context {
 
 	get isThisMemberCurrentUser() {
 		return this.context.userRequired.id === this.userId;
+	}
+
+	/**
+	 * Delete current conversation member
+	 */
+	async delete() {
+		if (!this.conversation.isOwnedByCurrentUser) {
+			throw usePermissionError(PermissionErrorCodes.ConversationOwner);
+		}
+
+		await removeConversationMember(this.context.fetcher, this.conversation.id, this.id);
+
+		this.conversation.membersRequired.delete(this.id);
 	}
 }

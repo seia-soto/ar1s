@@ -38,5 +38,6 @@ export declare class ConversationMember extends Context
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
+|  [delete()](./client.conversationmember.delete.md) |  | Delete current conversation member |
 |  [update(params)](./client.conversationmember.update.md) |  |  |
 

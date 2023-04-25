@@ -7,3 +7,16 @@ export const getConversationMembers = async (fetcher: Fetcher, conversationId: n
 
 	return reflections;
 };
+
+export const addConversationMember = async (fetcher: Fetcher, conversationId: number, userId: number) => {
+	const response = await fetcher('private/conversation/' + conversationId.toString() + '/member/' + userId.toString(), {method: 'post'});
+	const reflection: ConversationMemberReflection = await response.json();
+
+	return reflection;
+};
+
+export const removeConversationMember = async (fetcher: Fetcher, conversationId: number, memberId: number) => {
+	const response = await fetcher('private/conversation/' + conversationId.toString() + '/member/' + memberId.toString(), {method: 'post'});
+
+	return response.status === 200;
+};

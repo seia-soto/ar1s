@@ -1,10 +1,10 @@
 import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {deleteConversation, getConversation} from '../apis/conversation.js';
-import {getConversationMembers} from '../apis/conversationMember.js';
+import {addConversationMember, getConversationMembers} from '../apis/conversationMember.js';
 import {getMessages} from '../apis/message.js';
 import {NoEntityErrorCodes, PermissionErrorCodes, useNoEntityError, usePermissionError} from '../error.js';
-import {type Aris, type Platform} from '../index.js';
+import {type User, type Aris, type Platform} from '../index.js';
 import {Collection, Context, Series} from './aacontext.js';
 import {ConversationMember} from './conversationMember.js';
 import {Message} from './message.js';
@@ -165,5 +165,38 @@ export class Conversation extends Context {
 		await deleteConversation(this.context.fetcher, this.id);
 
 		this.context.userRequired.conversationsRequired.delete(this.id);
+	}
+
+	/**
+	 * Add user to current conversation
+	 * @param userId The user identifier in same platform
+	 */
+	async addMember(userId: User['id']) {
+		if (!this.isOwnedByCurrentUser) {
+			throw usePermissionError(PermissionErrorCodes.ConversationOwner);
+		}
+
+		const memberRef = await addConversationMember(this.context.fetcher, this.id, userId);
+		const member = new ConversationMember(this.context, this, memberRef);
+
+		this.members ??= new Collection();
+
+		this.members.set(member);
+
+		return member;
+	}
+
+	/**
+	 * Remove user from current conversation
+	 * @param memberId The conversation member identifier in current conversation
+	 */
+	async removeMember(memberId: ConversationMember['id']) {
+		const member = this.membersRequired.get(memberId);
+
+		if (!member) {
+			throw useNoEntityError(NoEntityErrorCodes.ConversationMember);
+		}
+
+		await member.delete();
 	}
 }
