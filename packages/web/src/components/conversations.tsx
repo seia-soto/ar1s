@@ -31,7 +31,10 @@ function Conversations() {
 	});
 
 	const handleDeleteConversation = (conversation: Conversation) => async () => {
-		await conversation.syncMembers();
+		if (typeof conversation.profile === 'undefined') {
+			await conversation.syncMembers();
+		}
+
 		await conversation.delete();
 
 		render();
