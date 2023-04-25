@@ -45,6 +45,7 @@ export declare class Conversation extends Context
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [addMember(userId)](./client.conversation.addmember.md) |  | Add user to current conversation |
+|  [createMessage(content)](./client.conversation.createmessage.md) |  | Create message on current conversation |
 |  [delete()](./client.conversation.delete.md) |  | Delete current conversation |
 |  [removeMember(memberId)](./client.conversation.removemember.md) |  | Remove user from current conversation |
 |  [sync()](./client.conversation.sync.md) |  | Sync current conversation |

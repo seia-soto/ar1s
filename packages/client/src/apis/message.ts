@@ -7,3 +7,15 @@ export const getMessages = async (fetcher: Fetcher, conversationId: number) => {
 
 	return messageRefs;
 };
+
+export const createMessage = async (fetcher: Fetcher, conversationId: number, content: string) => {
+	const response = await fetcher('private/conversation/' + conversationId.toString() + '/message', {
+		method: 'post',
+		json: {
+			content,
+		},
+		throwHttpErrors: false,
+	});
+
+	return response.status === 200;
+};

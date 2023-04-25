@@ -2,7 +2,7 @@ import {ConversationMemberFlags} from '@ar1s/spec/out/conversationMember.js';
 import {compileBit, hasFlag} from '@ar1s/spec/out/utils/bitwise.js';
 import {deleteConversation, getConversation} from '../apis/conversation.js';
 import {addConversationMember, getConversationMembers} from '../apis/conversationMember.js';
-import {getMessages} from '../apis/message.js';
+import {createMessage, getMessages} from '../apis/message.js';
 import {NoEntityErrorCodes, PermissionErrorCodes, useNoEntityError, usePermissionError} from '../error.js';
 import {type User, type Aris, type Platform} from '../index.js';
 import {Collection, Context, Series} from './aacontext.js';
@@ -198,5 +198,13 @@ export class Conversation extends Context {
 		}
 
 		await member.delete();
+	}
+
+	/**
+	 * Create message on current conversation
+	 * @param content The message content
+	 */
+	async createMessage(content: Message['content']) {
+		await createMessage(this.context.fetcher, this.id, content);
 	}
 }

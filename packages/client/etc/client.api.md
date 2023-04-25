@@ -58,6 +58,7 @@ export class Conversation extends Context {
     readonly context: Aris;
     // (undocumented)
     readonly createdAt: Date;
+    createMessage(content: Message['content']): Promise<void>;
     delete(): Promise<void>;
     // (undocumented)
     displayImageUrl: string;
