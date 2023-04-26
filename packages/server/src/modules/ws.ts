@@ -108,6 +108,7 @@ const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 					.catch((error: unknown) => {
 						// If `pin.isResolved` is set to `true`, we know that the reply is already hijacked in the workflow.
 						if (pin.isResolved) {
+							request.log.error(error);
 							pin.socket.destroy();
 
 							return;
