@@ -22,7 +22,7 @@ export const formatUsername = (value: string) => (
 TypeSystem.Format(UserFormats.Username, formatUsername);
 
 export const formatPassword = (value: string) => (
-	value.length > 16
+	value.length > 12
   && value.length < 512
 );
 
