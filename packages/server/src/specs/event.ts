@@ -48,16 +48,21 @@ export const retrieveTicket = async (pin: string) => {
 	const c = await keydb.acquire();
 	const v = await c.hGet(eventNamespace, pin);
 
+	await keydb.release(c);
+
 	if (!v) {
 		return false;
 	}
 
-	const [ts, platformId, userId] = pin.split(':');
+	const [ts, platformId, userId] = v.split(':');
 	const tsN = parseInt(ts, 10);
 	const platformIdN = parseInt(platformId, 10);
 	const userIdN = parseInt(userId, 10);
 
-	if (Date.now() > tsN + expiration) {
+	if (
+		isNaN(tsN) || isNaN(platformIdN) || isNaN(userIdN)
+		|| Date.now() > tsN + expiration
+	) {
 		await c.hDel(eventNamespace, pin);
 
 		return false;
