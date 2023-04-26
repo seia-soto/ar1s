@@ -13,7 +13,7 @@ export enum UserFormats {
 }
 
 export const formatUsername = (value: string) => (
-	!/[^a-zA-Z0-9]/.test(value)
+	!/[^a-z0-9]/.test(value)
   && value.length >= 1
   && value.length <= 16
 );
