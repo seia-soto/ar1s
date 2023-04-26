@@ -34,7 +34,9 @@ export const kWsPin = Symbol('ar1s-ws-pin');
 const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	const wss = new WebSocketServer({noServer: true});
 
-	const resolveWebSocket = async (request: FastifyRequest, _reply: FastifyReply, wsHandler?: RouteOptions['wsHandler']) => new Promise<WebSocketWithConnection>(resolve => {
+	const resolveWebSocket = async (request: FastifyRequest, reply: FastifyReply, wsHandler?: RouteOptions['wsHandler']) => new Promise<WebSocketWithConnection>(resolve => {
+		void reply.hijack();
+
 		// Note that the existence of pin is already checked in `routeOptions.handler` proxy
 		const pin = request.raw[kWsPin]!;
 
@@ -67,6 +69,7 @@ const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 
 	// Attach wss
 	fastify.decorate('wss', null);
+	fastify.decorateRequest('resolveWebSocket', null);
 
 	fastify.wss = wss;
 
@@ -78,7 +81,7 @@ const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 			return;
 		}
 
-		if (routeOptions.useWebSocket && routeOptions.method !== 'GET') {
+		if (useWebSocket && routeOptions.method !== 'GET') {
 			throw new Error('WebSocket connection should be made in GET method!');
 		}
 
@@ -101,23 +104,17 @@ const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 
 				request.resolveWebSocket = async () => resolveWebSocket(request, reply, routeOptions.wsHandler);
 
-				type Thenable<T> = T | Promise<T>;
+				return (Reflect.apply(target, thisArg, argArray) as Promise<unknown>)
+					.catch((error: unknown) => {
+						// If `pin.isResolved` is set to `true`, we know that the reply is already hijacked in the workflow.
+						if (pin.isResolved) {
+							pin.socket.destroy();
 
-				// Use unknown as we don't need to return anymore
-				const handle = Reflect.apply(target, thisArg, argArray) as Thenable<unknown>;
+							return;
+						}
 
-				// Defer the reply hijacking
-				return async () => {
-					const ret = await handle;
-
-					// Check if we resolved the WebSocket to know if hijacking is required
-					// If we call hijack even unless the upgrade request is resolved, the socket will hang up and lead to decreased performance
-					if (!pin.isResolved) {
-						return ret;
-					}
-
-					void reply.hijack();
-				};
+						throw error;
+					});
 			},
 		});
 	});

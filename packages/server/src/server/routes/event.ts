@@ -21,8 +21,9 @@ export const eventRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => 
 				}),
 			}),
 		},
+		useWebSocket: true,
 		async handler(request, _reply) {
-			if (!request.resolveWebSocket) {
+			if (typeof request.resolveWebSocket === 'undefined') {
 				throw usePermissionError();
 			}
 
