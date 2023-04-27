@@ -22,19 +22,14 @@ import {type FastifyPluginAsyncTypebox} from '@fastify/type-provider-typebox';
 import {type FastifyReply, type FastifyRequest, type RouteOptions} from 'fastify';
 import fastifyPlugin from 'fastify-plugin';
 import {ServerResponse} from 'http';
-import type internal from 'stream';
-import {WebSocketServer, createWebSocketStream, type WebSocket} from 'ws';
-
-export type WebSocketWithConnection = {
-	socket: WebSocket;
-} & internal.Duplex;
+import {WebSocketServer, type WebSocket} from 'ws';
 
 export const kWsPin = Symbol('ar1s-ws-pin');
 
 const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	const wss = new WebSocketServer({noServer: true});
 
-	const resolveWebSocket = async (request: FastifyRequest, reply: FastifyReply, wsHandler?: RouteOptions['wsHandler']) => new Promise<WebSocketWithConnection>(resolve => {
+	const resolveWebSocket = async (request: FastifyRequest, reply: FastifyReply, wsHandler?: RouteOptions['wsHandler']) => new Promise<WebSocket>(resolve => {
 		void reply.hijack();
 
 		// Note that the existence of pin is already checked in `routeOptions.handler` proxy
@@ -45,25 +40,15 @@ const webSocketPlugin: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 
 			wss.emit('connection', socket, request.raw);
 
-			const connection = createWebSocketStream(socket) as WebSocketWithConnection;
-
-			connection.on('error', error => {
+			socket.on('error', error => {
 				fastify.log.error(error);
 			});
 
-			socket.on('newListener', event => {
-				if (event === 'message') {
-					connection.resume();
-				}
-			});
-
-			connection.socket = socket;
-
 			if (typeof wsHandler === 'function') {
-				void wsHandler(wss, connection, request);
+				void wsHandler(wss, socket, request);
 			}
 
-			resolve(connection);
+			resolve(socket);
 		});
 	});
 

@@ -1,5 +1,4 @@
 import {ConversationFormats} from '@ar1s/spec/out/conversation.js';
-import {ParcelTypes} from '@ar1s/spec/out/parcel.js';
 import {UserFlags} from '@ar1s/spec/out/user.js';
 import {addFlag, compileBit} from '@ar1s/spec/out/utils/bitwise.js';
 import {lessThan} from '@databases/pg-typed';
@@ -8,11 +7,10 @@ import {Type} from '@sinclair/typebox';
 import {db, models} from '../../../modules/database/index.js';
 import type Conversation from '../../../modules/database/schema/conversation.js';
 import type ConversationMember from '../../../modules/database/schema/conversationMember.js';
-import {publish} from '../../../modules/delivery/pubsub.js';
 import {ValidationErrorCodes, useInexistingResourceError, useValidationError} from '../../../modules/error.js';
 import {Formats, rangedQueryType, singleRangedQueryType, useReverseRangedQueryParams, useSingleRangedQueryParam} from '../../../modules/formats.js';
 import {conversationStandardDataTypeObjectParams, createConversation, deleteConversation, isUserJoinedConversation, isUserOwnedConversation} from '../../../specs/conversation.js';
-import {createConversationMember, getHumanConversationMemberIds} from '../../../specs/conversationMember.js';
+import {createConversationMember} from '../../../specs/conversationMember.js';
 
 export const conversationRouter: FastifyPluginAsyncTypebox = async (fastify, _opts) => {
 	// Get all available conversation in range for user
@@ -77,18 +75,6 @@ where u.id = ${request.session.user}`) as Array<Pick<Conversation, 'id' | 'flag'
 				const owner = await models.user(t).find({id: request.session.user}).select('id', 'flag', 'platform', 'displayName', 'displayAvatarUrl', 'displayBio').oneRequired();
 				const conversation = await createConversation(t, owner, request.body);
 
-				// Send to this user only
-				void publish([request.session.user], {
-					type: ParcelTypes.ConversationCreate,
-					payload: {
-						id: conversation.id,
-						flag: conversation.flag,
-						displayName: conversation.displayName,
-						displayImageUrl: conversation.displayImageUrl,
-						updatedAt: conversation.updatedAt.toString(),
-					},
-				});
-
 				return conversation;
 			});
 		},
@@ -120,17 +106,6 @@ where u.id = ${request.session.user}`) as Array<Pick<Conversation, 'id' | 'flag'
 					updatedAt: new Date(),
 				});
 
-				void publish(await getHumanConversationMemberIds(t, id), {
-					type: ParcelTypes.ConversationUpdate,
-					payload: {
-						id,
-						flag: conversation.flag,
-						displayName: conversation.displayName,
-						displayImageUrl: conversation.displayImageUrl,
-						updatedAt: conversation.updatedAt.toString(),
-					},
-				});
-
 				return '';
 			});
 		},
@@ -157,18 +132,8 @@ where u.id = ${request.session.user}`) as Array<Pick<Conversation, 'id' | 'flag'
 					await models.message(t).delete({author: conversationMember.id});
 					await models.conversationMember(t).delete({id: conversationMember.id});
 
-					void publish(await getHumanConversationMemberIds(t, id), {
-						type: ParcelTypes.ConversationMemberDelete,
-						payload: conversationMember.id,
-					});
-
 					return '';
 				}
-
-				void publish(await getHumanConversationMemberIds(t, id), {
-					type: ParcelTypes.ConversationDelete,
-					payload: id,
-				});
 
 				await deleteConversation(t, id);
 
@@ -227,18 +192,6 @@ and cm."user" = ${request.session.user}`) as [Pick<ConversationMember, 'id' | 'f
 						user: request.session.user,
 						conversation: id,
 					}, request.body);
-
-				void publish(await getHumanConversationMemberIds(t, id), {
-					type: ParcelTypes.ConversationMemberUpdate,
-					payload: {
-						id: conversationMember.id,
-						flag: conversationMember.flag,
-						createdAt: conversationMember.createdAt.toString(),
-						displayName: conversationMember.displayName,
-						displayAvatarUrl: conversationMember.displayAvatarUrl,
-						displayBio: conversationMember.displayBio,
-					},
-				});
 
 				return '';
 			});
@@ -414,15 +367,6 @@ where cm.conversation = ${id}`) as Array<Pick<ConversationMember, 'id' | 'flag' 
 					updatedAt: now,
 				});
 
-				void publish(await getHumanConversationMemberIds(t, id), {
-					type: ParcelTypes.MessageCreate,
-					payload: {
-						...message,
-						createdAt: message.createdAt.toString(),
-						updatedAt: message.updatedAt.toString(),
-					},
-				});
-
 				return '';
 			});
 		},
@@ -457,11 +401,6 @@ where id = ${messageId} and conversation = ${conversationId}
 				}
 
 				await models.message(t).delete({id: messageId});
-
-				void publish(await getHumanConversationMemberIds(t, conversationId), {
-					type: ParcelTypes.MessageDelete,
-					payload: messageId,
-				});
 
 				return '';
 			});
