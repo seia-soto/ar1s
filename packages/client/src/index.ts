@@ -9,6 +9,7 @@ import {ConversationMember, type ConversationMemberReflection} from './models/co
 import {Message, type MessageReflection} from './models/message.js';
 import {Platform, type PlatformReflection} from './models/platform.js';
 import {User, type UserReflection} from './models/user.js';
+import {createConnectionToken} from './apis/event.js';
 
 type Options = {
 	fetcher: typeof ky;
@@ -20,6 +21,7 @@ type Options = {
 class Aris {
 	readonly fetcher: typeof ky;
 	user?: User;
+	ws?: WebSocket;
 
 	constructor(
 		readonly prefixUrl: string,
@@ -33,6 +35,14 @@ class Aris {
 		}
 
 		return this.user;
+	}
+
+	get wsRequired() {
+		if (!this.ws) {
+			throw useNoEntityError(NoEntityErrorCodes.WebSocket);
+		}
+
+		return this.ws;
 	}
 
 	/**
@@ -103,6 +113,23 @@ class Aris {
 		const platform = new Platform(this, await platformRef);
 
 		return platform;
+	}
+
+	/**
+	 * Connect to subscribe live events from the server
+	 */
+	async connect() {
+		const token = await createConnectionToken(this.fetcher);
+
+		const url = 'wss://' + window.location.host + this.prefixUrl + '/event/' + token;
+		const ws = new WebSocket(url);
+
+		ws.addEventListener('error', () => {
+			delete this.ws;
+		});
+		ws.addEventListener('close', () => {
+			delete this.ws;
+		});
 	}
 }
 

@@ -24,6 +24,8 @@ class NoEntityError extends Error {
 }
 
 export const enum NoEntityErrorCodes {
+	WebSocket = '`ws` is not available; The subscription is not active!',
+
 	// Entities
 	User = '`user` is not available; The user is not found!',
 	Platform = '`platform` is not available; The platform is not found!',

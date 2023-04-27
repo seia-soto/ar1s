@@ -17,6 +17,7 @@ export class Aris {
         username: User['username'];
         password: string;
     }): Promise<void>;
+    connect(): Promise<void>;
     // (undocumented)
     readonly fetcher: typeof ky;
     getPlatform(invite?: Platform['inviteIdentifier']): Promise<Platform>;
@@ -30,6 +31,10 @@ export class Aris {
     user?: User;
     // (undocumented)
     get userRequired(): User;
+    // (undocumented)
+    ws?: WebSocket;
+    // (undocumented)
+    get wsRequired(): WebSocket;
 }
 
 // Warning: (ae-forgotten-export) The symbol "Context" needs to be exported by the entry point index.d.ts

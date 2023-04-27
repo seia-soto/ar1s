@@ -26,12 +26,15 @@ declare class Aris
 |  [prefixUrl](./client.aris.prefixurl.md) | <code>readonly</code> | string |  |
 |  [user?](./client.aris.user.md) |  | [User](./client.user.md) | _(Optional)_ |
 |  [userRequired](./client.aris.userrequired.md) | <code>readonly</code> | [User](./client.user.md) |  |
+|  [ws?](./client.aris.ws.md) |  | WebSocket | _(Optional)_ |
+|  [wsRequired](./client.aris.wsrequired.md) | <code>readonly</code> | WebSocket |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [bootstrap(platform, user)](./client.aris.bootstrap.md) |  | Bootstrap the instance |
+|  [connect()](./client.aris.connect.md) |  | Connect to subscribe live events from the server |
 |  [getPlatform(invite)](./client.aris.getplatform.md) |  | Get platform |
 |  [isBootstrapRequired()](./client.aris.isbootstraprequired.md) |  | Check if an instance requires bootstrap |
 |  [signIn(username, password, isTrustedEnvironment)](./client.aris.signin.md) |  | Sign in |
